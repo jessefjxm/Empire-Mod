@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <randomEventExample.label>样例事件已触发！</randomEventExample.label>
+
+
+  <!-- Base Event without all the comments -->
+
+  <randomEventExample2.label>样例事件已触发！</randomEventExample2.label>
+
+
+</LanguageData>

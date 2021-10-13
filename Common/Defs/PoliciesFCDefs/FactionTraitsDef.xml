@@ -10,10 +10,10 @@
 		<techLevelRequirement>Undefined</techLevelRequirement>
 		<positiveEffects>
 			<!-- string -->
-			<li>- +20% combat modifier when using your faction's military forces</li>
-			<li>- Once per five days, you can deploy a second squad from a single settlement by paying 20% of the squad's cost in Silver</li>
-			<li>- When creating a new settlement, it will start with a Barracks</li>
-			<li>- All military buildings cost 100 less upkeep</li>
+			<li>- 你派系军队的战斗力提高 20%。</li>
+			<li>- 每隔五天，你可以通过支付 20% 的组建成本，在单个定居点部署次要军事部队。</li>
+			<li>- 每个领地在建成后都会免费获得一个兵营建筑。</li>
+			<li>- 所有军事用途的建筑维护费减少 100%。</li>
 		</positiveEffects>
 		<negativeEffects>
 			<!-- string -->
@@ -31,11 +31,11 @@
 		<techLevelRequirement>Undefined</techLevelRequirement>
 		<positiveEffects>
 			<!-- string -->
-			<li>- Once per five days, can send a diplomatic envoy to another faction to attempt to improve relations</li>
-			<li>- Deaths of members of your faction will not cause unrest to rise or happiness to reduce</li>
+			<li>- 每隔 5 天可以派遣一名外交官前往目标派系改善关系。</li>
+			<li>- 领地内居民死亡时会导致该领地的幸福滴下降，人民也会变得不安。</li>
 		</positiveEffects>
 		<negativeEffects>
-			<li>- Cannot use military forces to raid or to capture other faction's settlements</li>
+			<li>- 无法攻占或者袭击其他派系的据点。</li>
 			<!-- string -->
 		</negativeEffects>
 	</FactionColonies.FCPolicyDef>
@@ -51,11 +51,11 @@
 		<techLevelRequirement>Undefined</techLevelRequirement>
 		<positiveEffects>
 			<!-- string -->
-			<li>- Can send your military to raid another faction's settlement to enslave members of their faction instead of ordinary raiding</li>
-			<li>- You can spend silver to increase the loyalty of a settlement</li>
+			<li>- 可以派遣军队去袭击其他派系的领地，并使该领地的所有居民成为你的奴隶。</li>
+			<li>- 通过给指定领地赏赐白银以提高该领地的忠诚度。</li>
 		</positiveEffects>
 		<negativeEffects>
-			<li>- Loyalty starts at 70%</li>
+			<li>- 领地建立时的初始幸福度变为 70%。</li>
 			<!-- string -->
 		</negativeEffects>
 	</FactionColonies.FCPolicyDef>
@@ -70,11 +70,11 @@
 		<techLevelRequirement>Undefined</techLevelRequirement>
 		<positiveEffects>
 			<!-- string -->
-			<li>- Can reduce base tax by 20% for two tax periods to drastically boost happiness and prosperity</li>
-			<li>- Receives a base tax bonus of (1% per 10% happiness)</li>
+			<li>- 可以采取减税政策，这使得在接下来的两次税收的基础税额降低 20%，但是相应地，你的领地的幸福度和繁荣度会因此大大提高。</li>
+			<li>- 领地的幸福度每提高 10% 就能够获得额外 1% 的税收。</li>
 		</positiveEffects>
 		<negativeEffects>
-			<li>- Happiness starts at 60%</li>
+			<li>- 领地建立时的初始幸福度变为 60%。</li>
 			<!-- string -->
 		</negativeEffects>
 	</FactionColonies.FCPolicyDef>
@@ -90,13 +90,13 @@
 		<techLevelRequirement>Undefined</techLevelRequirement>
 		<positiveEffects>
 			<!-- string -->
-			<li>- The time to upgrade settlements and construct buildings is reduced by 50%</li>
-			<li>- Every settlement receives an extra +3 to worker softcap per level of the settlement</li>
-			<li>- All settlements receive +10% to base tax</li>
+			<li>- 领地的升级和建筑的修建时间都会减少 50%。</li>
+			<li>- 麾下所有的领地每升一级所都会额外增加 3 个工人合理负载。</li>
+			<li>- 所有领地的基础税收增加10%。</li>
 		</positiveEffects>
 		<negativeEffects>
-			<li>- The cost to create new settlements is increased by 100%</li>
-			<li>- Cannot use your military forces to capture other faction's settlements</li>
+			<li>- 开拓一个新领地的成本提高 100%。</li>
+			<li>- 无法攻占或者掠夺其他派系的据点。</li>
 			<!-- string -->
 		</negativeEffects>
 	</FactionColonies.FCPolicyDef>
@@ -112,9 +112,9 @@
 		<techLevelRequirement>Undefined</techLevelRequirement>
 		<positiveEffects>
 			<!-- string -->
-			<li>- Your first settlement is free</li>
-			<li>- Once per year, starting after your first year, the cost to create a new settlement is reduced by 50%</li>
-			<li>- Settlements that you construct start at level 2</li>
+			<li>- 免费开拓第一个领地。</li>
+			<li>- 在开拓第一个领地之后，每隔 1 年，都会获得一次开拓新领地费用减半的加成。</li>
+			<li>- 领地建成后的初始等级是 2 级。</li>
 		</positiveEffects>
 		<negativeEffects>
 			<!-- string -->
@@ -132,8 +132,8 @@
 		<techLevelRequirement>Undefined</techLevelRequirement>
 		<positiveEffects>
 			<!-- string -->
-			<li>- All research produced by your settlements is doubled</li>
-			<li>- Can send items that you have not completed the research for or are above your tech level to your settlements to be reverse-engineered, giving you their value in research points</li>
+			<li>- 领地所提供的科研点数翻倍。</li>
+			<li>- 可以将超过你殖民地科技水平的物品进行逆向研究工程，以获得大笔科研点数。</li>
 		</positiveEffects>
 		<negativeEffects>
 			<!-- string -->
@@ -151,11 +151,11 @@
 		<techLevelRequirement>Undefined</techLevelRequirement>
 		<positiveEffects>
 			<!-- string -->
-			<li>- Once per season, can request for an experienced mercenary from your faction to join your colony</li>
-			<li>- All tithes received have their value increased by 20%</li>
+			<li>- 每个季度你可以从你的领地里面招募一名经验丰富的雇佣兵加入到你的殖民地。</li>
+			<li>- 实物税额提高 20%。</li>
 		</positiveEffects>
 		<negativeEffects>
-			<li>- Failing to protect your settlements against a raid causes loyalty to drop significantly</li>
+			<li>- 如果你没有保护好你领地内的臣民的话，领地的忠诚度将会大大降低。</li>
 			<!-- string -->
 		</negativeEffects>
 	</FactionColonies.FCPolicyDef>

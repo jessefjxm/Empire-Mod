@@ -4,16 +4,12 @@ using System.Linq;
 using UnityEngine;
 using Verse;
 
-namespace FactionColonies
-{
-    public class ResourceFC : IExposable
-    {
-        public ResourceFC()
-        {
+namespace FactionColonies {
+    public class ResourceFC : IExposable {
+        public ResourceFC() {
         }
 
-        public ResourceFC(double baseProduction, ResourceType type, SettlementFC settlement = null)
-        {
+        public ResourceFC(double baseProduction, ResourceType type, SettlementFC settlement = null) {
             name = type.ToString().ToLower();
             label = type.ToString();
             this.baseProduction = baseProduction;
@@ -24,46 +20,39 @@ namespace FactionColonies
             baseProductionMultipliers.Add(new ProductionMultiplier("", 0, ""));
             this.settlement = settlement;
             filter = new ThingFilter();
-            if (settlement != null)
-            {
+            if (settlement != null) {
                 PaymentUtil.resetThingFilter(settlement, type);
             }
         }
-        
-        public bool checkMinimum()
-        {
-            if (taxStock >= taxMinimumToTithe)
-            {
+
+        public bool checkMinimum() {
+            if (taxStock >= taxMinimumToTithe) {
                 return true;
             }
 
             return false;
         }
-        public double returnTaxPercentage()
-        {
-            taxPercentage = Math.Round(taxStock / taxMinimumToTithe, 2)*100 ;
+        public double returnTaxPercentage() {
+            taxPercentage = Math.Round(taxStock / taxMinimumToTithe, 2) * 100;
             return taxPercentage;
         }
 
-        public double returnLowestCost()
-        {
-            double minimum = filter.AllowedThingDefs.Aggregate<ThingDef, double>(999999, 
+        public double returnLowestCost() {
+            double minimum = filter.AllowedThingDefs.Aggregate<ThingDef, double>(999999,
                 (current, thing) => Math.Min(thing?.BaseMarketValue ?? 100, current));
             //Log.Message(minimum.ToString());
-            taxMinimumToTithe = minimum + FactionColonies.Settings().productionTitheMod + 
-            TraitUtilsFC.cycleTraits(0.0, "taxBaseRandomModifier", Find.World.GetComponent<FactionFC>().traits, "add") + 
+            taxMinimumToTithe = minimum + FactionColonies.Settings().productionTitheMod +
+            TraitUtilsFC.cycleTraits(0.0, "taxBaseRandomModifier", Find.World.GetComponent<FactionFC>().traits, "add") +
             TraitUtilsFC.cycleTraits(0.0, "taxBaseRandomModifier", settlement.traits, "add");
             return minimum;
         }
 
-        public Texture2D getIcon()
-        {
+        public Texture2D getIcon() {
             return (from texture in TexLoad.textures where texture.Key == name select texture.Value).FirstOrDefault();
         }
 
 
-        public void ExposeData()
-        {
+        public void ExposeData() {
             Scribe_Values.Look(ref name, "name");
             Scribe_Values.Look(ref label, "label");
             Scribe_Values.Look(ref baseProduction, "baseProduction");
@@ -88,6 +77,31 @@ namespace FactionColonies
             Scribe_References.Look(ref settlement, "settlement");
         }
 
+        public string getTranslateName() {
+            switch (name) {
+                case "food":
+                    return "农业";
+                case "weapons":
+                    return "武器";
+                case "apparel":
+                    return "装备";
+                case "animals":
+                    return "畜牧";
+                case "logging":
+                    return "林业";
+                case "mining":
+                    return "矿业";
+                case "research":
+                    return "科研";
+                case "power":
+                    return "电力";
+                case "medicine":
+                    return "医药";
+                default:
+                    return name;
+            }
+        }
+
         public string name;
         public string label;
         public double baseProduction; //base production for resource
@@ -109,22 +123,18 @@ namespace FactionColonies
 
     }
 
-    public class ProductionAdditive : IExposable
-    {
-        public ProductionAdditive()
-        {
+    public class ProductionAdditive : IExposable {
+        public ProductionAdditive() {
 
         }
 
-        public ProductionAdditive(string id, double value, string desc)
-        {
+        public ProductionAdditive(string id, double value, string desc) {
             this.id = id;
             this.value = value;
             this.desc = desc;
         }
 
-        public void ExposeData()
-        {
+        public void ExposeData() {
             Scribe_Values.Look(ref id, "id");
             Scribe_Values.Look(ref value, "value");
             Scribe_Values.Look(ref desc, "desc");
@@ -135,21 +145,17 @@ namespace FactionColonies
         public string desc;
     }
 
-    public class ProductionMultiplier : IExposable
-    {
-        public ProductionMultiplier()
-        {
+    public class ProductionMultiplier : IExposable {
+        public ProductionMultiplier() {
 
         }
-        public ProductionMultiplier(string id, double value, string desc)
-        {
+        public ProductionMultiplier(string id, double value, string desc) {
             this.id = id;
             this.value = value;
             this.desc = desc;
         }
 
-        public void ExposeData()
-        {
+        public void ExposeData() {
             Scribe_Values.Look(ref id, "id");
             Scribe_Values.Look(ref value, "value");
             Scribe_Values.Look(ref desc, "desc");

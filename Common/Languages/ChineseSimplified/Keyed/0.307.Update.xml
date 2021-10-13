@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+    <OverwhelmingVictory>大获全胜</OverwhelmingVictory>
+    <OverwhelmingVictoryDesc>你的军队不费吹灰之力就取得了战斗的胜利，全军士气高涨，因此这批部队不需要修整就能继续投入到下一个军事行动中去。</OverwhelmingVictoryDesc>
+    <TaxesFromSettlementAreBeingDelivered>领地 {0} 的税收正在运往你的首都！</TaxesFromSettlementAreBeingDelivered>
+    <DueFC>收入预估</DueFC>
+    <ResearchExpended>我们已经将 {0} 个研究点数投入到 {1} 的研究当中，目前剩余 {2} 研究点数。</ResearchExpended>
+    <ResearchPointsExpended>研究投入</ResearchPointsExpended>
+    <NoResearchExpended>没有投入研究力量到任何研究项目中，目前剩余 {0} 研究点数。</NoResearchExpended>
+    <PointsAddedToResearchPool>已投入 {0} 研究点数到当前研究项目中。</PointsAddedToResearchPool>
+    <SetAsEmpirePowerOutput>设置为帝国的电力输出点</SetAsEmpirePowerOutput>
+    <SetAsOutput>调整输出状态</SetAsOutput>
+    <SetAsOutputSuccess>该电力输送器已经变是输出状态了！</SetAsOutputSuccess>
+    <NumberTaxesHasBeenSolved>{0}的税收账单正在进行自动结算</NumberTaxesHasBeenSolved>
+    <PrisonersMenu>囚犯</PrisonersMenu>
+    <FCWorkload>工作量</FCWorkload>
+    <FCHeavy>繁重的</FCHeavy>
+    <FCMedium>合适的</FCMedium>
+    <FCLight>轻松的</FCLight>
+    <FCHeavyExplanation>+2 工人合理负载 -20点 生命值</FCHeavyExplanation>
+    <FCMediumExplanation>+1 工人合理负载 -10点 生命值</FCMediumExplanation>
+    <FCLightExplanation>+1 工人极限负载 +4点 生命值</FCLightExplanation>
+    <Actions>行动</Actions>
+    <SellPawn>出售该小人</SellPawn>
+    <ReturnToPlayer>将其遣送回玩家的殖民地</ReturnToPlayer>
+    <SellPawnInfo>该小人的价值将被统计到殖民地的账单上</SellPawnInfo>
+    <ViewInfo>查看信息</ViewInfo>
+    <PrisonerHasDiedLetter>囚犯已经死亡</PrisonerHasDiedLetter>
+    <PrisonerHasDied>位于 {1} 的囚犯 {0} 已经死于过度劳作</PrisonerHasDied>
+    <TaxDeliveryMap>设置收税地</TaxDeliveryMap>
+    <Military>军事力量</Military>
+    <SetMap>打开地图设置</SetMap>
+    <ActivateResearch>激活研究项目</ActivateResearch>
+    <PrisonerCaptureInfo>囚犯 - {0} 正在被押送至 {1}</PrisonerCaptureInfo>
+    <GoodsReceived>物品已送达</GoodsReceived>
+    <GoodsReceivedFollowing>你在 {0} 中获得了以下物品：</GoodsReceivedFollowing>
+    <TaxPercentage>实物税（%）</TaxPercentage>
+    <ResearchLevel>查看科技水平</ResearchLevel>
+    <ReachedMaxLevel>已经处于最高科技水平</ReachedMaxLevel>
+    <FCShipBasics>飞船相关科技</FCShipBasics>
+    <FCFabrication>精密装配</FCFabrication>
+    <FCElectricity>电力</FCElectricity>
+    <FCSmithing>锻造</FCSmithing>
+    <CurrentResearchLevel>当前科技水平为 {0}，提升到下一级别需要完成研究：{1}</CurrentResearchLevel>
+    <AllowedRaces>允许存在的种族</AllowedRaces>
+    <CannotHaveLessThanOneRace>你的派系至少需要一个种族</CannotHaveLessThanOneRace>
+    <SettlementNotBeingAttacked>领地并没有遭受进攻</SettlementNotBeingAttacked>
+    <MedievalTechOnly>中世纪科技水平限定</MedievalTechOnly>
+    <ForeignMilitarySwitch>{0} 的军队正在前往 {1} 协助防御。他们的军力等级是 {2}</ForeignMilitarySwitch>
+    <FCMilitarySentCapture>{0} 的军队正在尝试占领 {1}</FCMilitarySentCapture>
+    <FCMilitarySentRaid>{0} 正在突袭掠夺 {1}</FCMilitarySentRaid>
+    <FCMilitarySentEnslave>{0} 的军队正在使 {1} 的人民成为奴隶</FCMilitarySentEnslave>
+    <FCMilitaryCooldown>{0} 的军队已经准备好再度投入战场了！</FCMilitaryCooldown>
+    <FCSettlementFormed>领地已建立</FCSettlementFormed>
+    <FreeWorkers>可用工人</FreeWorkers>
+    <ToggleAutoDefend>自动防守遭受攻击的居住地：{0}</ToggleAutoDefend>
+
+
+    <FCOverview>概况</FCOverview>
+    <FCTraits>主流思潮</FCTraits>
+    <FCSelectTraits0>请选择你帝国的两种主流思潮！注意，在确定选择后，你就不能再进行更改！</FCSelectTraits0>
+    <FCSelectTraits2>请注意！当你的选择确定后就不能再进行更改了！</FCSelectTraits2>
+    <FCConflictingTraits>你不能同时选择两项相对立的思潮！</FCConflictingTraits>
+    <FCUnselectTrait>你已经选择了两项思潮，如果要进行更改，请先取消任意一项已选择的思潮！</FCUnselectTrait>
+    <FCTraitsChosen>你已经确定了帝国的主流思潮，并且不能再进行更改了！</FCTraitsChosen>
+    <NotEnoughSilverToDeploySquad>你没有足够的白银来重新部署这个单位！</NotEnoughSilverToDeploySquad>
+    <XDaysToRedeploy>再过{0}天你就可以重新部署这个单位了！</XDaysToRedeploy>
+    <FCRelationImproved>派系关系获得了改善！</FCRelationImproved>
+    <FCRelationImprovedText>通过和{0}的交流和联系，你和{1}的关系得到了不错的改善！</FCRelationImprovedText>
+    <FCRelationNotImproved>派系关系改善失败！</FCRelationNotImproved>
+    <FCFailedToImproveRelationship>你与{0}的沟通并没有达到理想的效果，关系仍然停留在原点。</FCFailedToImproveRelationship>
+    <XDaysToSendDiplomat>再过{0}天你就能够再次与该派系改善关系了！</XDaysToSendDiplomat>
+    <FCIncreaseRelations>正在尝试与该派系改善关系</FCIncreaseRelations>
+    <FCCannotImproveRelationsWithType>你不能和这种类型的派系改善关系</FCCannotImproveRelationsWithType>
+    <FCSpecialActions>特殊操作</FCSpecialActions>
+    <FCBuyLoyalty>收买人心，提高领地忠诚度</FCBuyLoyalty>
+    <SendSilverToColony>将白银赏赐给领民</SendSilverToColony>
+    <SendingXSilver>赏赐{0}白银</SendingXSilver>
+    <SettlementGainsXLoyalty>领地将获得{0}忠诚度</SettlementGainsXLoyalty>
+    <FCConfirm>确认</FCConfirm>
+    <FCGiveTaxBreak>颁布减税政策</FCGiveTaxBreak>
+    <FCConfirmDecision>确认执行</FCConfirmDecision>
+    <FCConfirmTaxBreak>在 10 天内降低 30% 的基础税率，但是你的领地每天能够额外提升 2% 的忠诚度和盈利度。</FCConfirmTaxBreak>
+    <FCAlreadyGivingTaxBreak>你已经在这个领地颁布了减税政策，这项法令还会持续 {0} 天。</FCAlreadyGivingTaxBreak>
+    <FCGivingTaxBreak>{0}在接下来的 10 天内都会享受到税收减免政策带来的便利。他们会很开心的！</FCGivingTaxBreak>
+    <FCActionMercenaryRefreshed>雇佣兵现在可用</FCActionMercenaryRefreshed>
+    <FCActionSettlementFeeReduction>由于你派系采用扩张主义的思潮，因此你开拓下一个领地的花费减半！</FCActionSettlementFeeReduction>
+    <FCActionAvailable>可以采取行动了</FCActionAvailable>
+    <FCActionMercenaryOnCooldown>你需要到{0}后才行采取新的行动。</FCActionMercenaryOnCooldown>
+    <FCRequestMercenary>请求雇佣兵协助</FCRequestMercenary>
+    <FCMercenaryJoined>雇佣兵加入</FCMercenaryJoined>
+    <FCMercenaryJoinedText>一位来自你领地的，名叫{0}的雇佣兵加入到了你的殖民地！</FCMercenaryJoinedText>
+    <FCSendResearchItems>逆向研究物品</FCSendResearchItems>
+    <FCFactionResearch>派系研究项目</FCFactionResearch>
+    <FCFactionLevelUp>派系已升级</FCFactionLevelUp>
+    <FCFactionLevelUpDesc>你的派系「{0}」的领地等级提升到了 {1} 级！</FCFactionLevelUpDesc>
+    <FCSelectANewTrait>选择一项新特质</FCSelectANewTrait>
+    <FCTraitLockedUntilLevel>派系等级 {0} 解锁</FCTraitLockedUntilLevel>
+    <FCLevel>派系等级：{0}</FCLevel>
+    <FCConfirmTrait>你确定要选择 {0} 吗？在选择之后你就不能此进行更改了。</FCConfirmTrait>
+    <FCIndustriousPop>你的领地 {0} 额外上缴了 {1} 的税收！</FCIndustriousPop>
+    <FCIdustriousTaxBoost>额外税收</FCIdustriousTaxBoost>
+    <FCSelectYourTraits>你还没有选择你派系的主流思潮或特质，请转换到自定义选项卡之后然后再选择它们！</FCSelectYourTraits>
+
+    <!-- Updated the following defs  -->
+    <!--     Building - Research Labs & Glitterworld Research Facility    -->
+    <!--     Social Policy - Science blah blah   &  Faction trait - Researchers     -->
+
+
+
+</LanguageData>

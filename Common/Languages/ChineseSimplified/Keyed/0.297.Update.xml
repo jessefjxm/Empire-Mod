@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+    <settlementAboutToBeAttacked>{1} 即将向 {0} 发起进攻</settlementAboutToBeAttacked>
+    <settlementInDanger>领地告急</settlementInDanger>
+    <militaryAlreadyDefendingSettlement>这只军队已经在保卫目标对象了</militaryAlreadyDefendingSettlement>
+    <defendingMilitaryReset>这只部队已经被重新设置为殖民地的防御军队</defendingMilitaryReset>
+    <targetAlreadyBeingAttacked>这个对象已经在遭受进攻了</targetAlreadyBeingAttacked>
+    <settlementMilitaryForcesRaiding>{0}的军队正在突袭{1}的据点</settlementMilitaryForcesRaiding>
+    <settlementMilitaryForcesEnslave>{0}的军队正在尝试奴役{1}的人民</settlementMilitaryForcesEnslave>
+    <settlementMilitaryForcesCapturing>{0}的军队正尝试攻陷{1}</settlementMilitaryForcesCapturing>
+    <militarySent>派遣军队</militarySent>
+    <militarySentToDefend>{0}的军队正被调去保卫{1}</militarySentToDefend>
+    <militaryAlreadyAssigned>军队已经被调离。</militaryAlreadyAssigned>
+    <settlementDeliveredLoot>你的领地已经向你交付一下战利品：</settlementDeliveredLoot>
+    <RaidLoot>成功袭击据点</RaidLoot>
+    <RaidEnemySettlementSuccess>我们成功袭击了{0}</RaidEnemySettlementSuccess>
+    <RaidFailure>袭击据点失败</RaidFailure>
+    <RaidEnemySettlementFailure>我们入侵{0}的行动失败了</RaidEnemySettlementFailure>
+    <CaptureSettlement>占领据点</CaptureSettlement>
+    <CaptureEnemySettlementSuccess>{0}的军队成功占领了{1}。根据之前占领派系的科技水平，这新占领领地的科技水平变化到了{2}。</CaptureEnemySettlementSuccess>
+    <CaptureEnemySettlementFailure>{0}未能成功占领{1}。</CaptureEnemySettlementFailure>
+    <MilitaryForcesReorganizing>{0}在完成任务后正在进行修整。</MilitaryForcesReorganizing>
+    <DefenseSuccessful>领地防御成功</DefenseSuccessful>
+    <DefenseFailure>领地防御失败</DefenseFailure>
+    <BulidingDestroyedInRaid>{0}在袭击中被彻底摧毁</BulidingDestroyedInRaid>
+    <SettlementDeleveledRaid>领地等级降低了一级。</SettlementDeleveledRaid>
+    <AttackSettlementfc>攻击该据点</AttackSettlementfc>
+    <CaptureSettlementfc>占领该据点</CaptureSettlementfc>
+    <EnslavePopulation>奴役其人口</EnslavePopulation>
+    <RaidSettlement>掠夺该据点</RaidSettlement>
+    <FCAvailable>可用的</FCAvailable>
+    <ShortMilitary>万人</ShortMilitary>
+    <NoValidMilitaries>没有可用军队。</NoValidMilitaries>
+    <DefendSettlement>防守领地</DefendSettlement>
+    <SettlementDefendingInformation>领地军事信息：{0}的守备力量 - {1}万人</SettlementDefendingInformation>
+    <ResetToHomeSettlement>重置领地的防御力量 - {0}万人</ResetToHomeSettlement>
+    <ChangeDefendingForce>改变领地的防御力量</ChangeDefendingForce>
+    <SendToSettlement>转移到领地</SendToSettlement>
+
+    <EventAffectingSettlements>下列领地受到该事件影响：</EventAffectingSettlements>
+    <TaxesHaveArrived>领地税收已上缴至首都！</TaxesHaveArrived>
+
+</LanguageData>

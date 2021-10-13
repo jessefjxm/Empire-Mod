@@ -1,14 +1,12 @@
-﻿using System.Linq;
-using System.Text;
-using RimWorld;
+﻿using RimWorld;
 using RimWorld.Planet;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 using Verse;
 
-namespace FactionColonies
-{
-    public class CreateColonyWindowFc : Window
-    {
+namespace FactionColonies {
+    public class CreateColonyWindowFc : Window {
         public sealed override Vector2 InitialSize => new Vector2(300f, 600f);
 
         public int currentTileSelected = -1;
@@ -17,52 +15,44 @@ namespace FactionColonies
         public bool traitExpansionistReducedFee;
         public int timeToTravel = -1;
 
-        public CreateColonyWindowFc()
-        {
+        public CreateColonyWindowFc() {
             forcePause = false;
             draggable = false;
             preventCameraMotion = false;
             doCloseX = true;
-            windowRect = new Rect(UI.screenWidth - InitialSize.x, (UI.screenHeight - InitialSize.y) / 2f - (UI.screenHeight/8f), 
+            windowRect = new Rect(UI.screenWidth - InitialSize.x, (UI.screenHeight - InitialSize.y) / 2f - (UI.screenHeight / 8f),
                 InitialSize.x, InitialSize.y);
         }
 
 
 
         //Pre-Opening
-        public override void PreOpen()
-        {
+        public override void PreOpen() {
 
         }
 
         //Drawing
-        public override void DoWindowContents(Rect inRect)
-        {
+        public override void DoWindowContents(Rect inRect) {
             FactionFC faction = Find.World.GetComponent<FactionFC>();
 
             faction.roadBuilder.DrawPaths();
 
-            if (Find.WorldSelector.selectedTile != -1 && Find.WorldSelector.selectedTile != currentTileSelected)
-            {
+            if (Find.WorldSelector.selectedTile != -1 && Find.WorldSelector.selectedTile != currentTileSelected) {
                 currentTileSelected = Find.WorldSelector.selectedTile;
                 //Log.Message("Current: " + currentTileSelected + ", Selected: " + Find.WorldSelector.selectedTile);
                 currentBiomeSelected = DefDatabase<BiomeResourceDef>.GetNamed(
                     Find.WorldGrid.tiles[currentTileSelected].biome.ToString(), false);
                 //default biome
-                if (currentBiomeSelected == default(BiomeResourceDef))
-                {
+                if (currentBiomeSelected == default(BiomeResourceDef)) {
                     //Log Modded Biome
                     currentBiomeSelected = BiomeResourceDefOf.defaultBiome;
                 }
                 currentHillinessSelected = DefDatabase<BiomeResourceDef>.GetNamed(
                     Find.WorldGrid.tiles[currentTileSelected].hilliness.ToString());
-                if (currentBiomeSelected.canSettle && currentHillinessSelected.canSettle && currentTileSelected != 1)
-                {
+                if (currentBiomeSelected.canSettle && currentHillinessSelected.canSettle && currentTileSelected != 1) {
                     timeToTravel = FactionColonies.ReturnTicksToArrive(
                         Find.World.GetComponent<FactionFC>().capitalLocation, currentTileSelected);
-                }
-                else
-                {
+                } else {
                     timeToTravel = 0;
                 }
             }
@@ -77,19 +67,15 @@ namespace FactionColonies
             if (faction.hasPolicy(FCPolicyDefOf.isolationist))
                 silverToCreateSettlement *= 2;
 
-            if (faction.hasPolicy(FCPolicyDefOf.expansionist)){
-                if (!faction.settlements.Any() && !faction.settlementCaravansList.Any())
-                {
+            if (faction.hasPolicy(FCPolicyDefOf.expansionist)) {
+                if (!faction.settlements.Any() && !faction.settlementCaravansList.Any()) {
                     traitExpansionistReducedFee = false;
                     silverToCreateSettlement = 0;
-                } else
-                {
-                    if (faction.traitExpansionistTickLastUsedSettlementFeeReduction == -1 || (faction.traitExpansionistBoolCanUseSettlementFeeReduction))
-                    {
+                } else {
+                    if (faction.traitExpansionistTickLastUsedSettlementFeeReduction == -1 || (faction.traitExpansionistBoolCanUseSettlementFeeReduction)) {
                         traitExpansionistReducedFee = true;
                         silverToCreateSettlement /= 2;
-                    } else
-                    {
+                    } else {
                         traitExpansionistReducedFee = false;
                     }
                 }
@@ -131,30 +117,27 @@ namespace FactionColonies
             Widgets.Label(new Rect(110, 310, 60, 25), "Modifier".Translate());
             Widgets.Label(new Rect(180, 310, 60, 25), "Final".Translate());
 
-            if (currentTileSelected != -1)
-            {
-                foreach (ResourceType titheType in ResourceUtils.resourceTypes)
-                {
+            if (currentTileSelected != -1) {
+                foreach (ResourceType titheType in ResourceUtils.resourceTypes) {
                     int height = 15;
-                    if(Widgets.ButtonImage(new Rect(20, 335 + (int) titheType * (5 + height), height, height), 
-                        faction.returnResource(titheType).getIcon()))
-                    {
-                        Find.WindowStack.Add(new DescWindowFc("SettlementProductionOf".Translate() + ": " 
-                            + faction.returnResource(titheType).label, 
-                            char.ToUpper(faction.returnResource(titheType).label[0]) 
+                    if (Widgets.ButtonImage(new Rect(20, 335 + (int)titheType * (5 + height), height, height),
+                        faction.returnResource(titheType).getIcon())) {
+                        Find.WindowStack.Add(new DescWindowFc("SettlementProductionOf".Translate() + ": "
+                            + faction.returnResource(titheType).label,
+                            char.ToUpper(faction.returnResource(titheType).label[0])
                             + faction.returnResource(titheType).label.Substring(1)));
                     }
-                    Widgets.Label(new Rect(40, 335 + (int) titheType * (5 + height), 60, height+2), 
-                        (currentBiomeSelected.BaseProductionAdditive[(int) titheType] 
-                         + currentHillinessSelected.BaseProductionAdditive[(int) titheType]).ToString());
-                    Widgets.Label(new Rect(110, 335 + (int) titheType * (5 + height), 60, height+2), 
-                        (currentBiomeSelected.BaseProductionMultiplicative[(int) titheType] 
-                         * currentHillinessSelected.BaseProductionMultiplicative[(int) titheType]).ToString());
-                    Widgets.Label(new Rect(180, 335 + (int) titheType * (5 + height), 60, height+2), 
-                        ((currentBiomeSelected.BaseProductionAdditive[(int) titheType] 
-                          + currentHillinessSelected.BaseProductionAdditive[(int) titheType])
-                         *(currentBiomeSelected.BaseProductionMultiplicative[(int) titheType] 
-                           * currentHillinessSelected.BaseProductionMultiplicative[(int) titheType])).ToString());
+                    Widgets.Label(new Rect(40, 335 + (int)titheType * (5 + height), 60, height + 2),
+                        (currentBiomeSelected.BaseProductionAdditive[(int)titheType]
+                         + currentHillinessSelected.BaseProductionAdditive[(int)titheType]).ToString());
+                    Widgets.Label(new Rect(110, 335 + (int)titheType * (5 + height), 60, height + 2),
+                        (currentBiomeSelected.BaseProductionMultiplicative[(int)titheType]
+                         * currentHillinessSelected.BaseProductionMultiplicative[(int)titheType]).ToString());
+                    Widgets.Label(new Rect(180, 335 + (int)titheType * (5 + height), 60, height + 2),
+                        ((currentBiomeSelected.BaseProductionAdditive[(int)titheType]
+                          + currentHillinessSelected.BaseProductionAdditive[(int)titheType])
+                         * (currentBiomeSelected.BaseProductionMultiplicative[(int)titheType]
+                           * currentHillinessSelected.BaseProductionMultiplicative[(int)titheType])).ToString());
                 }
             }
 
@@ -165,26 +148,22 @@ namespace FactionColonies
             Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.MiddleCenter;
             int buttonLength = 130;
-            if(Widgets.ButtonText(new Rect((InitialSize.x - 32 - buttonLength)/2f, 535, buttonLength, 32), 
+            if (Widgets.ButtonText(new Rect((InitialSize.x - 32 - buttonLength) / 2f, 535, buttonLength, 32),
                 "Settle".Translate() + ": (" + silverToCreateSettlement + ")")) //add inital cost
             { //if click button to settle
                 if (PaymentUtil.getSilver() >= silverToCreateSettlement) //if have enough monies to make new settlement
                 {
                     StringBuilder reason = new StringBuilder();
-                    if (currentTileSelected == -1 || !TileFinder.IsValidTileForNewSettlement(currentTileSelected, reason) || 
-                        Find.World.GetComponent<FactionFC>().checkSettlementCaravansList(currentTileSelected.ToString()))
-                    {
+                    if (currentTileSelected == -1 || !TileFinder.IsValidTileForNewSettlement(currentTileSelected, reason) ||
+                        Find.World.GetComponent<FactionFC>().checkSettlementCaravansList(currentTileSelected.ToString())) {
                         //Alert Error to User
                         Messages.Message(reason.ToString(), MessageTypeDefOf.NegativeEvent);
-                    }
-                    else
-                    {   //Else if valid tile
+                    } else {   //Else if valid tile
 
                         PaymentUtil.paySilver(silverToCreateSettlement);
                         //if PROCESS MONEY HERE
 
-                        if (traitExpansionistReducedFee)
-                        {
+                        if (traitExpansionistReducedFee) {
                             faction.traitExpansionistTickLastUsedSettlementFeeReduction = Find.TickManager.TicksGame;
                             faction.traitExpansionistBoolCanUseSettlementFeeReduction = false;
                         }
@@ -198,19 +177,18 @@ namespace FactionColonies
                         Find.World.GetComponent<FactionFC>().addEvent(tmp);
 
                         Find.World.GetComponent<FactionFC>().settlementCaravansList.Add(tmp.location.ToString());
-                        Messages.Message("CaravanSentToLocation".Translate() 
+                        Messages.Message("CaravanSentToLocation".Translate()
                                          + " " + (tmp.timeTillTrigger
-                                                  -Find.TickManager.TicksGame).ToStringTicksToDays() + "!", 
+                                                  - Find.TickManager.TicksGame).ToStringTicksToDays() + "!",
                             MessageTypeDefOf.PositiveEvent);
                         // when event activate FactionColonies.createPlayerColonySettlement(currentTileSelected);
                     }
-                } else
-                {  //if don't have enough monies to make settlement
+                } else {  //if don't have enough monies to make settlement
                     Messages.Message("NotEnoughSilverToSettle".Translate() + "!", MessageTypeDefOf.NeutralEvent);
                 }
             }
 
-            
+
 
 
 
@@ -219,12 +197,11 @@ namespace FactionColonies
             Text.Anchor = anchorBefore;
         }
 
-        public void DrawLabelBox(int x, int y, int length, int height, string text1, string text2)
-        {
+        public void DrawLabelBox(int x, int y, int length, int height, string text1, string text2) {
             Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.MiddleCenter;
             //Draw highlight
-            Widgets.DrawHighlight(new Rect(x, y+height/8, length, height / 4f));
+            Widgets.DrawHighlight(new Rect(x, y + height / 8, length, height / 4f));
             Widgets.Label(new Rect(x, y, length, height / 2f), text1);
 
             //divider

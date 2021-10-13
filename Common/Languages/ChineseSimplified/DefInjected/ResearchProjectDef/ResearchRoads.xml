@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <FCRoadBuildingDirt.label>帝国道路工程 - 泥土路</FCRoadBuildingDirt.label>
+  <FCRoadBuildingDirt.description>研究建造泥土路所需的技术，研发完这项科技之后你帝国的各个领地之间会开始自动修建泥土路，每隔三天就会有一条新的道路建成。</FCRoadBuildingDirt.description>
+
+  <FCRoadBuildingRoad.label>帝国道路工程 - 石板路</FCRoadBuildingRoad.label>
+  <FCRoadBuildingRoad.description>研究建造石板路所需的技术，研发完这项科技之后你帝国的各个领地之间会开始自动修建石板路，每隔三天就会有一条新的道路建成。</FCRoadBuildingRoad.description>
+
+  <FCRoadBuildingHighway.label>帝国道路工程 - 高速公路</FCRoadBuildingHighway.label>
+  <FCRoadBuildingHighway.description>研究建造高速公路所需的技术，研发完这项科技之后你帝国的各个领地之间会开始自动修建高速公路，“条条大路通罗马”不再只是一句空谈了。每隔三天就会有一条新的道路建成。</FCRoadBuildingHighway.description>
+
+
+</LanguageData>

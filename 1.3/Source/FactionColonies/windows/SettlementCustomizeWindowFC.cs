@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using RimWorld.Planet;
 using UnityEngine;
-using RimWorld;
 using Verse;
-using RimWorld.Planet;
 
-namespace FactionColonies
-{
-    public class SettlementCustomizeWindowFc : Window
-    {
-        public override Vector2 InitialSize
-        {
+namespace FactionColonies {
+    public class SettlementCustomizeWindowFc : Window {
+        public override Vector2 InitialSize {
             get { return new Vector2(445f, 280f); }
         }
 
@@ -38,8 +30,7 @@ namespace FactionColonies
         private string title;
 
 
-        public SettlementCustomizeWindowFc(SettlementFC settlement)
-        {
+        public SettlementCustomizeWindowFc(SettlementFC settlement) {
             this.forcePause = false;
             this.draggable = true;
             this.doCloseX = true;
@@ -50,18 +41,15 @@ namespace FactionColonies
             //this.title = faction.title;
         }
 
-        public override void PreOpen()
-        {
+        public override void PreOpen() {
             base.PreOpen();
         }
 
-        public override void WindowUpdate()
-        {
+        public override void WindowUpdate() {
             base.WindowUpdate();
         }
 
-        public override void OnAcceptKeyPressed()
-        {
+        public override void OnAcceptKeyPressed() {
             base.OnAcceptKeyPressed();
             //faction.title = title;
             settlement.name = name;
@@ -70,8 +58,7 @@ namespace FactionColonies
             if (settlementFc != null) settlementFc.Name = name;
         }
 
-        public override void DoWindowContents(Rect inRect)
-        {
+        public override void DoWindowContents(Rect inRect) {
             //grab before anchor/font
             GameFont fontBefore = Text.Font;
             TextAnchor anchorBefore = Text.Anchor;
@@ -86,8 +73,7 @@ namespace FactionColonies
             Text.Font = GameFont.Small;
             for (int i = 0; i < 1; i++) //for each field to customize
             {
-                switch (i)
-                {
+                switch (i) {
                     case 0: //faction name
                         Widgets.Label(new Rect(xoffset + 3, yoffset + yspacing * i, length / 4, yspacing),
                             "SettlementName".Translate() + ": ");
@@ -117,12 +103,10 @@ namespace FactionColonies
             }
 
             if (Widgets.ButtonText(new Rect((InitialSize.x - 120 - 18) / 2, yoffset + InitialSize.y - 120, 120, 30),
-                "ConfirmChanges".Translate()))
-            {
+                "ConfirmChanges".Translate())) {
                 settlement.name = name;
                 Settlement check = Find.WorldObjects.SettlementAt(settlement.mapLocation);
-                if (check != null)
-                {
+                if (check != null) {
                     check.Name = name;
                 }
             }

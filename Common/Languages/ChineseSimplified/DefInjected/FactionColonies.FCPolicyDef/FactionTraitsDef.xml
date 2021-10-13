@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- <militaristic.label>军国主义。强烈的国民自豪感渗透进帝国的方方面面。采纳该思潮后，你派系军队的战斗力将提高 20% 。每隔 5 天你就可以通过花费目标部队组建费用的 20% 来组建一只新的军队。每个领地在建成后都会免费获得一个兵营建筑，并且所有军事用途的建筑维护费减少 100%。</militaristic.label>
+<pacifist.label>和平主义。冲突带来的结果往往是毁灭性的，甚至会破坏我们相互争夺的东西。采纳该思潮后，每隔 5 天你就可以派遣一名外交官前往目标派系改善关系，但是如果你领地内居民死亡时会导致该领地的幸福滴下降，人民也会变得不安。无法攻占或者袭击其他派系的据点。</pacifist.label>
+<authoritarian.label>威权主义。同一个声音，同一个权利，同一个国家。采纳该思潮后，你将采用一种新的突袭方式以替代传统的袭击，这种方式使得你可以派遣军队去袭击其他派系的领地并使该领地的所有居民成为你的奴隶，另外，你可以通过给指定领地赏赐白银以提高该领地的忠诚度。领地建立时的初始幸福度将变为 70%。</authoritarian.label>
+<egalitarian.label>平等主义。每个人生来都是平等的，我们要推行福利政策并惠及到社会的方方面面。采纳该思潮后，你可以采取减税政策，这使得在接下来的两次税收的基础税额降低 20%，但是相应地，你的领地的幸福度和繁荣度会因此大大提高。另外，你领地的幸福度每提高 10% 就能够获得额外 1% 的税收（例如 100% 的幸福度税收就会提高 10%），领地建立时的初始幸福度将变为 60%。</egalitarian.label>
+<isolationist.label>孤立主义。我们应该专注于内政并稳步发展。采用该思潮后，领地的升级和建筑的修建时间都会减少 50%。你麾下所有的领地每升一级所都会额外增加 3 个工人合理负载。另外，所有领地的基础税收增加10%。但是开拓一个新领地的成本提高 100%，无法攻占或者掠夺其他派系的据点。</isolationist.label>
+<expansionist.label>扩张主义。我们应该专注于扩张，整个地图都会插上我们的旗帜。采纳该思潮后，你可以免费开拓第一个领地，另外在开拓第一个领地之后每隔 1 年你就能够享受一个加成，这使得你在开拓下一个领地的花费减半，另外领地建成后的初始等级是 2 级。</expansionist.label>
+<technocratic.label>科学至上。我们应该专注研发科技，科技就是第一生产力。采纳该思潮后，你的领地所提供的科研点数将翻倍，另外，你可以将超过你殖民地科技水平的物品送到你的指定领地并进行逆向研究工程并获得不错的科研点数。</technocratic.label>
+<feudal.label>封建保守。我们应该维持现在的关系裙带。采纳该思潮后，每个季度你可以从你的领地里面招募一名经验丰富的雇佣兵加入到你的殖民地。实物税额提高 20%。但是如果你没有保护好你领地内的臣民的话，领地的忠诚度将会大大降低。</feudal.label> -->
+
+  <militaristic.label>军国主义</militaristic.label>
+  <militaristic.desc>为自己的事业在鲜血和死亡中寻求荣耀。强烈的国民自豪感渗透进帝国的方方面面。</militaristic.desc>
+
+  <pacifist.label>和平主义</pacifist.label>
+  <pacifist.desc>时时刻刻都在试图避免冲突。冲突带来的结果往往是毁灭性的，甚至会破坏我们相互争夺的东西。</pacifist.desc>
+
+  <authoritarian.label>威权主义</authoritarian.label>
+  <authoritarian.desc>试图通过任何必要的手段控制其成员。同一个声音，同一个权利，同一个国家。</authoritarian.desc>
+
+  <egalitarian.label>平等主义</egalitarian.label>
+  <egalitarian.label>寻求所有人的平等。每个人生来都是平等的，我们要推行福利政策并惠及到社会的方方面面。</egalitarian.label>
+
+  <isolationist.label>孤立主义</isolationist.label>
+  <isolationist.label>在世界政治和互动中与世隔绝。我们应该专注于内政并稳步发展。</isolationist.label>
+
+  <expansionist.label>扩张主义</expansionist.label>
+  <expansionist.label>向全境传播我们的荣耀。整个地图都会插上我们的旗帜。</expansionist.label>
+
+  <technocratic.label>科学至上</technocratic.label>
+  <technocratic.label>追寻知识的进一步发展和持续改进。科技就是第一生产力。</technocratic.label>
+
+  <feudal.label>封建保守</feudal.label>
+  <feudal.label>支持封建契约，通过将社会绑定到领主身上以换取保护。我们应该维持现在的关系裙带。</feudal.label>
+
+
+</LanguageData>

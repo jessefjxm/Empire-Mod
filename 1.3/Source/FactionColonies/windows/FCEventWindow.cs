@@ -1,17 +1,11 @@
-﻿using System;
+﻿using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using RimWorld;
 using Verse;
-using RimWorld.Planet;
 
-namespace FactionColonies
-{
-    class FCEventWindow : Window
-    {
+namespace FactionColonies {
+    class FCEventWindow : Window {
 
         public List<FCEvent> events;
         public FactionFC faction;
@@ -31,17 +25,14 @@ namespace FactionColonies
 
 
 
-        public override Vector2 InitialSize
-        {
-            get
-            {
+        public override Vector2 InitialSize {
+            get {
                 return new Vector2(628f, 278f);
             }
         }
 
 
-        public FCEventWindow()
-        {
+        public FCEventWindow() {
             //Window Information
             this.faction = Find.World.GetComponent<FactionFC>();
             this.events = faction.events;
@@ -74,14 +65,12 @@ namespace FactionColonies
             eventTimeRemaining = new Rect(eventLocationBase.x + eventLocationBase.width, 0, 140, eventHeight);
         }
 
-        public override void WindowUpdate()
-        {
+        public override void WindowUpdate() {
             base.WindowUpdate();
             this.maxScroll = (events.Count() * eventHeight) - scrollBoxHeight;
         }
 
-        public override void DoWindowContents(Rect inRect)
-        {
+        public override void DoWindowContents(Rect inRect) {
             //grab before anchor/font
             GameFont fontBefore = Text.Font;
             TextAnchor anchorBefore = Text.Anchor;
@@ -99,8 +88,7 @@ namespace FactionColonies
             int i = 0;
 
             Text.Anchor = TextAnchor.MiddleCenter;
-            foreach (FCEvent evt in events)
-            {
+            foreach (FCEvent evt in events) {
                 i++;
                 Rect name = new Rect();
                 Rect desc = new Rect();
@@ -122,73 +110,53 @@ namespace FactionColonies
                 highlight = new Rect(name.x, name.y, time.x + time.width, eventHeight);
 
 
-                
-                if(i % 2 == 0)
-                {
+
+                if (i % 2 == 0) {
                     Widgets.DrawHighlight(highlight);
                 }
                 Widgets.Label(name, evt.def.label);
                 //
-                if (Widgets.ButtonText(desc, "Desc"))
-                {
-                    if (evt.hasCustomDescription == false)
-                    {
+                if (Widgets.ButtonText(desc, "查看描述")) {
+                    if (evt.hasCustomDescription == false) {
                         //If desc button clicked
                         string settlementString = "";
-                        foreach (SettlementFC loc in evt.settlementTraitLocations)
-                        {
-                            if (loc != null)
-                            {
-                                if (settlementString == "")
-                                {
+                        foreach (SettlementFC loc in evt.settlementTraitLocations) {
+                            if (loc != null) {
+                                if (settlementString == "") {
                                     settlementString = settlementString + loc.name;
-                                }
-                                else
-                                {
+                                } else {
                                     settlementString = settlementString + ", " + loc.name;
                                 }
                             }
                         }
-                        if (settlementString != "")
-                        {
-                            Find.WindowStack.Add(new DescWindowFc(evt.def.description + "\n This event is affecting the following settlements: " + settlementString));
-                        }
-                        else
-                        {
+                        if (settlementString != "") {
+                            Find.WindowStack.Add(new DescWindowFc(evt.def.description + "\n 该事件正在影响以下居住地： " + settlementString));
+                        } else {
                             Find.WindowStack.Add(new DescWindowFc(evt.def.description));
                         }
-                    } else
-                    {
+                    } else {
                         //has custom description
                         Find.WindowStack.Add(new DescWindowFc(evt.customDescription));
                     }
                 }
                 //
-                if(Widgets.ButtonText(location, "Location".Translate().CapitalizeFirst()))
-                {
-                    if(evt.hasDestination == true)
-                    {
+                if (Widgets.ButtonText(location, "Location".Translate().CapitalizeFirst())) {
+                    if (evt.hasDestination == true) {
                         Find.WindowStack.Add(new SettlementWindowFc(faction.returnSettlementByLocation(evt.location, evt.planetName)));
-                    } else
-                    {
-                        if (evt.settlementTraitLocations.Count() > 0)
-                        {
+                    } else {
+                        if (evt.settlementTraitLocations.Count() > 0) {
                             //if event affecting colonies
                             List<FloatMenuOption> list = new List<FloatMenuOption>();
-                            foreach (SettlementFC settlement in evt.settlementTraitLocations)
-                            {
-                                if (settlement != null)
-                                {
+                            foreach (SettlementFC settlement in evt.settlementTraitLocations) {
+                                if (settlement != null) {
                                     list.Add(new FloatMenuOption(settlement.name, delegate { Find.WindowStack.Add(new SettlementWindowFc(settlement)); }));
                                 }
                             }
                             if (list.Count == 0) { list.Add(new FloatMenuOption("Null", null)); }
                             Find.WindowStack.Add(new FloatMenu(list));
-                                
-                        } else
-                        {
-                           if (evt.def == FCEventDefOf.taxColony && evt.source != -1)
-                            {
+
+                        } else {
+                            if (evt.def == FCEventDefOf.taxColony && evt.source != -1) {
                                 Find.WindowStack.Add(new SettlementWindowFc(faction.returnSettlementByLocation(evt.source, evt.planetName)));
                             }
                         }
@@ -217,34 +185,27 @@ namespace FactionColonies
             Text.Anchor = anchorBefore;
 
 
-            if (Event.current.type == EventType.ScrollWheel)
-            {
+            if (Event.current.type == EventType.ScrollWheel) {
 
                 scrollWindow(Event.current.delta.y);
             }
-            
+
         }
 
 
 
 
 
-        private void scrollWindow(float num)
-        {
-            if (scroll - num * 5 < -1 * maxScroll)
-            {
+        private void scrollWindow(float num) {
+            if (scroll - num * 5 < -1 * maxScroll) {
                 scroll = -1 * maxScroll;
-            }
-            else if (scroll - num * 5 > 0)
-            {
+            } else if (scroll - num * 5 > 0) {
                 scroll = 0;
-            }
-            else
-            {
+            } else {
                 scroll -= (int)Event.current.delta.y * 5;
             }
             Event.current.Use();
         }
 
-        }
     }
+}

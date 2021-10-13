@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<LanguageData>
+		<defaultBiome.label>温带森林</defaultBiome.label>
+		<BorealForest.label>寒带森林</BorealForest.label>
+		<Tundra.label>冻土苔原</Tundra.label>
+		<ColdBog.label>极地沼泽</ColdBog.label>
+		<IceSheet.label>海洋冰盖</IceSheet.label>
+		<SeaIce.label>冰原</SeaIce.label>
+		<TemperateSwamp.label>温带沼泽</TemperateSwamp.label>
+		<TropicalRainforest.label>热带雨林</TropicalRainforest.label>
+		<TropicalSwamp.label>热带沼泽</TropicalSwamp.label>
+		<AridShrubland.label>干旱灌木原</AridShrubland.label>
+		<Desert.label>沙漠</Desert.label>
+		<ExtremeDesert.label>极端沙漠</ExtremeDesert.label>
+	</LanguageData>

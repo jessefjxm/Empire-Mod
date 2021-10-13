@@ -25,8 +25,8 @@
 		<techLevelRequirement>Undefined</techLevelRequirement>
 		<positiveEffects>
 			<!-- string -->
-			<li>- Reduce prosperity loss by 50% when attacked</li>
-			<li>- Cannot lose buildings or settlement levels upon a failed defense</li>
+			<li>- 当领地遭受进攻时，所损失的繁荣度降低 50%。</li>
+			<li>- 当领地防御失败时，领地不会降级，建筑也不会因此被摧毁。</li>
 		</positiveEffects>
 		<negativeEffects>
 			<!-- string -->
@@ -44,8 +44,8 @@
 		<techLevelRequirement>Undefined</techLevelRequirement>
 		<positiveEffects>
 			<!-- string -->
-			<li>- Increases the value of loot by 20% when raiding</li>
-			<li>- Military forces are available 1 day sooner after using them to raid</li>
+			<li>- 由袭击掠夺敌方据点所提供的战利品收益提高 20%。</li>
+			<li>- 每次完成袭击行动后，军队的修整时间减少一天。</li>
 		</positiveEffects>
 		<negativeEffects>
 			<!-- string -->
@@ -63,7 +63,7 @@
 		<techLevelRequirement>Undefined</techLevelRequirement>
 		<positiveEffects>
 			<!-- string -->
-			<li>- Military forces receive a +2 level bonus to combat when defending</li>
+			<li>- 当领地处于防御状态时，守备部队 +2 军力等级。</li>
 		</positiveEffects>
 		<negativeEffects>
 			<!-- string -->
@@ -80,7 +80,7 @@
 		<techLevelRequirement>Undefined</techLevelRequirement>
 		<positiveEffects>
 			<!-- string -->
-			<li>- 5% chance every time a settlement is billed to receive a significant boost in revenue</li>
+			<li>- 每次领地税收到账时，有 5% 的几率获得额外的大笔收入。</li>
 		</positiveEffects>
 		<negativeEffects>
 			<!-- string -->
@@ -98,9 +98,9 @@
 		<techLevelRequirement>Undefined</techLevelRequirement>
 		<positiveEffects>
 			<!-- string -->
-			<li>- Authomatically unlocks the first road technology</li>
-			<li>- Roads are constructed in 33% of the require time</li>
-			<li>- Roads will also be constructed to connect to allied faction's settlements</li>
+			<li>- 自动解锁初级的建设领地道路科技。</li>
+			<li>- 修建道路所需要的时间减少 33% 。</li>
+			<li>- 道路会自动修建延伸至盟友的据点。</li>
 		</positiveEffects>
 		<negativeEffects>
 			<!-- string -->
@@ -118,7 +118,7 @@
 		<techLevelRequirement>Undefined</techLevelRequirement>
 		<positiveEffects>
 			<!-- string -->
-			<li>- A random trade caravan will arrive to your capital every 3-5 days</li>
+			<li>- 每隔 3~5 天就会有一支随机类型的商队抵达你的首都与你进行交易。</li>
 		</positiveEffects>
 		<negativeEffects>
 			<!-- string -->
@@ -136,7 +136,7 @@
 		<techLevelRequirement>Undefined</techLevelRequirement>
 		<positiveEffects>
 			<!-- string -->
-			<li>- Settlements passively generate research points equal to 5% of their total profit</li>
+			<li>- 领地将会自动产生相当于 5% 收益的科研点数。</li>
 		</positiveEffects>
 		<negativeEffects>
 			<!-- string -->
@@ -154,7 +154,7 @@
 		<techLevelRequirement>Undefined</techLevelRequirement>
 		<positiveEffects>
 			<!-- string -->
-			<li>- Negative random Empire events have a 20% chance to be re-rolled in exchange for a new event</li>
+			<li>- 负面的随机事件有 20% 的几率重新生成。</li>
 		</positiveEffects>
 		<negativeEffects>
 			<!-- string -->

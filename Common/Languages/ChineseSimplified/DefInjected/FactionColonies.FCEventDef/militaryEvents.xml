@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <raidEnemySettlement.label>突袭敌方领地</raidEnemySettlement.label>
+  <enslaveEnemySettlement.label>奴役敌方领地</enslaveEnemySettlement.label>
+  <captureEnemySettlement.label>占领敌方领地</captureEnemySettlement.label>
+  <cooldownMilitary.label>军事行动冷却时间</cooldownMilitary.label>
+  <settlementBeingAttacked.label>领地遭受攻击</settlementBeingAttacked.label>
+
+
+</LanguageData>

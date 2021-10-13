@@ -1,19 +1,13 @@
-﻿using System;
+﻿using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RimWorld;
-using Verse;
-using Unity;
-using UnityEngine;
 using System.Reflection;
+using UnityEngine;
+using Verse;
 
 
-namespace FactionColonies
-{
-    class FCPrisonerMenu : Window
-    {
+namespace FactionColonies {
+    class FCPrisonerMenu : Window {
         public List<FCPrisoner> prisoners;
         public SettlementFC settlement;
         public FactionFC faction;
@@ -36,12 +30,10 @@ namespace FactionColonies
         public Rect optionButtonInfo;
         public Rect optionButtonAction;
 
-        
 
-        public override Vector2 InitialSize
-        {
-            get
-            {
+
+        public override Vector2 InitialSize {
+            get {
                 return new Vector2(538f, 478f);  //19
             }
         }
@@ -50,8 +42,7 @@ namespace FactionColonies
 
 
 
-        public FCPrisonerMenu(SettlementFC settlement)
-        {
+        public FCPrisonerMenu(SettlementFC settlement) {
             //Window Information
             this.faction = Find.World.GetComponent<FactionFC>();
             this.settlement = settlement;
@@ -86,16 +77,14 @@ namespace FactionColonies
 
         }
 
-        public override void WindowUpdate()
-        {
+        public override void WindowUpdate() {
             base.WindowUpdate();
             this.maxScroll = (prisoners.Count() * optionHeight) - scrollBoxHeight;
         }
 
 
 
-        public override void DoWindowContents(Rect inRect)
-        {
+        public override void DoWindowContents(Rect inRect) {
             //grab before anchor/font
             GameFont fontBefore = Text.Font;
             TextAnchor anchorBefore = Text.Anchor;
@@ -109,8 +98,7 @@ namespace FactionColonies
             Text.Anchor = TextAnchor.MiddleLeft;
 
             int i = 0;
-            foreach (FCPrisoner prisoner in prisoners)
-            {
+            foreach (FCPrisoner prisoner in prisoners) {
                 Rect Box;
                 Rect PawnIcon;
                 Rect PawnName;
@@ -142,8 +130,7 @@ namespace FactionColonies
                 //display stuff now
                 Widgets.DrawMenuSection(Box);
                 //on every other box
-                if (i % 2 == 0)
-                {
+                if (i % 2 == 0) {
                     Widgets.DrawHighlight(Box);
                 }
 
@@ -154,14 +141,13 @@ namespace FactionColonies
                 //Pawn Health
                 Widgets.Label(PawnHealth, "Health".Translate().CapitalizeFirst() + " " + prisoner.health);
                 //Pawn Unrest
-                    //Widgets.Label(PawnUnrest, "Unrest".Translate().CapitalizeFirst() + " " + prisoner.unrest);
+                //Widgets.Label(PawnUnrest, "Unrest".Translate().CapitalizeFirst() + " " + prisoner.unrest);
 
 
 
                 //Pawn Workload
                 string workload;
-                switch (prisoner.workload)
-                {
+                switch (prisoner.workload) {
                     case FCWorkLoad.Heavy:
                         workload = "FCHeavy".Translate().CapitalizeFirst();
                         break;
@@ -175,19 +161,15 @@ namespace FactionColonies
                         workload = "null";
                         break;
                 }
-                if (Widgets.ButtonText(PawnWorkload, "FCWorkload".Translate().CapitalizeFirst() + ": " + workload))
-                {
+                if (Widgets.ButtonText(PawnWorkload, "FCWorkload".Translate().CapitalizeFirst() + ": " + workload)) {
                     List<FloatMenuOption> list = new List<FloatMenuOption>();
-                    list.Add(new FloatMenuOption("FCHeavy".Translate().CapitalizeFirst() + " - " + "FCHeavyExplanation".Translate(), delegate
-                    {
+                    list.Add(new FloatMenuOption("FCHeavy".Translate().CapitalizeFirst() + " - " + "FCHeavyExplanation".Translate(), delegate {
                         prisoner.workload = FCWorkLoad.Heavy;
                     }));
-                    list.Add(new FloatMenuOption("FCMedium".Translate().CapitalizeFirst() + " - " + "FCMediumExplanation".Translate(), delegate
-                    {
+                    list.Add(new FloatMenuOption("FCMedium".Translate().CapitalizeFirst() + " - " + "FCMediumExplanation".Translate(), delegate {
                         prisoner.workload = FCWorkLoad.Medium;
                     }));
-                    list.Add(new FloatMenuOption("FCLight".Translate().CapitalizeFirst() + " - " + "FCLightExplanation".Translate(), delegate
-                    {
+                    list.Add(new FloatMenuOption("FCLight".Translate().CapitalizeFirst() + " - " + "FCLightExplanation".Translate(), delegate {
                         prisoner.workload = FCWorkLoad.Light;
                     }));
                     FloatMenu menu = new FloatMenu(list);
@@ -195,17 +177,13 @@ namespace FactionColonies
                 }
 
                 //Info Button
-                if (Widgets.ButtonTextSubtle(ButtonInfo, "ViewInfo".Translate()))
-                {
+                if (Widgets.ButtonTextSubtle(ButtonInfo, "ViewInfo".Translate())) {
                     Pawn pawn = new Pawn();
                     pawn = prisoner.prisoner;
 
-                    if (prisoner.healthTracker != null)
-                    {
+                    if (prisoner.healthTracker != null) {
                         prisoner.prisoner.health = prisoner.healthTracker;
-                    }
-                    else
-                    {
+                    } else {
                         prisoner.prisoner.health = new Pawn_HealthTracker(prisoner.prisoner);
                         prisoner.healthTracker = new Pawn_HealthTracker(prisoner.prisoner);
                     }
@@ -217,13 +195,10 @@ namespace FactionColonies
                 }
 
                 //Action button
-                if (Widgets.ButtonTextSubtle(ButtonAction, "Actions".Translate()))
-                {
+                if (Widgets.ButtonTextSubtle(ButtonAction, "Actions".Translate())) {
                     List<FloatMenuOption> list = new List<FloatMenuOption>();
 
-                    list.Add(new FloatMenuOption("SellPawn".Translate() + " $" + prisoner.prisoner.MarketValue + " " + "SellPawnInfo".Translate(), delegate
-                    
-                    {
+                    list.Add(new FloatMenuOption("SellPawn".Translate() + " $" + prisoner.prisoner.MarketValue + " " + "SellPawnInfo".Translate(), delegate {
                         settlement.addSilverIncome(prisoner.prisoner.MarketValue);
 
                         //reset window
@@ -233,19 +208,15 @@ namespace FactionColonies
 
                     }));
 
-                    list.Add(new FloatMenuOption("ReturnToPlayer".Translate(), delegate
-                    {
-                        if (prisoner.healthTracker != null)
-                        {
+                    list.Add(new FloatMenuOption("ReturnToPlayer".Translate(), delegate {
+                        if (prisoner.healthTracker != null) {
                             prisoner.prisoner.health = prisoner.healthTracker;
-                        } else
-                        {
+                        } else {
                             prisoner.prisoner.health = new Pawn_HealthTracker(prisoner.prisoner);
                             prisoner.healthTracker = new Pawn_HealthTracker(prisoner.prisoner);
                         }
                         HealthUtility.DamageUntilDowned(prisoner.prisoner, false);
-                        if (prisoner.prisoner.guest == null)
-                        {
+                        if (prisoner.prisoner.guest == null) {
                             prisoner.prisoner.guest = new Pawn_GuestTracker();
                         }
                         prisoner.prisoner.guest.guestStatusInt = GuestStatus.Prisoner;
@@ -268,7 +239,7 @@ namespace FactionColonies
                     FloatMenu menu = new FloatMenu(list);
                     Find.WindowStack.Add(menu);
                 }
-                
+
 
 
 
@@ -279,8 +250,7 @@ namespace FactionColonies
             Text.Font = fontBefore;
             Text.Anchor = anchorBefore;
 
-            if (Event.current.type == EventType.ScrollWheel)
-            {
+            if (Event.current.type == EventType.ScrollWheel) {
 
                 scrollWindow(Event.current.delta.y);
             }
@@ -288,18 +258,12 @@ namespace FactionColonies
         }
 
 
-        private void scrollWindow(float num)
-        {
-            if (scroll - num * 5 < -1 * maxScroll)
-            {
+        private void scrollWindow(float num) {
+            if (scroll - num * 5 < -1 * maxScroll) {
                 scroll = -1 * maxScroll;
-            }
-            else if (scroll - num * 5 > 0)
-            {
+            } else if (scroll - num * 5 > 0) {
                 scroll = 0;
-            }
-            else
-            {
+            } else {
                 scroll -= (int)Event.current.delta.y * 5;
             }
             Event.current.Use();

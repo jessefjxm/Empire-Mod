@@ -1,44 +1,35 @@
-using System.Collections.Generic;
-using RimWorld;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
-using Verse.AI.Group;
 
-namespace FactionColonies
-{
-    public class WorldSettlementDefendAction : CaravanArrivalAction
-    {
+namespace FactionColonies {
+    public class WorldSettlementDefendAction : CaravanArrivalAction {
         private WorldSettlementFC settlement;
 
         //For saving
-        public WorldSettlementDefendAction()
-        {
+        public WorldSettlementDefendAction() {
         }
-        
-        public WorldSettlementDefendAction(WorldSettlementFC settlement)
-        {
+
+        public WorldSettlementDefendAction(WorldSettlementFC settlement) {
             this.settlement = settlement;
         }
 
-        public override void Arrived(Caravan caravan)
-        {
+        public override void Arrived(Caravan caravan) {
             settlement.CaravanDefend(caravan);
         }
-        
-        public override void ExposeData()
-        {
+
+        public override void ExposeData() {
             base.ExposeData();
             Scribe_References.Look(ref settlement, "settlement");
         }
-        
+
         public override string Label => "DefendColony".Translate();
 
         public override string ReportString => "DefendColonyDesc".Translate();
-        
+
         public static IEnumerable<FloatMenuOption> GetFloatMenuOptions(
             Caravan caravan,
-            WorldSettlementFC settlement)
-        {
+            WorldSettlementFC settlement) {
             return CaravanArrivalActionUtility.GetFloatMenuOptions(
                 () => settlement.Spawned && settlement.settlement.isUnderAttack,
                 () => new WorldSettlementDefendAction(settlement),

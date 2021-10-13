@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<LanguageData>
+		<barracks.label>兵营</barracks.label>
+		<tradingPost.label>贸易站</tradingPost.label>
+		<migrantHousing.label>工人棚屋</migrantHousing.label>
+		<quarry.label>采石场</quarry.label>
+		<trainingYard.label>训练场</trainingYard.label>
+	</LanguageData>

@@ -1,14 +1,12 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace FactionColonies
-{
-    class FCBuildingWindow : Window
-    {
+namespace FactionColonies {
+    class FCBuildingWindow : Window {
 
         SettlementFC settlement;
         int buildingSlot;
@@ -37,17 +35,14 @@ namespace FactionColonies
         Rect newBuildingLabel;
         Rect newBuildingDesc;
 
-        public override Vector2 InitialSize
-        {
-            get
-            {
+        public override Vector2 InitialSize {
+            get {
                 return new Vector2(436f, 536f);
             }
         }
 
 
-        public override void DoWindowContents(Rect inRect)
-        {
+        public override void DoWindowContents(Rect inRect) {
             //grab before anchor/font
             GameFont fontBefore = Text.Font;
             TextAnchor anchorBefore = Text.Anchor;
@@ -58,32 +53,26 @@ namespace FactionColonies
 
             //Buildings
             int i = 0;
-            foreach (BuildingFCDef building in buildingList)
-            {
+            foreach (BuildingFCDef building in buildingList) {
                 newBuildingWindow = new Rect(BaseBuildingWindow.x, BaseBuildingWindow.y + (i * (rowHeight)) + scroll, BaseBuildingWindow.width, BaseBuildingWindow.height);
                 newBuildingIcon = new Rect(BaseBuildingIcon.x, BaseBuildingIcon.y + (i * (rowHeight)) + scroll, BaseBuildingIcon.width, BaseBuildingIcon.height);
                 newBuildingLabel = new Rect(BaseBuildingLabel.x, BaseBuildingLabel.y + (i * (rowHeight)) + scroll, BaseBuildingLabel.width, BaseBuildingLabel.height);
                 newBuildingDesc = new Rect(BaseBuildingDesc.x, BaseBuildingDesc.y + (i * (rowHeight)) + scroll, BaseBuildingDesc.width, BaseBuildingDesc.height);
 
-                if (Widgets.ButtonInvisible(newBuildingWindow))
-                {
+                if (Widgets.ButtonInvisible(newBuildingWindow)) {
                     //If click on building
                     List<FloatMenuOption> list = new List<FloatMenuOption>();
 
-                    if(building == buildingDef)
-                    {
+                    if (building == buildingDef) {
                         //if the same building
-                        list.Add(new FloatMenuOption("Destroy".Translate(), delegate
-                        {
+                        list.Add(new FloatMenuOption("Destroy".Translate(), delegate {
                             settlement.deconstructBuilding(buildingSlot);
                             Find.WindowStack.TryRemove(this);
                             Find.WindowStack.WindowOfType<SettlementWindowFc>().windowUpdateFc();
                         }));
-                    } else
-                    {
+                    } else {
                         //if not the same building
-                        list.Add(new FloatMenuOption("Build".Translate(), delegate
-                        {
+                        list.Add(new FloatMenuOption("Build".Translate(), delegate {
                             if (!settlement.validConstructBuilding(building, buildingSlot, settlement)) return;
                             FCEvent tmpEvt = new FCEvent(true);
                             tmpEvt.def = FCEventDefOf.constructBuilding;
@@ -153,32 +142,27 @@ namespace FactionColonies
             Widgets.Label(TopDescription, buildingDef.desc);
 
             Widgets.DrawLineHorizontal(0, TopWindow.y + TopWindow.height, 400);
-            
+
             //reset anchor/font
             Text.Font = fontBefore;
             Text.Anchor = anchorBefore;
 
-            if (Event.current.type == EventType.ScrollWheel)
-            {
+            if (Event.current.type == EventType.ScrollWheel) {
                 scrollWindow(Event.current.delta.y);
             }
         }
 
 
-        public FCBuildingWindow(SettlementFC settlement, int buildingSlot)
-        {
+        public FCBuildingWindow(SettlementFC settlement, int buildingSlot) {
             factionfc = Find.World.GetComponent<FactionFC>();
             buildingList = new List<BuildingFCDef>();
-            foreach (BuildingFCDef building in DefDatabase<BuildingFCDef>.AllDefsListForReading)
-            {
-                if(building.defName != "Empty" && building.defName != "Construction")
-                {
+            foreach (BuildingFCDef building in DefDatabase<BuildingFCDef>.AllDefsListForReading) {
+                if (building.defName != "Empty" && building.defName != "Construction") {
                     //If not a building that shouldn't appear on the list
-                    if (building.techLevel <= factionfc.techLevel)
-                    {
+                    if (building.techLevel <= factionfc.techLevel) {
                         //If building techlevel requirement is met
-                        if (building.applicableBiomes.Count == 0 || building.applicableBiomes.Any() 
-                            && building.applicableBiomes.Contains(settlement.biome)){
+                        if (building.applicableBiomes.Count == 0 || building.applicableBiomes.Any()
+                            && building.applicableBiomes.Contains(settlement.biome)) {
                             //If building meets the biome requirements
                             buildingList.Add(building);
                         }
@@ -197,11 +181,10 @@ namespace FactionColonies
             this.buildingSlot = buildingSlot;
             buildingDef = settlement.buildings[buildingSlot];
 
-            
+
         }
 
-        public override void PreOpen()
-        {
+        public override void PreOpen() {
             base.PreOpen();
             scroll = 0;
             maxScroll = buildingList.Count * rowHeight - scrollHeight;
@@ -210,18 +193,12 @@ namespace FactionColonies
 
 
 
-        private void scrollWindow(float num)
-        {
-            if (scroll - num * 10 < -1 * maxScroll)
-            {
+        private void scrollWindow(float num) {
+            if (scroll - num * 10 < -1 * maxScroll) {
                 scroll = -1 * maxScroll;
-            }
-            else if (scroll - num * 10 > 0)
-            {
+            } else if (scroll - num * 10 > 0) {
                 scroll = 0;
-            }
-            else
-            {
+            } else {
                 scroll -= (int)Event.current.delta.y * 10;
             }
             Event.current.Use();

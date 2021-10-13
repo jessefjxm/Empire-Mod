@@ -2,22 +2,18 @@
 using Verse;
 using Verse.AI.Group;
 
-namespace FactionColonies
-{
-    public class LordJob_DefendColony : LordJob
-    {
+namespace FactionColonies {
+    public class LordJob_DefendColony : LordJob {
         private Dictionary<Pawn, Pawn> mounts;
 
-        public LordJob_DefendColony(Dictionary<Pawn, Pawn> mounts)
-        {
+        public LordJob_DefendColony(Dictionary<Pawn, Pawn> mounts) {
             this.mounts = mounts;
-            
+
         }
-        
+
         public override bool AddFleeToil => false;
 
-        public override StateGraph CreateGraph()
-        {
+        public override StateGraph CreateGraph() {
             StateGraph stateGraph = new StateGraph();
             LordToil_DefendSelfAndMount defendSelf = new LordToil_DefendSelfAndMount(mounts);
             stateGraph.AddToil(defendSelf);
@@ -29,10 +25,8 @@ namespace FactionColonies
             return stateGraph;
         }
 
-        public override void Notify_PawnLost(Pawn pawn, PawnLostCondition condition)
-        {
-            if (condition == PawnLostCondition.ChangedFaction || condition == PawnLostCondition.ExitedMap)
-            {
+        public override void Notify_PawnLost(Pawn pawn, PawnLostCondition condition) {
+            if (condition == PawnLostCondition.ChangedFaction || condition == PawnLostCondition.ExitedMap) {
                 lord.AddPawn(pawn);
                 return;
             }

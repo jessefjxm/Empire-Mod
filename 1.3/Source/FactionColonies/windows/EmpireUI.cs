@@ -1,23 +1,17 @@
-﻿using System;
+﻿using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Verse;
-using RimWorld;
 using UnityEngine;
+using Verse;
 
 
-namespace FactionColonies
-{
-    public class EmpireUIMercenaryCommandMenu : Window
-    {
+namespace FactionColonies {
+    public class EmpireUIMercenaryCommandMenu : Window {
 
         public MercenarySquadFC selectedSquad;
         public string squadText;
 
-        public EmpireUIMercenaryCommandMenu()
-        {
+        public EmpireUIMercenaryCommandMenu() {
             this.layer = WindowLayer.Super;
             this.closeOnClickedOutside = false;
             this.closeOnAccept = false;
@@ -29,25 +23,20 @@ namespace FactionColonies
             this.preventCameraMotion = false;
         }
 
-        public override Vector2 InitialSize
-        {
-            get
-            {
+        public override Vector2 InitialSize {
+            get {
                 return new Vector2(200f, 200f);
             }
         }
 
 
-        protected override void SetInitialSizeAndPosition()
-        {
+        protected override void SetInitialSizeAndPosition() {
             this.windowRect = new Rect((float)UI.screenWidth - this.InitialSize.x, 0f, this.InitialSize.x, this.InitialSize.y);
         }
 
-        public override void DoWindowContents(Rect rect) 
-        {
+        public override void DoWindowContents(Rect rect) {
             FactionFC faction = Find.World.GetComponent<FactionFC>();
-            if(faction.militaryCustomizationUtil.DeployedSquads.Count() == 0)
-            {
+            if (faction.militaryCustomizationUtil.DeployedSquads.Count() == 0) {
                 this.Close();
             }
 
@@ -61,31 +50,24 @@ namespace FactionColonies
             Rect commandMove = new Rect(0, 80, 160, 40);
             Rect commandHeal = new Rect(0, 120, 160, 40);
 
-            
-            if (selectedSquad == null)
-            {
+
+            if (selectedSquad == null) {
                 squadText = "Select Deployed Squad";
-            } else
-            {
+            } else {
                 squadText = selectedSquad.getSettlement.name + "'s " + selectedSquad.outfit.name;
             }
 
             //Select a squad
-            if(Widgets.ButtonText(selectSquad, squadText))
-            {
+            if (Widgets.ButtonText(selectSquad, squadText)) {
                 List<FloatMenuOption> list = new List<FloatMenuOption>();
-                foreach (MercenarySquadFC squad in faction.militaryCustomizationUtil.DeployedSquads)
-                {
-                    if (squad.getSettlement != null)
-                    {
-                        list.Add(new FloatMenuOption(squad.getSettlement.name + "'s " + squad.outfit.name, delegate
-                        {
+                foreach (MercenarySquadFC squad in faction.militaryCustomizationUtil.DeployedSquads) {
+                    if (squad.getSettlement != null) {
+                        list.Add(new FloatMenuOption(squad.getSettlement.name + "'s " + squad.outfit.name, delegate {
                             selectedSquad = squad;
                         }));
                     }
                 }
-                if (!list.Any())
-                {
+                if (!list.Any()) {
                     list.Add(new FloatMenuOption("No squads available", null));
                 }
 
@@ -94,40 +76,33 @@ namespace FactionColonies
 
 
 
-            if(Widgets.ButtonTextSubtle(commandAttack, "Attack"))
-            {
-                if (selectedSquad != null)
-                {
+            if (Widgets.ButtonTextSubtle(commandAttack, "Attack")) {
+                if (selectedSquad != null) {
                     selectedSquad.order = MilitaryOrders.Attack;
-                    Messages.Message(selectedSquad.outfit.name + " are now charging the enemy.", MessageTypeDefOf.NeutralEvent);
+                    Messages.Message(selectedSquad.outfit.name + " 正在与敌人交火。", MessageTypeDefOf.NeutralEvent);
                     //selectedSquad.orderLocation = Position;
                 }
             }
-            if (Widgets.ButtonTextSubtle(commandMove, "Move"))
-            {
-                if (selectedSquad != null)
-                {
+            if (Widgets.ButtonTextSubtle(commandMove, "Move")) {
+                if (selectedSquad != null) {
                     DebugTool tool;
                     IntVec3 Position;
-                    tool = new DebugTool("Select Move Position", delegate ()
-                    {
+                    tool = new DebugTool("Select Move Position", delegate () {
                         Position = UI.MouseCell();
 
                         selectedSquad.order = MilitaryOrders.Standby;
                         selectedSquad.orderLocation = Position;
-                        Messages.Message(selectedSquad.outfit.name + " are moving to the position and standing by.", MessageTypeDefOf.NeutralEvent);
+                        Messages.Message(selectedSquad.outfit.name + " 正在移动到指定地点并待命。", MessageTypeDefOf.NeutralEvent);
 
                         DebugTools.curTool = null;
                     });
                     DebugTools.curTool = tool;
                 }
             }
-            if (Widgets.ButtonTextSubtle(commandHeal, "Leave"))
-            {
-                if (selectedSquad != null)
-                {
+            if (Widgets.ButtonTextSubtle(commandHeal, "Leave")) {
+                if (selectedSquad != null) {
                     selectedSquad.order = MilitaryOrders.Leave;
-                    Messages.Message(selectedSquad.outfit.name + " are now leaving the map. " + selectedSquad.dead + " dead.", 
+                    Messages.Message(selectedSquad.outfit.name + " 正在离开地图。 " + selectedSquad.dead + " 已死亡。",
                         MessageTypeDefOf.NeutralEvent);
                 }
             }
@@ -138,7 +113,7 @@ namespace FactionColonies
             //IntVec3 Position;
             //tool = new DebugTool("Select Drop Position", delegate ()
             //{
-             //   Position = UI.MouseCell();
+            //   Position = UI.MouseCell();
 
             //    selectedSquad.order = MilitaryOrders.Standby;
             //    selectedSquad.orderLocation = Position;
@@ -152,7 +127,7 @@ namespace FactionColonies
             Text.Anchor = oldAnchor;
         }
 
-        
+
 
 
     }

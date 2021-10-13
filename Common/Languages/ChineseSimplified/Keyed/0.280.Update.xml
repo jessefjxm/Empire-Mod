@@ -3,9 +3,9 @@
 
 <SetCapital>设为首都</SetCapital>
 
-<DeathOfFactionPawn>你的无能致使领地的居民死亡,领地的动荡程度大大的提高了.</DeathOfFactionPawn>
-<CaptureOfFactionPawn>一名居民被俘虏,领地的动荡程度大大的提高了.</CaptureOfFactionPawn>
+<DeathOfFactionPawn>你的无能致使领地的居民死亡，领地的动荡程度大大提高。</DeathOfFactionPawn>
+<CaptureOfFactionPawn>一名居民被俘虏，领地的动荡程度大大提高。</CaptureOfFactionPawn>
 
-<UnpaidTitheEffect>在这个领地叛乱度+10,幸福度有所下降.</UnpaidTitheEffect>
+<UnpaidTitheEffect>该领地叛乱度+10，幸福度有所下降。</UnpaidTitheEffect>
 
 </LanguageData>

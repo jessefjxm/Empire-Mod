@@ -1,14 +1,11 @@
-﻿using System.Collections.Generic;
-using RimWorld;
+﻿using RimWorld;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
-namespace FactionColonies
-{
-    public class BuildingFCDef : Def, IExposable
-    {
-        public void ExposeData()
-        {
+namespace FactionColonies {
+    public class BuildingFCDef : Def, IExposable {
+        public void ExposeData() {
 
             Scribe_Values.Look(ref desc, "desc");
             Scribe_Values.Look(ref cost, "cost");
@@ -31,16 +28,12 @@ namespace FactionColonies
         public Texture2D iconLoaded;
         //public required research
 
-        public Texture2D icon
-        {
-            get
-            {
-                if (iconLoaded == null)
-                {
+        public Texture2D icon {
+            get {
+                if (iconLoaded == null) {
                     if (!iconPath.NullOrEmpty()) {
                         iconLoaded = ContentFinder<Texture2D>.Get(iconPath);
-                    } else
-                    {
+                    } else {
                         Log.Message("Failed to load icon");
                         iconLoaded = TexLoad.questionmark;
                     }
@@ -53,13 +46,11 @@ namespace FactionColonies
     }
 
     [DefOf]
-    public class BuildingFCDefOf
-    {
+    public class BuildingFCDefOf {
         public static BuildingFCDef Empty;
         public static BuildingFCDef Construction;
         public static BuildingFCDef artilleryOutpost;
-        static BuildingFCDefOf()
-        {
+        static BuildingFCDefOf() {
             DefOfHelper.EnsureInitializedInCtor(typeof(BuildingFCDefOf));
         }
     }

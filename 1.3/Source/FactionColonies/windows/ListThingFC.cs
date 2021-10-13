@@ -4,10 +4,8 @@ using System.Linq;
 using UnityEngine;
 using Verse;
 
-namespace FactionColonies
-{
-    public class ListThingFc : Window
-    {
+namespace FactionColonies {
+    public class ListThingFc : Window {
         public override Vector2 InitialSize => new Vector2(345f, 380f);
 
         //declare variables
@@ -25,16 +23,14 @@ namespace FactionColonies
         public List<Thing> list = new List<Thing>();
 
 
-        public ListThingFc()
-        {
+        public ListThingFc() {
             forcePause = false;
             draggable = true;
             doCloseX = true;
             preventCameraMotion = false;
         }
 
-        public ListThingFc(List<Thing> list)
-        {
+        public ListThingFc(List<Thing> list) {
             this.list = list;
             forcePause = false;
             draggable = true;
@@ -42,15 +38,13 @@ namespace FactionColonies
             preventCameraMotion = false;
         }
 
-        public override void PreOpen()
-        {
+        public override void PreOpen() {
             base.PreOpen();
             scroll = 0;
             maxScroll = list.Count * yspacing - height;
         }
 
-        public override void DoWindowContents(Rect inRect)
-        {
+        public override void DoWindowContents(Rect inRect) {
             //grab before anchor/font
             GameFont fontBefore = Text.Font;
             TextAnchor anchorBefore = Text.Anchor;
@@ -76,14 +70,11 @@ namespace FactionColonies
                 {"Name".Translate(), "StackCount".Translate(), "MarketValue".Translate(), "FCTotalValue".Translate()};
             for (int i = 0; i < 4; i++) //-2 to exclude location and ID
             {
-                if (i == 0)
-                {
+                if (i == 0) {
                     Widgets.Label(
                         new Rect(xoffset + 2 + i * xspacing, yoffset - yspacing, xspacing + headerSpacing, yspacing),
                         headerList[i]);
-                }
-                else
-                {
+                } else {
                     Widgets.Label(
                         new Rect(xoffset + headerSpacing + 2 + i * xspacing, yoffset - yspacing, xspacing, yspacing),
                         headerList[i]);
@@ -92,10 +83,8 @@ namespace FactionColonies
 
             for (int i = 0; i < list.Count(); i++) //browse through tax list
             {
-                if (i * yspacing + scroll >= 0 && i * yspacing + scroll <= height)
-                {
-                    if (i % 2 == 0)
-                    {
+                if (i * yspacing + scroll >= 0 && i * yspacing + scroll <= height) {
+                    if (i % 2 == 0) {
                         Widgets.DrawHighlight(new Rect(xoffset, yoffset + i * yspacing + scroll, length, yspacing));
                     }
 
@@ -106,28 +95,24 @@ namespace FactionColonies
                             Widgets.Label(
                                 new Rect(xoffset + 2 + k * xspacing, yoffset + i * yspacing + scroll,
                                     xspacing + headerSpacing, yspacing), list[i].def.label); //timedue is date made
-                        }
-                        else if (k == 1) //number of thing
-                        {
+                        } else if (k == 1) //number of thing
+                          {
                             Widgets.Label(
                                 new Rect(xoffset + headerSpacing + 2 + k * xspacing, yoffset + i * yspacing + scroll,
                                     xspacing, yspacing), list[i].stackCount.ToString());
-                        }
-                        else if (k == 2) //Base market value
-                        {
+                        } else if (k == 2) //Base market value
+                          {
                             Widgets.Label(
                                 new Rect(xoffset + headerSpacing + 2 + k * xspacing, yoffset + i * yspacing + scroll,
                                     xspacing, yspacing), list[i].MarketValue.ToString());
-                        }
-                        else if (k == 3) //Value of thing
-                        {
+                        } else if (k == 3) //Value of thing
+                          {
                             Widgets.Label(
                                 new Rect(xoffset + headerSpacing + 2 + k * xspacing, yoffset + i * yspacing + scroll,
                                     xspacing, yspacing),
                                 "CashSymbol".Translate() + (list[i].stackCount * list[i].MarketValue).ToString());
-                        }
-                        else //Catch all
-                        {
+                        } else //Catch all
+                          {
                             Widgets.Label(
                                 new Rect(xoffset + headerSpacing + 2 + k * xspacing, yoffset + i * yspacing + scroll,
                                     xspacing, yspacing), "REPORT THIS - listThingFC");
@@ -142,25 +127,18 @@ namespace FactionColonies
             Text.Font = fontBefore;
             Text.Anchor = anchorBefore;
 
-            if (Event.current.type == EventType.ScrollWheel)
-            {
+            if (Event.current.type == EventType.ScrollWheel) {
                 scrollWindow(Event.current.delta.y);
             }
         }
 
-        private void scrollWindow(float num)
-        {
-            if (scroll - num * 10 < -1 * maxScroll)
-            {
+        private void scrollWindow(float num) {
+            if (scroll - num * 10 < -1 * maxScroll) {
                 scroll = -1 * maxScroll;
-            }
-            else if (scroll - num * 10 > 0)
-            {
+            } else if (scroll - num * 10 > 0) {
                 scroll = 0;
-            }
-            else
-            {
-                scroll -= (int) Event.current.delta.y * 10;
+            } else {
+                scroll -= (int)Event.current.delta.y * 10;
             }
 
             Event.current.Use();

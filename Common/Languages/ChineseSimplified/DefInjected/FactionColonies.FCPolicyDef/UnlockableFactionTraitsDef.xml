@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <empty.label>没有特质</empty.label>
+  <!-- <resilient.label>快速复原。当你的领地在遭受敌军进攻时，所损失的繁荣度降低 50%，当你的领地防御失败时，你的领地不会降级，并且领地内的建筑也不会因此被摧毁。</resilient.label>
+  <raiders.label>强取豪夺。由袭击掠夺敌方据点所提供的战利品收益提高 20%。同时，每次完成袭击行动后，不管成功与否，军队的修整时间都会减少一天。</raiders.label>
+  <defenseInDepth.label>坚如磐石。当你的领地处于防御状态时，该领地的守备部队 +2 军力等级。</defenseInDepth.label>
+  <industrious.label>奋发图强。当每次领地税收到账时，你都有 5% 的几率获得额外且大量的收入。</industrious.label>
+  <roadBuilders.label>修路专家。自动解锁建设领地土路的科技，同时，修建道路所需要的时间减少 33% 。另外，道路也会自动修建延伸至盟友的据点。</roadBuilders.label>
+  <mercantile.label>商业头脑。每隔 3~5 天就会有一支随机类型的商队抵达你的首都与你进行交易。</mercantile.label>
+  <innovative.label>革故鼎新。你将会获得相当于月收入 5% 的科研点数。</innovative.label> -->
+
+  <resilient.label>快速复原</resilient.label>
+  <raiders.label>强取豪夺</raiders.label>
+  <defenseInDepth.label>坚如磐石</defenseInDepth.label>
+  <industrious.label>奋发图强</industrious.label>
+  <roadBuilders.label>修路专家</roadBuilders.label>
+  <mercantile.label>商业头脑</mercantile.label>
+  <innovative.label>革故鼎新</innovative.label>
+  <lucky.label>幸运</lucky.label>
+
+
+</LanguageData>

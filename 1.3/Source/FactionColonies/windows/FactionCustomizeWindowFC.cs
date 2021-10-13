@@ -1,14 +1,12 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace FactionColonies
-{
-    public class FactionCustomizeWindowFc : Window
-    {
+namespace FactionColonies {
+    public class FactionCustomizeWindowFc : Window {
         public override Vector2 InitialSize => new Vector2(838f, 538f);
 
         //declare variables
@@ -56,29 +54,29 @@ namespace FactionColonies
 
         bool traitsChosen;
 
-        Rect buttonMilitaristic = new Rect((float) (600 + 60 * Math.Cos(0 * Math.PI)),
-            (float) (100 + 60 * Math.Sin(0 * Math.PI)), 30, 30);
+        Rect buttonMilitaristic = new Rect((float)(600 + 60 * Math.Cos(0 * Math.PI)),
+            (float)(100 + 60 * Math.Sin(0 * Math.PI)), 30, 30);
 
-        Rect buttonAuthoritarian = new Rect((float) (600 + 60 * Math.Cos(0.25 * Math.PI)),
-            (float) (100 + 60 * Math.Sin(0.25 * Math.PI)), 30, 30);
+        Rect buttonAuthoritarian = new Rect((float)(600 + 60 * Math.Cos(0.25 * Math.PI)),
+            (float)(100 + 60 * Math.Sin(0.25 * Math.PI)), 30, 30);
 
-        Rect buttonIsolationist = new Rect((float) (600 + 60 * Math.Cos(0.5 * Math.PI)),
-            (float) (100 + 60 * Math.Sin(0.5 * Math.PI)), 30, 30);
+        Rect buttonIsolationist = new Rect((float)(600 + 60 * Math.Cos(0.5 * Math.PI)),
+            (float)(100 + 60 * Math.Sin(0.5 * Math.PI)), 30, 30);
 
-        Rect buttonFeudal = new Rect((float) (600 + 60 * Math.Cos(0.75 * Math.PI)),
-            (float) (100 + 60 * Math.Sin(0.75 * Math.PI)), 30, 30);
+        Rect buttonFeudal = new Rect((float)(600 + 60 * Math.Cos(0.75 * Math.PI)),
+            (float)(100 + 60 * Math.Sin(0.75 * Math.PI)), 30, 30);
 
-        Rect buttonPacifist = new Rect((float) (600 + 60 * Math.Cos(1 * Math.PI)),
-            (float) (100 + 60 * Math.Sin(1 * Math.PI)), 30, 30);
+        Rect buttonPacifist = new Rect((float)(600 + 60 * Math.Cos(1 * Math.PI)),
+            (float)(100 + 60 * Math.Sin(1 * Math.PI)), 30, 30);
 
-        Rect buttonEgalitarian = new Rect((float) (600 + 60 * Math.Cos(1.25 * Math.PI)),
-            (float) (100 + 60 * Math.Sin(1.25 * Math.PI)), 30, 30);
+        Rect buttonEgalitarian = new Rect((float)(600 + 60 * Math.Cos(1.25 * Math.PI)),
+            (float)(100 + 60 * Math.Sin(1.25 * Math.PI)), 30, 30);
 
-        Rect buttonExpansionist = new Rect((float) (600 + 60 * Math.Cos(1.5 * Math.PI)),
-            (float) (100 + 60 * Math.Sin(1.5 * Math.PI)), 30, 30);
+        Rect buttonExpansionist = new Rect((float)(600 + 60 * Math.Cos(1.5 * Math.PI)),
+            (float)(100 + 60 * Math.Sin(1.5 * Math.PI)), 30, 30);
 
-        Rect buttonTechnocrat = new Rect((float) (600 + 60 * Math.Cos(1.75 * Math.PI)),
-            (float) (100 + 60 * Math.Sin(1.75 * Math.PI)), 30, 30);
+        Rect buttonTechnocrat = new Rect((float)(600 + 60 * Math.Cos(1.75 * Math.PI)),
+            (float)(100 + 60 * Math.Sin(1.75 * Math.PI)), 30, 30);
 
         int numberTraitsSelected;
         bool boolMilitaristic;
@@ -93,8 +91,7 @@ namespace FactionColonies
         string policyText = "";
 
 
-        public FactionCustomizeWindowFc(FactionFC faction)
-        {
+        public FactionCustomizeWindowFc(FactionFC faction) {
             forcePause = false;
             draggable = true;
             doCloseX = true;
@@ -109,12 +106,9 @@ namespace FactionColonies
 
             numberTraitsSelected = faction.policies.Count();
 
-            if (numberTraitsSelected != 0)
-            {
-                foreach (FCPolicy policy in faction.policies)
-                {
-                    switch (policy.def.defName)
-                    {
+            if (numberTraitsSelected != 0) {
+                foreach (FCPolicy policy in faction.policies) {
+                    switch (policy.def.defName) {
                         case "militaristic":
                             boolMilitaristic = true;
                             break;
@@ -143,19 +137,15 @@ namespace FactionColonies
                 }
             }
 
-            if (numberTraitsSelected == 2)
-            {
+            if (numberTraitsSelected == 2) {
                 traitsChosen = true;
-            }
-            else
-            {
+            } else {
                 traitsChosen = false;
                 faction.policies = new List<FCPolicy>();
             }
         }
 
-        public override void OnAcceptKeyPressed()
-        {
+        public override void OnAcceptKeyPressed() {
             base.OnAcceptKeyPressed();
             faction.title = title;
             faction.name = name;
@@ -163,8 +153,7 @@ namespace FactionColonies
             //Find.World.GetComponent<FactionFC>().name = name;
         }
 
-        public override void DoWindowContents(Rect inRect)
-        {
+        public override void DoWindowContents(Rect inRect) {
             //grab before anchor/font
             GameFont fontBefore = Text.Font;
             TextAnchor anchorBefore = Text.Anchor;
@@ -185,49 +174,38 @@ namespace FactionColonies
             title = Widgets.TextField(textfieldTitle, title);
 
             Widgets.Label(labelFactionIcon, "FactionIcon".Translate());
-            if (Widgets.ButtonImage(buttonIcon, tempFactionIcon))
-            {
-                List<FloatMenuOption> list = TexLoad.factionIcons.Select(texture => new FloatMenuOption(texture.name, delegate
-                    {
-                        tempFactionIcon = texture;
-                        tempFactionIconPath = texture.name;
-                    }, texture, Color.white)).ToList();
+            if (Widgets.ButtonImage(buttonIcon, tempFactionIcon)) {
+                List<FloatMenuOption> list = TexLoad.factionIcons.Select(texture => new FloatMenuOption(texture.name, delegate {
+                    tempFactionIcon = texture;
+                    tempFactionIconPath = texture.name;
+                }, texture, Color.white)).ToList();
 
                 FloatMenu menu = new FloatMenu(list);
                 Find.WindowStack.Add(menu);
             }
 
-            if (Widgets.ButtonTextSubtle(buttonAllowedRaces, "AllowedRaces".Translate()))
-            {
+            if (Widgets.ButtonTextSubtle(buttonAllowedRaces, "AllowedRaces".Translate())) {
                 List<FloatMenuOption> list = new List<FloatMenuOption>
                 {
-                    new FloatMenuOption("Enable All", delegate { faction.resetRaceFilter(); })
+                    new FloatMenuOption("全部允许", delegate { faction.resetRaceFilter(); })
                 };
                 List<string> races = new List<string>();
                 foreach (PawnKindDef def in DefDatabase<PawnKindDef>.AllDefsListForReading.Where(def =>
                     def?.race?.label != null &&
                     def.race.race?.intelligence == Intelligence.Humanlike &
-                    races.Contains(def.race.label) == false && def.race.BaseMarketValue != 0))
-                {
+                    races.Contains(def.race.label) == false && def.race.BaseMarketValue != 0)) {
                     if (def.race.label == "Human" && def.LabelCap != "Colonist") continue;
                     races.Add(def.race.label);
                     list.Add(new FloatMenuOption(
-                        def.race.label.CapitalizeFirst() + " - Allowed: " + faction.raceFilter.Allows(def.race),
-                        delegate
-                        {
-                            if (faction.raceFilter.AllowedThingDefs.Count() == 1 && faction.raceFilter.Allows(def.race))
-                            {
+                        def.race.label.CapitalizeFirst() + " - " + (faction.raceFilter.Allows(def.race) ? "允许" : "禁止"),
+                        delegate {
+                            if (faction.raceFilter.AllowedThingDefs.Count() == 1 && faction.raceFilter.Allows(def.race)) {
                                 Messages.Message("CannotHaveLessThanOneRace".Translate(), MessageTypeDefOf.RejectInput);
-                            }
-                            else if (faction.raceFilter.AllowedThingDefs.Count() > 1)
-                            {
-                                if (!faction.raceFilter.SetAllow(def.race, !faction.raceFilter.Allows(def.race)))
-                                {
+                            } else if (faction.raceFilter.AllowedThingDefs.Count() > 1) {
+                                if (!faction.raceFilter.SetAllow(def.race, !faction.raceFilter.Allows(def.race))) {
                                     Messages.Message(new Message("InvalidFaction".Translate(), MessageTypeDefOf.RejectInput));
                                 }
-                            }
-                            else
-                            {
+                            } else {
                                 Log.Message("Empire Error - Zero races available for faction - Report this");
                                 Log.Message("Resetting race filter");
                                 faction.resetRaceFilter();
@@ -239,8 +217,7 @@ namespace FactionColonies
                 Find.WindowStack.Add(menu);
             }
 
-            if (Widgets.ButtonText(buttonConfirm, "ConfirmChanges".Translate()))
-            {
+            if (Widgets.ButtonText(buttonConfirm, "ConfirmChanges".Translate())) {
                 Faction fact = FactionColonies.getPlayerColonyFaction();
                 faction.title = title;
                 faction.name = name;
@@ -254,8 +231,7 @@ namespace FactionColonies
                 faction.updateFactionIcon(ref fact, "FactionIcons/" + tempFactionIconPath);
 
 
-                if (!traitsChosen)
-                {
+                if (!traitsChosen) {
                     //check each trait bool. If true and does not exist already, add to factionfc
                     if (boolMilitaristic)
                         faction.policies.Add(new FCPolicy(FCPolicyDefOf.militaristic));
@@ -280,8 +256,7 @@ namespace FactionColonies
 
 
             if (!traitsChosen)
-                switch (faction.policies.Count())
-                {
+                switch (faction.policies.Count()) {
                     case 0:
                     case 1:
                         alertText = "FCSelectTraits0".Translate();
@@ -289,9 +264,7 @@ namespace FactionColonies
                     case 2:
                         alertText = "FCSelectTraits2".Translate();
                         break;
-                }
-            else
-            {
+                } else {
                 alertText = "FCTraitsChosen".Translate();
             }
 
@@ -304,37 +277,26 @@ namespace FactionColonies
                 icon = FCPolicyDefOf.militaristic.IconLight;
             else
                 icon = FCPolicyDefOf.militaristic.IconDark;
-            if (buttonMilitaristic.Contains(Event.current.mousePosition))
-            {
+            if (buttonMilitaristic.Contains(Event.current.mousePosition)) {
                 TooltipHandler.TipRegion(buttonMilitaristic, returnPolicyText(FCPolicyDefOf.militaristic));
             }
 
-            if (Widgets.ButtonImage(buttonMilitaristic, icon))
-            {
-                if (numberTraitsSelected <= 1 || boolMilitaristic)
-                {
+            if (Widgets.ButtonImage(buttonMilitaristic, icon)) {
+                if (numberTraitsSelected <= 1 || boolMilitaristic) {
                     //Continue
-                    if (boolPacifist == false)
-                    {
+                    if (boolPacifist == false) {
                         boolMilitaristic = !boolMilitaristic;
-                        if (boolMilitaristic)
-                        {
+                        if (boolMilitaristic) {
                             numberTraitsSelected += 1;
-                        }
-                        else
-                        {
+                        } else {
                             numberTraitsSelected -= 1;
                         }
 
                         policyText = returnPolicyText(FCPolicyDefOf.militaristic);
-                    }
-                    else
-                    {
+                    } else {
                         Messages.Message("FCConflictingTraits".Translate(), MessageTypeDefOf.RejectInput);
                     }
-                }
-                else
-                {
+                } else {
                     Messages.Message("FCUnselectTrait".Translate(), MessageTypeDefOf.RejectInput);
                 }
             }
@@ -344,37 +306,26 @@ namespace FactionColonies
                 icon = FCPolicyDefOf.authoritarian.IconLight;
             else
                 icon = FCPolicyDefOf.authoritarian.IconDark;
-            if (buttonAuthoritarian.Contains(Event.current.mousePosition))
-            {
+            if (buttonAuthoritarian.Contains(Event.current.mousePosition)) {
                 TooltipHandler.TipRegion(buttonAuthoritarian, returnPolicyText(FCPolicyDefOf.authoritarian));
             }
 
-            if (Widgets.ButtonImage(buttonAuthoritarian, icon))
-            {
-                if (numberTraitsSelected <= 1 || boolAuthoritarian)
-                {
+            if (Widgets.ButtonImage(buttonAuthoritarian, icon)) {
+                if (numberTraitsSelected <= 1 || boolAuthoritarian) {
                     //Continue
-                    if (boolEgalitarian == false)
-                    {
+                    if (boolEgalitarian == false) {
                         boolAuthoritarian = !boolAuthoritarian;
-                        if (boolAuthoritarian)
-                        {
+                        if (boolAuthoritarian) {
                             numberTraitsSelected += 1;
-                        }
-                        else
-                        {
+                        } else {
                             numberTraitsSelected -= 1;
                         }
 
                         policyText = returnPolicyText(FCPolicyDefOf.authoritarian);
-                    }
-                    else
-                    {
+                    } else {
                         Messages.Message("FCConflictingTraits".Translate(), MessageTypeDefOf.RejectInput);
                     }
-                }
-                else
-                {
+                } else {
                     Messages.Message("FCUnselectTrait".Translate(), MessageTypeDefOf.RejectInput);
                 }
             }
@@ -384,37 +335,26 @@ namespace FactionColonies
                 icon = FCPolicyDefOf.isolationist.IconLight;
             else
                 icon = FCPolicyDefOf.isolationist.IconDark;
-            if (buttonIsolationist.Contains(Event.current.mousePosition))
-            {
+            if (buttonIsolationist.Contains(Event.current.mousePosition)) {
                 TooltipHandler.TipRegion(buttonIsolationist, returnPolicyText(FCPolicyDefOf.isolationist));
             }
 
-            if (Widgets.ButtonImage(buttonIsolationist, icon))
-            {
-                if (numberTraitsSelected <= 1 || boolIsolationist)
-                {
+            if (Widgets.ButtonImage(buttonIsolationist, icon)) {
+                if (numberTraitsSelected <= 1 || boolIsolationist) {
                     //Continue
-                    if (boolExpansionist == false)
-                    {
+                    if (boolExpansionist == false) {
                         boolIsolationist = !boolIsolationist;
-                        if (boolIsolationist)
-                        {
+                        if (boolIsolationist) {
                             numberTraitsSelected += 1;
-                        }
-                        else
-                        {
+                        } else {
                             numberTraitsSelected -= 1;
                         }
 
                         policyText = returnPolicyText(FCPolicyDefOf.isolationist);
-                    }
-                    else
-                    {
+                    } else {
                         Messages.Message("FCConflictingTraits".Translate(), MessageTypeDefOf.RejectInput);
                     }
-                }
-                else
-                {
+                } else {
                     Messages.Message("FCUnselectTrait".Translate(), MessageTypeDefOf.RejectInput);
                 }
             }
@@ -424,37 +364,26 @@ namespace FactionColonies
                 icon = FCPolicyDefOf.feudal.IconLight;
             else
                 icon = FCPolicyDefOf.feudal.IconDark;
-            if (buttonFeudal.Contains(Event.current.mousePosition))
-            {
+            if (buttonFeudal.Contains(Event.current.mousePosition)) {
                 TooltipHandler.TipRegion(buttonFeudal, returnPolicyText(FCPolicyDefOf.feudal));
             }
 
-            if (Widgets.ButtonImage(buttonFeudal, icon))
-            {
-                if (numberTraitsSelected <= 1 || boolFeudal)
-                {
+            if (Widgets.ButtonImage(buttonFeudal, icon)) {
+                if (numberTraitsSelected <= 1 || boolFeudal) {
                     //Continue
-                    if (boolTechnocrat == false)
-                    {
+                    if (boolTechnocrat == false) {
                         boolFeudal = !boolFeudal;
-                        if (boolFeudal)
-                        {
+                        if (boolFeudal) {
                             numberTraitsSelected += 1;
-                        }
-                        else
-                        {
+                        } else {
                             numberTraitsSelected -= 1;
                         }
 
                         policyText = returnPolicyText(FCPolicyDefOf.feudal);
-                    }
-                    else
-                    {
+                    } else {
                         Messages.Message("FCConflictingTraits".Translate(), MessageTypeDefOf.RejectInput);
                     }
-                }
-                else
-                {
+                } else {
                     Messages.Message("FCUnselectTrait".Translate(), MessageTypeDefOf.RejectInput);
                 }
             }
@@ -464,37 +393,26 @@ namespace FactionColonies
                 icon = FCPolicyDefOf.pacifist.IconLight;
             else
                 icon = FCPolicyDefOf.pacifist.IconDark;
-            if (buttonPacifist.Contains(Event.current.mousePosition))
-            {
+            if (buttonPacifist.Contains(Event.current.mousePosition)) {
                 TooltipHandler.TipRegion(buttonPacifist, returnPolicyText(FCPolicyDefOf.pacifist));
             }
 
-            if (Widgets.ButtonImage(buttonPacifist, icon))
-            {
-                if (numberTraitsSelected <= 1 || boolPacifist)
-                {
+            if (Widgets.ButtonImage(buttonPacifist, icon)) {
+                if (numberTraitsSelected <= 1 || boolPacifist) {
                     //Continue
-                    if (boolMilitaristic == false)
-                    {
+                    if (boolMilitaristic == false) {
                         boolPacifist = !boolPacifist;
-                        if (boolPacifist)
-                        {
+                        if (boolPacifist) {
                             numberTraitsSelected += 1;
-                        }
-                        else
-                        {
+                        } else {
                             numberTraitsSelected -= 1;
                         }
 
                         policyText = returnPolicyText(FCPolicyDefOf.pacifist);
-                    }
-                    else
-                    {
+                    } else {
                         Messages.Message("FCConflictingTraits".Translate(), MessageTypeDefOf.RejectInput);
                     }
-                }
-                else
-                {
+                } else {
                     Messages.Message("FCUnselectTrait".Translate(), MessageTypeDefOf.RejectInput);
                 }
             }
@@ -504,37 +422,26 @@ namespace FactionColonies
                 icon = FCPolicyDefOf.egalitarian.IconLight;
             else
                 icon = FCPolicyDefOf.egalitarian.IconDark;
-            if (buttonEgalitarian.Contains(Event.current.mousePosition))
-            {
+            if (buttonEgalitarian.Contains(Event.current.mousePosition)) {
                 TooltipHandler.TipRegion(buttonEgalitarian, returnPolicyText(FCPolicyDefOf.egalitarian));
             }
 
-            if (Widgets.ButtonImage(buttonEgalitarian, icon))
-            {
-                if (numberTraitsSelected <= 1 || boolEgalitarian)
-                {
+            if (Widgets.ButtonImage(buttonEgalitarian, icon)) {
+                if (numberTraitsSelected <= 1 || boolEgalitarian) {
                     //Continue
-                    if (boolAuthoritarian == false)
-                    {
+                    if (boolAuthoritarian == false) {
                         boolEgalitarian = !boolEgalitarian;
-                        if (boolEgalitarian)
-                        {
+                        if (boolEgalitarian) {
                             numberTraitsSelected += 1;
-                        }
-                        else
-                        {
+                        } else {
                             numberTraitsSelected -= 1;
                         }
 
                         policyText = returnPolicyText(FCPolicyDefOf.egalitarian);
-                    }
-                    else
-                    {
+                    } else {
                         Messages.Message("FCConflictingTraits".Translate(), MessageTypeDefOf.RejectInput);
                     }
-                }
-                else
-                {
+                } else {
                     Messages.Message("FCUnselectTrait".Translate(), MessageTypeDefOf.RejectInput);
                 }
             }
@@ -544,37 +451,26 @@ namespace FactionColonies
                 icon = FCPolicyDefOf.expansionist.IconLight;
             else
                 icon = FCPolicyDefOf.expansionist.IconDark;
-            if (buttonExpansionist.Contains(Event.current.mousePosition))
-            {
+            if (buttonExpansionist.Contains(Event.current.mousePosition)) {
                 TooltipHandler.TipRegion(buttonExpansionist, returnPolicyText(FCPolicyDefOf.expansionist));
             }
 
-            if (Widgets.ButtonImage(buttonExpansionist, icon))
-            {
-                if (numberTraitsSelected <= 1 || boolExpansionist)
-                {
+            if (Widgets.ButtonImage(buttonExpansionist, icon)) {
+                if (numberTraitsSelected <= 1 || boolExpansionist) {
                     //Continue
-                    if (boolIsolationist == false)
-                    {
+                    if (boolIsolationist == false) {
                         boolExpansionist = !boolExpansionist;
-                        if (boolExpansionist)
-                        {
+                        if (boolExpansionist) {
                             numberTraitsSelected += 1;
-                        }
-                        else
-                        {
+                        } else {
                             numberTraitsSelected -= 1;
                         }
 
                         policyText = returnPolicyText(FCPolicyDefOf.expansionist);
-                    }
-                    else
-                    {
+                    } else {
                         Messages.Message("FCConflictingTraits".Translate(), MessageTypeDefOf.RejectInput);
                     }
-                }
-                else
-                {
+                } else {
                     Messages.Message("FCUnselectTrait".Translate(), MessageTypeDefOf.RejectInput);
                 }
             }
@@ -584,37 +480,26 @@ namespace FactionColonies
                 icon = FCPolicyDefOf.technocratic.IconLight;
             else
                 icon = FCPolicyDefOf.technocratic.IconDark;
-            if (buttonTechnocrat.Contains(Event.current.mousePosition))
-            {
+            if (buttonTechnocrat.Contains(Event.current.mousePosition)) {
                 TooltipHandler.TipRegion(buttonTechnocrat, returnPolicyText(FCPolicyDefOf.technocratic));
             }
 
-            if (Widgets.ButtonImage(buttonTechnocrat, icon))
-            {
-                if (numberTraitsSelected <= 1 || boolTechnocrat)
-                {
+            if (Widgets.ButtonImage(buttonTechnocrat, icon)) {
+                if (numberTraitsSelected <= 1 || boolTechnocrat) {
                     //Continue
-                    if (boolFeudal == false)
-                    {
+                    if (boolFeudal == false) {
                         boolTechnocrat = !boolTechnocrat;
-                        if (boolTechnocrat)
-                        {
+                        if (boolTechnocrat) {
                             numberTraitsSelected += 1;
-                        }
-                        else
-                        {
+                        } else {
                             numberTraitsSelected -= 1;
                         }
 
                         policyText = returnPolicyText(FCPolicyDefOf.technocratic);
-                    }
-                    else
-                    {
+                    } else {
                         Messages.Message("FCConflictingTraits".Translate(), MessageTypeDefOf.RejectInput);
                     }
-                }
-                else
-                {
+                } else {
                     Messages.Message("FCUnselectTrait".Translate(), MessageTypeDefOf.RejectInput);
                 }
             }
@@ -630,20 +515,17 @@ namespace FactionColonies
         }
 
 
-        string returnPolicyText(FCPolicyDef def)
-        {
+        string returnPolicyText(FCPolicyDef def) {
             string str = "";
 
             str += def.LabelCap + "\n";
 
-            foreach (string positive in def.positiveEffects)
-            {
+            foreach (string positive in def.positiveEffects) {
                 str += "\n" + positive;
             }
 
             str += "\n==========";
-            foreach (string negative in def.negativeEffects)
-            {
+            foreach (string negative in def.negativeEffects) {
                 str += "\n" + negative;
             }
 

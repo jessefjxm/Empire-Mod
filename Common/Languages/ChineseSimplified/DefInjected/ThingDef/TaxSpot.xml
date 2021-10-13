@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<LanguageData>
+		<TaxSpot.label>收税点</TaxSpot.label>
+		<TaxSpot.description>你的领地所缴纳的税额将会被送到这里。</TaxSpot.description>
+	</LanguageData>

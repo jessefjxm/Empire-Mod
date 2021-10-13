@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+    <DefenseSuccessfulFull>{0}的守卫部队成功抵御了来自{1}的进攻！</DefenseSuccessfulFull>
+    <DefenseFailureFull>{0}的守备部队未能成功抵御{1}的进攻，现在领地的防御设施被彻底摧毁了。</DefenseFailureFull>
+
+    <!-- Updated the following defs  -->
+    <!--     Building - Research Labs & Glitterworld Research Facility    -->
+    <!--     Social Policy - Science blah blah   &  Faction trait - Researchers     -->
+
+
+
+</LanguageData>

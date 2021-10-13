@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+    <AlreadyUpgradeSettlement>领地已经在升级之中。</AlreadyUpgradeSettlement>
+    <StartUpgradeSettlement>领地开始升级……</StartUpgradeSettlement>
+
+    <BuildingInvalidEnvironment>该建筑不能建造在这种生态群落上！</BuildingInvalidEnvironment>
+
+    <FCDescSeaIce>无边无际的冰层，似乎没有任何东西能够打破这里的死寂。这里没有动物，没有食物，只有还在温室里缓慢生长的作物。只有最顽强的生命才能在这里生存。</FCDescSeaIce>
+    <FCDescIceSheet>凄凉无尽的霜冻和严寒肆虐着大地，只有露出地面的石头和废墟成了打破了这唯一的色调。在这里唯一的食物来源是耐寒的野生动物，它们把这里当做它们的家。</FCDescIceSheet>
+    <FCDescTundra>在这种苔原的各种崎岖山坡上，生活着少数耐寒的动植物群，它们在苔藓覆盖的土地上生存。每当夏天来临时，大地绽放出生机，哪怕这“花隐掖垣暮，啾啾栖鸟过”的美景只是短暂的。</FCDescTundra>
+    <FCDescColdBog>这片土地荒凉冷酷的生态环境也许也成就了其崎岖壮烈的美景，沼泽成了这美景的画龙点睛之笔，这里的生灵只有成群结队的迁徙性食草动物和紧跟其后的捕食者。</FCDescColdBog>
+    <FCDescBorealForest>虽然通常没有冻土苔原那么寒冷，但寒带森林的夏天有多温和，多短暂，它的冬天就有多严酷，多漫长。在冬天到来之前，这里的植物和花朵还有各种动植物群都显得十分丰富。</FCDescBorealForest>
+    <FCDescTropicalRainforest>这里遍布着遮天蔽日的热带树木，几乎没有阳光能透过森林的缝隙然后投射到地面上。但不管怎样，这里还是存在着一个令人眼花缭乱而又危险的动植物群，不可否认的是，和美丽相共存的是隐藏其中的危险和阴魂不散的疾病。</FCDescTropicalRainforest>
+    <FCDescTemperateForest>茂密的森林和溪流把土地分割开来。成群的动物活动其中，这里可获取的食物较多，能够被用于建造建筑的空地也十分广阔。</FCDescTemperateForest>
+    <FCDescTemperateSwamp>这片土地几乎被遍地的沼泽而不是被茂密的植被所覆盖。另外，由于这些沼泽很难处理，因此这里可用的建筑空间十分宝贵。</FCDescTemperateSwamp>
+    <FCDescTropicalSwamp>这里的热带树木直插云霄，将其他的植被和明媚的阳光都扼杀掉了，只有一丝光线侥幸跳脱，投射到了地面上，这里最常见的东西是沼泽和阴魂不散的疾病。</FCDescTropicalSwamp>
+    <FCDescAridShrubland>虽然这里不像沙漠那样荒凉和炎热，但由于烈阳的长期炙烤，这里的肥沃土壤和植被显得极其稀有且宝贵。这里的土地空旷且平整，生长着的少数的耐旱树木才使得这片土地不那么单调。</FCDescAridShrubland>
+    <FCDescDesert>这里可供种植的土地极其少见，因为大部分的土地都被沙粒所掩盖，有些地块因为过于危险且不能承载重型建筑使得其也不能成为建筑用地。尽管如此，有经验的人还是能够在这里生活下去，毕竟沙海也蕴藏着无限的生机。</FCDescDesert>
+    <FCDescExtremeDesert>严酷的烈阳已经把这块土地炙烤成了一望无际的沙海，没有任何土壤能够支持植被生长，可供建筑用的土地很难找到。</FCDescExtremeDesert>
+    <FCDescUnknown>我们对于这块地方的状况知之甚少，但这片殖民地的人民仍在设法在这里定居且建立一个繁荣的城镇。</FCDescUnknown>
+
+    <FCTownLevel1>这块殖民地只有围绕着一个中心而建造的几座房屋和几个生产用的小型建筑。</FCTownLevel1>
+    <FCTownLevel2>这个殖民地有了一些大型建筑，但是其规模仍然很小，许多防御用的沙袋和路障点缀着这个据点的外围。</FCTownLevel2>
+    <FCTownLevel3>这个殖民地开始建造了以生产为主的大型建筑群，另外还有专门的仓库储存着资源，大批的工人们忙碌地来回奔波于这些生产设施中。一片简陋的墙成了这个据点简单但又靠谱的后盾。</FCTownLevel3>
+    <FCTownLevel4>这个殖民地相当的大，并且其内部的组织秩序十分良好，许多工业用的建筑设置聚集在一块专用区域中从而使得其能够最大程度地提高效率。厚厚的防御城墙和内部的防御系统保护着殖民地远受外来人员的攻击。</FCTownLevel4>
+    <FCTownLevel5>这个殖民地里有许多地标性建筑标志着这就是这个繁华如灯塔般文明的工业中心，这里除了大量工业设施外还存在着各种配置齐全的公用设施。这个殖民地被多道防御阵地层层包裹，在城市的心脏地带还有着极为严密的内部防御设施。</FCTownLevel5>
+
+</LanguageData>

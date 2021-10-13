@@ -1,9 +1,7 @@
 ﻿using Verse;
 
-namespace FactionColonies
-{
-    public class Mercenary : IExposable, ILoadReferenceable
-    {
+namespace FactionColonies {
+    public class Mercenary : IExposable, ILoadReferenceable {
         //init variables
         public MilUnitFC loadout;
         public MercenarySquadFC squad;
@@ -13,19 +11,16 @@ namespace FactionColonies
         public Pawn pawn;
         public bool deployable = false;
         public int loadID;
-        
-        public Mercenary()
-        {
+
+        public Mercenary() {
 
         }
 
-        public Mercenary(bool blank)
-        {
+        public Mercenary(bool blank) {
             loadID = Find.World.GetComponent<FactionFC>().GetNextMercenaryID();
         }
 
-        public void ExposeData()
-        {
+        public void ExposeData() {
             Scribe_References.Look(ref loadout, "loadout");
             Scribe_References.Look(ref squad, "squad");
             Scribe_References.Look(ref settlement, "settlement");
@@ -36,8 +31,7 @@ namespace FactionColonies
 
         }
 
-        public string GetUniqueLoadID()
-        {
+        public string GetUniqueLoadID() {
             return "Mercenary_" + loadID;
         }
     }

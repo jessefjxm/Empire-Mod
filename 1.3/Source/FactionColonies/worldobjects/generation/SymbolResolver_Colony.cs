@@ -1,36 +1,29 @@
 ﻿using RimWorld;
 using RimWorld.BaseGen;
 using Verse;
-using Verse.AI.Group;
 
-namespace FactionColonies
-{
-    public class SymbolResolver_Colony : SymbolResolver
-    {
-        public override void Resolve(ResolveParams rp)
-        {
+namespace FactionColonies {
+    public class SymbolResolver_Colony : SymbolResolver {
+        public override void Resolve(ResolveParams rp) {
             int dist = 0;
             if (rp.edgeDefenseWidth.HasValue)
                 dist = rp.edgeDefenseWidth.Value;
             else if (rp.rect.Width >= 20 && rp.rect.Height >= 20 &&
                      (rp.faction.def.techLevel >= TechLevel.Industrial || Rand.Bool))
                 dist = Rand.Bool ? 2 : 4;
-            
-            if (rp.faction.def.techLevel >= TechLevel.Industrial)
-            {
+
+            if (rp.faction.def.techLevel >= TechLevel.Industrial) {
                 BaseGen.symbolStack.Push("outdoorLighting", rp);
                 int num = Rand.Chance(0.75f) ? GenMath.RoundRandom(rp.rect.Area / 400f) : 0;
-                for (int index = 0; index < num; ++index)
-                {
+                for (int index = 0; index < num; ++index) {
                     ResolveParams resolveParams2 = rp;
                     resolveParams2.faction = rp.faction;
-                   BaseGen.symbolStack.Push("firefoamPopper", resolveParams2);
+                    BaseGen.symbolStack.Push("firefoamPopper", resolveParams2);
                 }
             }
 
             bool? nullable1;
-            if (dist > 0)
-            {
+            if (dist > 0) {
                 ResolveParams resolveParams2 = rp;
                 resolveParams2.faction = rp.faction;
                 resolveParams2.edgeDefenseWidth = dist;

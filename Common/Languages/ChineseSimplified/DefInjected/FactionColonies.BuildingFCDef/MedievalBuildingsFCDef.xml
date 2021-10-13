@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<LanguageData>
+		<slavePlantation.label>奴隶种植园</slavePlantation.label>
+		<adventurersGuild.label>冒险家工会</adventurersGuild.label>
+		<publicMarket.label>公共市场</publicMarket.label>
+		<jailhouse.label>监狱</jailhouse.label>
+		<wildernessGuild.label>荒野行会</wildernessGuild.label>
+		<apparelSweatshop.label>血汗制衣厂</apparelSweatshop.label>
+		<loggingCamp.label>伐木营地</loggingCamp.label>
+	</LanguageData>

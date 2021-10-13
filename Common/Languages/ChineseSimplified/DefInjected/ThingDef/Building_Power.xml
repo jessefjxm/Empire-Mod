@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<LanguageData>
+		<EmpirePowerGenerator.label>帝国能源中心</EmpirePowerGenerator.label>
+		<EmpirePowerGenerator.description>该设施会将各个区域的发电设施所生产的电能集中在一起，然后为你的殖民地提供电力供应。</EmpirePowerGenerator.description>
+	</LanguageData>

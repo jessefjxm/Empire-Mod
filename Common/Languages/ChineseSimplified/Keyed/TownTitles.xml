@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+    <FCTitle_Food_1>小型农场</FCTitle_Food_1>
+    <FCTitle_Food_2>大型农庄</FCTitle_Food_2>
+    <FCTitle_Food_3>地区性中心粮仓</FCTitle_Food_3>
+
+    <FCTitle_Weapons_1>小型锻造区</FCTitle_Weapons_1>
+    <FCTitle_Weapons_2>锻造工坊</FCTitle_Weapons_2>
+    <FCTitle_Weapons_3>巨型军工厂</FCTitle_Weapons_3>
+
+    <FCTitle_Apparel_1>小型服装作坊</FCTitle_Apparel_1>
+    <FCTitle_Apparel_2>服装工坊</FCTitle_Apparel_2>
+    <FCTitle_Apparel_3>大型现代化服装厂</FCTitle_Apparel_3>
+
+    <FCTitle_Animals_1>小型牲畜养殖场</FCTitle_Animals_1>
+    <FCTitle_Animals_2>中型畜牧业基地</FCTitle_Animals_2>
+    <FCTitle_Animals_3>地区性畜牧中心</FCTitle_Animals_3>
+
+    <FCTitle_Logging_1>小型伐木场</FCTitle_Logging_1>
+    <FCTitle_Logging_2>中型伐木营地</FCTitle_Logging_2>
+    <FCTitle_Logging_3>大型木材中心</FCTitle_Logging_3>
+
+    <FCTitle_Mining_1>小型矿场</FCTitle_Mining_1>
+    <FCTitle_Mining_2>中型矿业基地</FCTitle_Mining_2>
+    <FCTitle_Mining_3>大型采矿区</FCTitle_Mining_3>
+
+    <FCTitle_Research_1>小型研究基地</FCTitle_Research_1>
+    <FCTitle_Research_2>中型研究中心</FCTitle_Research_2>
+    <FCTitle_Research_3>先进科技大学</FCTitle_Research_3>
+
+    <FCTitle_Power_1>小型发电区</FCTitle_Power_1>
+    <FCTitle_Power_2>中型发电厂</FCTitle_Power_2>
+    <FCTitle_Power_3>巨型发电厂</FCTitle_Power_3>
+
+    <FCTitle_Medicine_1>小型诊所</FCTitle_Medicine_1>
+    <FCTitle_Medicine_2>医院</FCTitle_Medicine_2>
+    <FCTitle_Medicine_3>地区医疗中心</FCTitle_Medicine_3>
+
+</LanguageData>

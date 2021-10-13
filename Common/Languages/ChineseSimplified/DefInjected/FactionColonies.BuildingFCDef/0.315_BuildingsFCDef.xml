@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<LanguageData>
+		<plagueCamp.label>瘟疫营</plagueCamp.label>
+		<deforestationCamp.label>伐木营地</deforestationCamp.label>
+		<herbalMedicineFarm.label>草药种植园</herbalMedicineFarm.label>
+		<batteryPowerStation.label>蓄电站</batteryPowerStation.label>
+		<solarPlant.label>太阳能发电厂</solarPlant.label>
+		<cleanEnergyLab.label>清洁能源实验室</cleanEnergyLab.label>
+		<animalTestingFacility.label>生物研究中心</animalTestingFacility.label>
+		<apartmentHousing.label>公寓住房</apartmentHousing.label>
+		<perpetualMotionGenerator.label>永动机</perpetualMotionGenerator.label>
+		<bionicsManufacturingPlant.label>仿生体制造工厂</bionicsManufacturingPlant.label>
+		<archotechGenerator.label>超凡科技发电机</archotechGenerator.label>
+	</LanguageData>

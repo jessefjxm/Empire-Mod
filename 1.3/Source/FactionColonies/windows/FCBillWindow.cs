@@ -1,14 +1,12 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace FactionColonies
-{
-    class FCBillWindow : Window
-    {
+namespace FactionColonies {
+    class FCBillWindow : Window {
 
         public List<BillFC> bills;
         public FactionFC faction;
@@ -29,17 +27,14 @@ namespace FactionColonies
 
 
 
-        public override Vector2 InitialSize
-        {
-            get
-            {
+        public override Vector2 InitialSize {
+            get {
                 return new Vector2(628f, 278f);
             }
         }
 
 
-        public FCBillWindow()
-        {
+        public FCBillWindow() {
             //Window Information
             faction = Find.World.GetComponent<FactionFC>();
             bills = faction.Bills;
@@ -72,17 +67,15 @@ namespace FactionColonies
             billTimeRemaining = new Rect(billLocationBase.x + billLocationBase.width, 0, 90, billHeight);
             //rect for bill resolve button
             billResolveBase = new Rect(billTimeRemaining.x + billTimeRemaining.width, 0, 140, billHeight);
-        }   
-            
+        }
 
-        public override void WindowUpdate()
-        {
+
+        public override void WindowUpdate() {
             base.WindowUpdate();
             maxScroll = (bills.Count() * billHeight) - scrollBoxHeight;
         }
 
-        public override void DoWindowContents(Rect inRect)
-        {
+        public override void DoWindowContents(Rect inRect) {
             //grab before anchor/font
             GameFont fontBefore = Text.Font;
             TextAnchor anchorBefore = Text.Anchor;
@@ -102,8 +95,7 @@ namespace FactionColonies
             int i = 0;
 
             Text.Anchor = TextAnchor.MiddleCenter;
-            foreach (BillFC bill in bills)
-            {
+            foreach (BillFC bill in bills) {
                 i++;
                 Rect settlement = new Rect();
                 Rect date = new Rect();
@@ -127,18 +119,15 @@ namespace FactionColonies
 
                 highlight = new Rect(settlement.x, settlement.y, resolve.x + resolve.width, billHeight);
 
-                
 
-                if (i % 2 == 0)
-                {
+
+                if (i % 2 == 0) {
                     Widgets.DrawHighlight(highlight);
                 }
                 String settlementName;
-                if( bill.settlement != null) { settlementName = bill.settlement.name; } else { settlementName = "Null"; }
-                if(Widgets.ButtonText(settlement, settlementName))
-                {
-                    if (bill.settlement != null)
-                    {
+                if (bill.settlement != null) { settlementName = bill.settlement.name; } else { settlementName = "Null"; }
+                if (Widgets.ButtonText(settlement, settlementName)) {
+                    if (bill.settlement != null) {
                         Find.WindowStack.Add(new SettlementWindowFc(bill.settlement));
                     }
                 }
@@ -151,20 +140,16 @@ namespace FactionColonies
                 //
                 bool bul;
                 bul = (bill.taxes.itemTithes.Count > 0);
-                Widgets.Checkbox(new Vector2(tithe.x + tithe.width/2 - 12, tithe.y), ref bul);
+                Widgets.Checkbox(new Vector2(tithe.x + tithe.width / 2 - 12, tithe.y), ref bul);
 
-                if (Widgets.ButtonText(resolve, "ResolveBill".Translate()))
-                {
-                    if (PaymentUtil.getSilver() >= -1 * (bill.taxes.silverAmount) || bill.taxes.silverAmount >= 0)
-                    { //if have enough silver on the current map to pay  & map belongs to player
+                if (Widgets.ButtonText(resolve, "ResolveBill".Translate())) {
+                    if (PaymentUtil.getSilver() >= -1 * (bill.taxes.silverAmount) || bill.taxes.silverAmount >= 0) { //if have enough silver on the current map to pay  & map belongs to player
                         FCEventMaker.createTaxEvent(bill);
-                        if (bill.taxes.researchCompleted != 0)
-                        {
+                        if (bill.taxes.researchCompleted != 0) {
                             faction.researchPointPool += bill.taxes.researchCompleted;
                             Messages.Message("PointsAddedToResearchPool".Translate(bill.taxes.researchCompleted), MessageTypeDefOf.PositiveEvent);
                         }
-                        if (bill.taxes.electricityAllotted != 0)
-                        {
+                        if (bill.taxes.electricityAllotted != 0) {
                             faction.powerPool += bill.taxes.electricityAllotted;
                         }
                         goto Reset;
@@ -181,24 +166,21 @@ namespace FactionColonies
             Widgets.ButtonTextSubtle(billDescBase, "DueFC".Translate());
             Widgets.ButtonTextSubtle(billLocationBase, "Amount".Translate());
             Widgets.ButtonTextSubtle(billTimeRemaining, "HasTithe".Translate());
-            if(Widgets.ButtonTextSubtle(billResolveBase, "Auto-Resolve"))
-            {
+            if (Widgets.ButtonTextSubtle(billResolveBase, "自动支付")) {
                 List<FloatMenuOption> list = new List<FloatMenuOption>();
 
-                FloatMenuOption option = new FloatMenuOption("Auto-Resolving : " + faction.autoResolveBills, delegate 
-                {
+                FloatMenuOption option = new FloatMenuOption("自动支付账单： " + (faction.autoResolveBills ? "是" : "否"), delegate {
                     faction.autoResolveBills = !faction.autoResolveBills;
-                    switch (faction.autoResolveBills)
-                    {
+                    switch (faction.autoResolveBills) {
                         case true:
-                            Messages.Message("Bills are now autoresolving!", MessageTypeDefOf.NeutralEvent);
+                            Messages.Message("开启自动支付账单！", MessageTypeDefOf.NeutralEvent);
                             PaymentUtil.autoresolveBills(bills);
                             break;
                         case false:
-                            Messages.Message("Bills are now not autoresolving.", MessageTypeDefOf.NeutralEvent);
+                            Messages.Message("关闭自动支付账单。", MessageTypeDefOf.NeutralEvent);
                             break;
                     }
-                    
+
                 });
                 list.Add(option);
 
@@ -217,8 +199,7 @@ namespace FactionColonies
             Text.Anchor = anchorBefore;
 
 
-            if (Event.current.type == EventType.ScrollWheel)
-            {
+            if (Event.current.type == EventType.ScrollWheel) {
 
                 scrollWindow(Event.current.delta.y);
             }
@@ -229,18 +210,12 @@ namespace FactionColonies
 
 
 
-        private void scrollWindow(float num)
-        {
-            if (scroll - num * 5 < -1 * maxScroll)
-            {
+        private void scrollWindow(float num) {
+            if (scroll - num * 5 < -1 * maxScroll) {
                 scroll = -1 * maxScroll;
-            }
-            else if (scroll - num * 5 > 0)
-            {
+            } else if (scroll - num * 5 > 0) {
                 scroll = 0;
-            }
-            else
-            {
+            } else {
                 scroll -= (int)Event.current.delta.y * 5;
             }
             Event.current.Use();

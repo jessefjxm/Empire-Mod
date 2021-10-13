@@ -1,20 +1,17 @@
+using FactionColonies.util;
+using HarmonyLib;
+using RimWorld;
+using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using FactionColonies.util;
-using HarmonyLib;
-using RimWorld;
-using RimWorld.BaseGen;
-using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 using Verse.AI.Group;
 
-namespace FactionColonies
-{
-    public class FactionFC : WorldComponent
-    {
+namespace FactionColonies {
+    public class FactionFC : WorldComponent {
         public int eventTimeDue;
         public int taxTimeDue = Find.TickManager.TicksGame;
         public int timeStart = Find.TickManager.TicksGame;
@@ -152,8 +149,7 @@ namespace FactionColonies
         // }
 
 
-        public override void ExposeData()
-        {
+        public override void ExposeData() {
             base.ExposeData();
             Scribe_Values.Look(ref name, "name");
             Scribe_Values.Look(ref title, "title");
@@ -265,12 +261,10 @@ namespace FactionColonies
 
         }
 
-        public override void FinalizeInit()
-        {
+        public override void FinalizeInit() {
             base.FinalizeInit();
             //Just in case null is saved somehow
-            if (raceFilter == null)
-            {
+            if (raceFilter == null) {
                 Log.Message("Null raceFilter detected - Recreating");
                 raceFilter = new RaceThingFilter(this);
             }
@@ -278,10 +272,8 @@ namespace FactionColonies
         }
 
         [HarmonyPatch(typeof(FactionDialogMaker), "RequestMilitaryAidOption")]
-        class disableMilitaryAid
-        {
-            static void Postfix(Map map, Faction faction, Pawn negotiator, ref DiaOption __result)
-            {
+        class disableMilitaryAid {
+            static void Postfix(Map map, Faction faction, Pawn negotiator, ref DiaOption __result) {
                 if (faction.def.defName != "PColony") return;
                 __result = new DiaOption("RequestMilitaryAid".Translate(25));
                 __result.Disable("Disabled. Use the settlements military tab.");
@@ -290,44 +282,37 @@ namespace FactionColonies
 
 
         [HarmonyPatch(typeof(WorldPawns), "PassToWorld")]
-        class MercenaryPassToWorld
-        {
-            static bool Prefix(Pawn pawn, PawnDiscardDecideMode discardMode = PawnDiscardDecideMode.Decide)
-            {
+        class MercenaryPassToWorld {
+            static bool Prefix(Pawn pawn, PawnDiscardDecideMode discardMode = PawnDiscardDecideMode.Decide) {
                 FactionFC faction = Find.World.GetComponent<FactionFC>();
-                return faction?.militaryCustomizationUtil?.AllMercenaryPawns == null || 
+                return faction?.militaryCustomizationUtil?.AllMercenaryPawns == null ||
                        !faction.militaryCustomizationUtil.AllMercenaryPawns.Contains(pawn);
             }
         }
 
-        [DebugAction("Empire", "Send Pawn To Settlement", allowedGameStates = AllowedGameStates.PlayingOnMap)]
-        private static void sendPawnToSettlement()
-        {
+        [DebugAction("Empire", "发送人物到居住地", allowedGameStates = AllowedGameStates.PlayingOnMap)]
+        private static void sendPawnToSettlement() {
             List<Pawn> selected = Find.Selector.SelectedPawns;
-            if (!selected.Any())
-            {
-                Messages.Message("No prisoner selected!", MessageTypeDefOf.RejectInput);
+            if (!selected.Any()) {
+                Messages.Message("没有选中囚犯！", MessageTypeDefOf.RejectInput);
                 return;
             }
             List<FloatMenuOption> settlementList = Find.World.GetComponent<FactionFC>()
-                .settlements.Select(settlement => new FloatMenuOption(settlement.name + " - Settlement Level : " + 
-                                                                      settlement.settlementLevel + " - Prisoners: " + 
-                                                                      settlement.prisonerList.Count(), delegate
-                {
-                    foreach (Pawn pawn in selected)
-                    {
-                        //disappear colonist
-                        FactionColonies.sendPrisoner(pawn, settlement);
+                .settlements.Select(settlement => new FloatMenuOption(settlement.name + " - Settlement Level : " +
+                                                                      settlement.settlementLevel + " - Prisoners: " +
+                                                                      settlement.prisonerList.Count(), delegate {
+                                                                          foreach (Pawn pawn in selected) {
+                                                                              //disappear colonist
+                                                                              FactionColonies.sendPrisoner(pawn, settlement);
 
-                        foreach (var bed in Find.Maps.Where(map => map.IsPlayerHome).SelectMany(map => 
-                            map.listerBuildings.allBuildingsColonist).OfType<Building_Bed>())
-                        {
-                            if (!Enumerable.Any(bed.OwnersForReading, found => found == pawn)) continue;
-                            bed.ForPrisoners = false;
-                            bed.ForPrisoners = true;
-                        }
-                    }
-                }))
+                                                                              foreach (var bed in Find.Maps.Where(map => map.IsPlayerHome).SelectMany(map =>
+                                                                                  map.listerBuildings.allBuildingsColonist).OfType<Building_Bed>()) {
+                                                                                  if (!Enumerable.Any(bed.OwnersForReading, found => found == pawn)) continue;
+                                                                                  bed.ForPrisoners = false;
+                                                                                  bed.ForPrisoners = true;
+                                                                              }
+                                                                          }
+                                                                      }))
                 .ToList();
 
             FloatMenu floatMenu2 = new FloatMenu(settlementList);
@@ -335,10 +320,8 @@ namespace FactionColonies
         }
 
         [HarmonyPatch(typeof(Pawn), "GetGizmos")]
-        class PawnGizmos
-        {
-            static void Postfix(ref Pawn __instance, ref IEnumerable<Gizmo> __result)
-            {
+        class PawnGizmos {
+            static void Postfix(ref Pawn __instance, ref IEnumerable<Gizmo> __result) {
                 Pawn instance = __instance;
                 if (__instance.guest == null || !__instance.guest.IsPrisoner || !__instance.guest.PrisonerIsSecure ||
                     !Find.World.GetComponent<FactionFC>().settlements.Any()) return;
@@ -353,8 +336,8 @@ namespace FactionColonies
                         action = delegate
                         {
                             List<FloatMenuOption> settlementList = Find.World.GetComponent<FactionFC>()
-                                .settlements.Select(settlement => new FloatMenuOption(settlement.name + 
-                                    " - Settlement Level : " + settlement.settlementLevel + 
+                                .settlements.Select(settlement => new FloatMenuOption(settlement.name +
+                                    " - Settlement Level : " + settlement.settlementLevel +
                                     " - Prisoners: " + settlement.prisonerList.Count(), delegate
                                 {
                                     //disappear colonist
@@ -383,12 +366,9 @@ namespace FactionColonies
 
         //stops friendly faction from being a group source
         [HarmonyPatch(typeof(IncidentWorker_RaidFriendly), "TryResolveRaidFaction")]
-        class RaidFriendlyStopSettlementFaction
-        {
-            static void Postfix(ref IncidentWorker_RaidFriendly __instance, ref bool __result, IncidentParms parms)
-            {
-                if (parms.faction == FactionColonies.getPlayerColonyFaction())
-                {
+        class RaidFriendlyStopSettlementFaction {
+            static void Postfix(ref IncidentWorker_RaidFriendly __instance, ref bool __result, IncidentParms parms) {
+                if (parms.faction == FactionColonies.getPlayerColonyFaction()) {
                     parms.faction = null;
                     __result = false;
                 }
@@ -399,50 +379,38 @@ namespace FactionColonies
         //Faction worldmap gizmos
         //Goodwill by distance to settlement
         [HarmonyPatch(typeof(WorldObject), "GetGizmos")]
-        class WorldObjectGizmos
-        {
-            static void Postfix(ref WorldObject __instance, ref IEnumerable<Gizmo> __result)
-            {
+        class WorldObjectGizmos {
+            static void Postfix(ref WorldObject __instance, ref IEnumerable<Gizmo> __result) {
                 FactionFC worldcomp = Find.World.GetComponent<FactionFC>();
                 Faction fact = FactionColonies.getPlayerColonyFaction();
                 if (__instance.def.defName != "Settlement") return;
                 int tile = __instance.Tile;
-                if (__instance.Faction != fact && __instance.Faction != Find.FactionManager.OfPlayer)
-                {
+                if (__instance.Faction != fact && __instance.Faction != Find.FactionManager.OfPlayer) {
                     //if a valid faction to target
                     Faction faction = __instance.Faction;
 
-                    Command_Action actionHostile = new Command_Action
-                    {
+                    Command_Action actionHostile = new Command_Action {
                         defaultLabel = "AttackSettlement".Translate(),
                         defaultDesc = "",
                         icon = TexLoad.iconMilitary,
-                        action = delegate
-                        {
+                        action = delegate {
                             List<FloatMenuOption> list = new List<FloatMenuOption>();
 
                             if (!worldcomp.hasPolicy(FCPolicyDefOf.isolationist))
-                                list.Add(new FloatMenuOption("CaptureSettlement".Translate(), delegate
-                                {
+                                list.Add(new FloatMenuOption("CaptureSettlement".Translate(), delegate {
                                     List<FloatMenuOption> settlementList = new List<FloatMenuOption>();
 
-                                    foreach (SettlementFC settlement in worldcomp.settlements)
-                                    {
-                                        if (settlement.isMilitaryValid())
-                                        {
+                                    foreach (SettlementFC settlement in worldcomp.settlements) {
+                                        if (settlement.isMilitaryValid()) {
                                             //if military is valid to use.
 
                                             settlementList.Add(new FloatMenuOption(
                                                 settlement.name + " " + "ShortMilitary".Translate() + " " +
                                                 settlement.settlementMilitaryLevel + " - " +
                                                 "FCAvailable".Translate() + ": " +
-                                                (!settlement.isMilitaryBusySilent()).ToString(), delegate
-                                                {
-                                                    if (settlement.isMilitaryBusy())
-                                                    {
-                                                    }
-                                                    else
-                                                    {
+                                                (!settlement.isMilitaryBusySilent()).ToString(), delegate {
+                                                    if (settlement.isMilitaryBusy()) {
+                                                    } else {
                                                         RelationsUtilFC.attackFaction(faction);
 
                                                         settlement.sendMilitary(tile, Find.World.info.name,
@@ -456,8 +424,7 @@ namespace FactionColonies
                                         }
                                     }
 
-                                    if (settlementList.Count == 0)
-                                    {
+                                    if (settlementList.Count == 0) {
                                         settlementList.Add(new FloatMenuOption("NoValidMilitaries".Translate(),
                                             null));
                                     }
@@ -468,27 +435,20 @@ namespace FactionColonies
                                 }));
 
 
-                            list.Add(new FloatMenuOption("RaidSettlement".Translate(), delegate
-                            {
+                            list.Add(new FloatMenuOption("RaidSettlement".Translate(), delegate {
                                 List<FloatMenuOption> settlementList = new List<FloatMenuOption>();
 
-                                foreach (SettlementFC settlement in worldcomp.settlements)
-                                {
-                                    if (settlement.isMilitaryValid())
-                                    {
+                                foreach (SettlementFC settlement in worldcomp.settlements) {
+                                    if (settlement.isMilitaryValid()) {
                                         //if military is valid to use.
 
                                         settlementList.Add(new FloatMenuOption(
                                             settlement.name + " " + "ShortMilitary".Translate() + " " +
                                             settlement.settlementMilitaryLevel + " - " + "FCAvailable".Translate() +
-                                            ": " + (!settlement.isMilitaryBusySilent()).ToString(), delegate
-                                            {
-                                                if (settlement.isMilitaryBusy())
-                                                {
+                                            ": " + (!settlement.isMilitaryBusySilent()).ToString(), delegate {
+                                                if (settlement.isMilitaryBusy()) {
                                                     //military is busy
-                                                }
-                                                else
-                                                {
+                                                } else {
                                                     RelationsUtilFC.attackFaction(faction);
 
                                                     settlement.sendMilitary(tile, Find.World.info.name,
@@ -502,8 +462,7 @@ namespace FactionColonies
                                     }
                                 }
 
-                                if (settlementList.Count == 0)
-                                {
+                                if (settlementList.Count == 0) {
                                     settlementList.Add(new FloatMenuOption("NoValidMilitaries".Translate(), null));
                                 }
 
@@ -516,30 +475,22 @@ namespace FactionColonies
                             }));
 
                             if (worldcomp.hasPolicy(FCPolicyDefOf.authoritarian) &&
-                                faction.def.defName != "VFEI_Insect")
-                            {
-                                list.Add(new FloatMenuOption("EnslavePopulation".Translate(), delegate
-                                {
+                                faction.def.defName != "VFEI_Insect") {
+                                list.Add(new FloatMenuOption("EnslavePopulation".Translate(), delegate {
                                     List<FloatMenuOption> settlementList = new List<FloatMenuOption>();
 
-                                    foreach (SettlementFC settlement in worldcomp.settlements)
-                                    {
-                                        if (settlement.isMilitaryValid())
-                                        {
+                                    foreach (SettlementFC settlement in worldcomp.settlements) {
+                                        if (settlement.isMilitaryValid()) {
                                             //if military is valid to use.
 
                                             settlementList.Add(new FloatMenuOption(
                                                 settlement.name + " " + "ShortMilitary".Translate() + " " +
                                                 settlement.settlementMilitaryLevel + " - " +
                                                 "FCAvailable".Translate() + ": " +
-                                                (!settlement.isMilitaryBusySilent()).ToString(), delegate
-                                                {
-                                                    if (settlement.isMilitaryBusy())
-                                                    {
+                                                (!settlement.isMilitaryBusySilent()).ToString(), delegate {
+                                                    if (settlement.isMilitaryBusy()) {
                                                         //military is busy
-                                                    }
-                                                    else
-                                                    {
+                                                    } else {
                                                         RelationsUtilFC.attackFaction(faction);
 
                                                         settlement.sendMilitary(tile, Find.World.info.name,
@@ -553,8 +504,7 @@ namespace FactionColonies
                                         }
                                     }
 
-                                    if (settlementList.Count == 0)
-                                    {
+                                    if (settlementList.Count == 0) {
                                         settlementList.Add(new FloatMenuOption("NoValidMilitaries".Translate(),
                                             null));
                                     }
@@ -574,48 +524,37 @@ namespace FactionColonies
                         }
                     };
 
-                    Command_Action actionPeaceful = new Command_Action
-                    {
+                    Command_Action actionPeaceful = new Command_Action {
                         defaultLabel = "FCIncreaseRelations".Translate(),
                         defaultDesc = "",
                         icon = TexLoad.iconProsperity,
                         action = delegate { worldcomp.sendDiplomaticEnvoy(faction); }
                     };
 
-                    if (worldcomp.hasPolicy(FCPolicyDefOf.pacifist))
-                    {
-                        __result = __result.Concat(new[] {actionPeaceful});
-                    }
-                    else
-                    {
-                        __result = __result.Concat(new[] {actionHostile});
+                    if (worldcomp.hasPolicy(FCPolicyDefOf.pacifist)) {
+                        __result = __result.Concat(new[] { actionPeaceful });
+                    } else {
+                        __result = __result.Concat(new[] { actionHostile });
                     }
                 }
             }
         }
 
         [HarmonyPatch(typeof(Pawn), "Kill")]
-        class MercenaryDied
-        {
-            static bool Prefix(Pawn __instance)
-            {
+        class MercenaryDied {
+            static bool Prefix(Pawn __instance) {
                 FactionFC faction = Find.World.GetComponent<FactionFC>();
                 if (faction.militaryCustomizationUtil.AllMercenaryPawns
-                    .Contains(__instance))
-                {
+                    .Contains(__instance)) {
                     __instance.SetFaction(FactionColonies.getPlayerColonyFaction());
                     MercenarySquadFC squad = Find.World.GetComponent<FactionFC>().militaryCustomizationUtil
                         .returnSquadFromUnit(__instance);
-                    if (squad != null)
-                    {
+                    if (squad != null) {
                         Mercenary merc = Find.World.GetComponent<FactionFC>().militaryCustomizationUtil
                             .returnMercenaryFromUnit(__instance, squad);
-                        if (merc != null)
-                        {
-                            if (squad.settlement != null)
-                            {
-                                if (FactionColonies.Settings().deadPawnsIncreaseMilitaryCooldown)
-                                {
+                        if (merc != null) {
+                            if (squad.settlement != null) {
+                                if (FactionColonies.Settings().deadPawnsIncreaseMilitaryCooldown) {
                                     squad.dead += 1;
                                 }
 
@@ -626,9 +565,7 @@ namespace FactionColonies
                         }
 
                         squad.removeDroppedEquipment();
-                    }
-                    else
-                    {
+                    } else {
                         Log.Message("Mercenary Errored out. Did not find squad.");
                     }
 
@@ -643,13 +580,10 @@ namespace FactionColonies
         }
 
         [HarmonyPatch(typeof(DeathActionWorker_Simple), "PawnDied")]
-        class MercenaryAnimalDied
-        {
-            static bool Prefix(Corpse corpse)
-            {
+        class MercenaryAnimalDied {
+            static bool Prefix(Corpse corpse) {
                 if (Find.World.GetComponent<FactionFC>().militaryCustomizationUtil.AllMercenaryPawns
-                    .Contains(corpse.InnerPawn))
-                {
+                    .Contains(corpse.InnerPawn)) {
                     //corpse.InnerPawn.SetFaction(FactionColonies.getPlayerColonyFaction());
                     corpse.Destroy();
                     return false;
@@ -660,12 +594,9 @@ namespace FactionColonies
         }
 
         // [HarmonyPatch(typeof(JobGiver_AnimalFlee), "TryGiveJob")]
-        class TryGiveJobFleeAnimal
-        {
-            static bool Prefix(Pawn pawn)
-            {
-                if (Find.World.GetComponent<FactionFC>().militaryCustomizationUtil.AllMercenaryPawns.Contains(pawn))
-                {
+        class TryGiveJobFleeAnimal {
+            static bool Prefix(Pawn pawn) {
+                if (Find.World.GetComponent<FactionFC>().militaryCustomizationUtil.AllMercenaryPawns.Contains(pawn)) {
                     return false;
                 }
 
@@ -675,16 +606,12 @@ namespace FactionColonies
 
         //Goodwill by distance to settlement
         [HarmonyPatch(typeof(SettlementProximityGoodwillUtility), "AppendProximityGoodwillOffsets")]
-        class GoodwillPatch
-        {
+        class GoodwillPatch {
             static void Postfix(int tile, List<Pair<Settlement, int>> outOffsets, bool ignoreIfAlreadyMinGoodwill,
-                bool ignorePermanentlyHostile)
-            {
+                bool ignorePermanentlyHostile) {
                 Pair:
-                foreach (Pair<Settlement, int> pair in outOffsets)
-                {
-                    if (pair.First.Faction.def.defName == "PColony")
-                    {
+                foreach (Pair<Settlement, int> pair in outOffsets) {
+                    if (pair.First.Faction.def.defName == "PColony") {
                         outOffsets.Remove(pair);
                         goto Pair;
                     }
@@ -694,12 +621,9 @@ namespace FactionColonies
 
         //CheckReachNaturalGoodwill()
         [HarmonyPatch(typeof(Faction), "CheckReachNaturalGoodwill")]
-        class GoodwillPatchFunctionsGoodwillTendency
-        {
-            static bool Prefix(ref Faction __instance)
-            {
-                if (__instance.def.defName == "PColony")
-                {
+        class GoodwillPatchFunctionsGoodwillTendency {
+            static bool Prefix(ref Faction __instance) {
+                if (__instance.def.defName == "PColony") {
                     return false;
                 }
 
@@ -709,20 +633,15 @@ namespace FactionColonies
 
         //tryAffectGoodwillWith
         [HarmonyPatch(typeof(Faction), "TryAffectGoodwillWith")]
-        class GoodwillPatchFunctionsGoodwillAffect
-        {
+        class GoodwillPatchFunctionsGoodwillAffect {
             static bool Prefix(ref Faction __instance, Faction other, int goodwillChange, bool canSendMessage = true,
-                bool canSendHostilityLetter = true, string reason = null, GlobalTargetInfo? lookTarget = null)
-            {
-                if (__instance.def.defName == "PColony" && other == Find.FactionManager.OfPlayer)
-                {
-                    if (reason == "GoodwillChangedReason_RequestedTrader".Translate())
-                    {
+                bool canSendHostilityLetter = true, string reason = null, GlobalTargetInfo? lookTarget = null) {
+                if (__instance.def.defName == "PColony" && other == Find.FactionManager.OfPlayer) {
+                    if (reason == "GoodwillChangedReason_RequestedTrader".Translate()) {
                         return false;
                     }
 
-                    if (reason == "GoodwillChangedReason_ReceivedGift".Translate())
-                    {
+                    if (reason == "GoodwillChangedReason_ReceivedGift".Translate()) {
                         return false;
                     }
 
@@ -736,22 +655,16 @@ namespace FactionColonies
 
         //Notify_MemberDied(Pawn member, DamageInfo? dinfo, bool wasWorldPawn, Map map)
         [HarmonyPatch(typeof(Faction), "Notify_MemberDied")]
-        class GoodwillPatchFunctionsMemberDied
-        {
-            static bool Prefix(ref Faction __instance, Pawn member, DamageInfo? dinfo, bool wasWorldPawn, Map map)
-            {
+        class GoodwillPatchFunctionsMemberDied {
+            static bool Prefix(ref Faction __instance, Pawn member, DamageInfo? dinfo, bool wasWorldPawn, Map map) {
                 if (member.Faction.def.defName == "PColony" && !wasWorldPawn &&
                     !PawnGenerator.IsBeingGenerated(member) && map != null && map.IsPlayerHome &&
-                    !__instance.HostileTo(Faction.OfPlayer))
-                {
+                    !__instance.HostileTo(Faction.OfPlayer)) {
                     FactionFC faction = Find.World.GetComponent<FactionFC>();
-                    if (!faction.hasPolicy(FCPolicyDefOf.pacifist))
-                    {
-                        if (dinfo != null && (dinfo.Value.Category == DamageInfo.SourceCategory.Collapse))
-                        {
+                    if (!faction.hasPolicy(FCPolicyDefOf.pacifist)) {
+                        if (dinfo != null && (dinfo.Value.Category == DamageInfo.SourceCategory.Collapse)) {
                             Messages.Message("DeathOfFactionPawn".Translate(), MessageTypeDefOf.PawnDeath);
-                            foreach (SettlementFC settlement in faction.settlements)
-                            {
+                            foreach (SettlementFC settlement in faction.settlements) {
                                 settlement.unrest += 5 *
                                                      TraitUtilsFC.cycleTraits(new double(), "unrestGainedMultiplier",
                                                          settlement.traits, "multiply") *
@@ -763,17 +676,13 @@ namespace FactionColonies
                                                         TraitUtilsFC.cycleTraits(new double(),
                                                             "happinessLostMultiplier", faction.traits, "multiply");
                             }
-                        }
-                        else if (dinfo != null &&
-                                 (dinfo.Value.Instigator == null || dinfo.Value.Instigator.Faction == null))
-                        {
+                        } else if (dinfo != null &&
+                                   (dinfo.Value.Instigator == null || dinfo.Value.Instigator.Faction == null)) {
                             Pawn pawn = dinfo.Value.Instigator as Pawn;
                             if (pawn == null || !pawn.RaceProps.Animal ||
-                                pawn.mindState.mentalStateHandler.CurStateDef != MentalStateDefOf.ManhunterPermanent)
-                            {
+                                pawn.mindState.mentalStateHandler.CurStateDef != MentalStateDefOf.ManhunterPermanent) {
                                 Messages.Message("DeathOfFactionPawn".Translate(), MessageTypeDefOf.PawnDeath);
-                                foreach (SettlementFC settlement in faction.settlements)
-                                {
+                                foreach (SettlementFC settlement in faction.settlements) {
                                     settlement.unrest += 5 *
                                                          TraitUtilsFC.cycleTraits(new double(),
                                                              "unrestGainedMultiplier", settlement.traits, "multiply") *
@@ -786,13 +695,10 @@ namespace FactionColonies
                                                                 "happinessLostMultiplier", faction.traits, "multiply");
                                 }
                             }
-                        }
-                        else if (dinfo != null && dinfo.Value.Instigator != null &&
-                                 dinfo.Value.Instigator.Faction == Find.FactionManager.OfPlayer)
-                        {
+                        } else if (dinfo != null && dinfo.Value.Instigator != null &&
+                                   dinfo.Value.Instigator.Faction == Find.FactionManager.OfPlayer) {
                             Messages.Message("DeathOfFactionPawn".Translate(), MessageTypeDefOf.PawnDeath);
-                            foreach (SettlementFC settlement in faction.settlements)
-                            {
+                            foreach (SettlementFC settlement in faction.settlements) {
                                 settlement.unrest += 5 *
                                                      TraitUtilsFC.cycleTraits(new double(), "unrestGainedMultiplier",
                                                          settlement.traits, "multiply") *
@@ -818,12 +724,9 @@ namespace FactionColonies
 
         //member exit map
         [HarmonyPatch(typeof(Faction), "Notify_MemberExitedMap")]
-        class GoodwillPatchFunctionsExitedMap
-        {
-            static bool Prefix(ref Faction __instance, Pawn member, bool free)
-            {
-                if (__instance.def.defName == "PColony")
-                {
+        class GoodwillPatchFunctionsExitedMap {
+            static bool Prefix(ref Faction __instance, Pawn member, bool free) {
+                if (__instance.def.defName == "PColony") {
                     return false;
                 }
 
@@ -834,12 +737,9 @@ namespace FactionColonies
 
         //member took damage
         [HarmonyPatch(typeof(Faction), "Notify_MemberTookDamage")]
-        class GoodwillPatchFunctionsTookDamage
-        {
-            static bool Prefix(ref Faction __instance, Pawn member, DamageInfo dinfo)
-            {
-                if (__instance.def.defName == "PColony")
-                {
+        class GoodwillPatchFunctionsTookDamage {
+            static bool Prefix(ref Faction __instance, Pawn member, DamageInfo dinfo) {
+                if (__instance.def.defName == "PColony") {
                     return false;
                 }
 
@@ -849,12 +749,9 @@ namespace FactionColonies
 
         //Player traded
         [HarmonyPatch(typeof(Faction), "Notify_PlayerTraded")]
-        class GoodwillPatchFunctionsPlayerTraded
-        {
-            static bool Prefix(ref Faction __instance, float marketValueSentByPlayer, Pawn playerNegotiator)
-            {
-                if (__instance.def.defName == "PColony")
-                {
+        class GoodwillPatchFunctionsPlayerTraded {
+            static bool Prefix(ref Faction __instance, float marketValueSentByPlayer, Pawn playerNegotiator) {
+                if (__instance.def.defName == "PColony") {
                     return false;
                 }
 
@@ -864,15 +761,11 @@ namespace FactionColonies
 
         //Player traded
         [HarmonyPatch(typeof(Faction), "Notify_MemberCaptured")]
-        class GoodwillPatchFunctionsCapturedPawn
-        {
-            static bool Prefix(ref Faction __instance, Pawn member, Faction violator)
-            {
-                if (__instance.def.defName == "PColony" && violator == Find.FactionManager.OfPlayer)
-                {
+        class GoodwillPatchFunctionsCapturedPawn {
+            static bool Prefix(ref Faction __instance, Pawn member, Faction violator) {
+                if (__instance.def.defName == "PColony" && violator == Find.FactionManager.OfPlayer) {
                     Messages.Message("CaptureOfFactionPawn".Translate(), MessageTypeDefOf.NegativeEvent);
-                    foreach (SettlementFC settlement in Find.World.GetComponent<FactionFC>().settlements)
-                    {
+                    foreach (SettlementFC settlement in Find.World.GetComponent<FactionFC>().settlements) {
                         settlement.unrest += 15 *
                                              TraitUtilsFC.cycleTraits(new double(), "unrestGainedMultiplier",
                                                  settlement.traits, "multiply") * TraitUtilsFC.cycleTraits(new double(),
@@ -896,10 +789,8 @@ namespace FactionColonies
         }
 
         [HarmonyPatch(typeof(ResearchManager), "FinishProject")]
-        class ResearchCompleted
-        {
-            static void Postfix(ResearchProjectDef proj, bool doCompletionDialog = false, Pawn researcher = null)
-            {
+        class ResearchCompleted {
+            static void Postfix(ResearchProjectDef proj, bool doCompletionDialog = false, Pawn researcher = null) {
                 FactionFC fc = Find.World.GetComponent<FactionFC>();
                 fc.roadBuilder.CheckForTechChanges();
             }
@@ -907,18 +798,14 @@ namespace FactionColonies
 
         // Fix a crash related to a harmony bug on Linux
         // This gets all patches Empire makes, gets the ones that would crash on Linux, and fixes them
-        static void FixLinuxHarmonyCrash(Harmony harmony)
-        {
-            bool WouldCrash(MethodInfo method)
-            {
-                if (method == null || !method.IsVirtual || method.IsAbstract || method.IsFinal)
-                {
+        static void FixLinuxHarmonyCrash(Harmony harmony) {
+            bool WouldCrash(MethodInfo method) {
+                if (method == null || !method.IsVirtual || method.IsAbstract || method.IsFinal) {
                     return false;
                 }
 
                 byte[] bytes = method.GetMethodBody()?.GetILAsByteArray();
-                if (bytes == null || bytes.Length == 0 || (bytes.Length == 1 && bytes.First() == 0x2A))
-                {
+                if (bytes == null || bytes.Length == 0 || (bytes.Length == 1 && bytes.First() == 0x2A)) {
                     return true;
                 }
 
@@ -928,9 +815,8 @@ namespace FactionColonies
             var methods = typeof(FactionFC).Assembly.GetTypes()
                     .Where(t => t.IsClass && !typeof(Delegate).IsAssignableFrom(t))
                     .Where(t => t.GetCustomAttributes(typeof(HarmonyPatch)).Any())
-                    .SelectMany(t =>
-                    {
-                        HarmonyPatch patch = (HarmonyPatch) Attribute.GetCustomAttribute(t, typeof(HarmonyPatch));
+                    .SelectMany(t => {
+                        HarmonyPatch patch = (HarmonyPatch)Attribute.GetCustomAttribute(t, typeof(HarmonyPatch));
                         MethodInfo[] m = patch.info.declaringType.GetMethods(BindingFlags.Public |
                                                                              BindingFlags.NonPublic |
                                                                              BindingFlags.Instance |
@@ -940,8 +826,7 @@ namespace FactionColonies
                     .Where(WouldCrash)
                 ;
 
-            foreach (MethodInfo i in methods)
-            {
+            foreach (MethodInfo i in methods) {
                 // Patching methods without any Prefixes/Postfixes before actually patching them fixes it. Idk why
                 harmony.Patch(i);
             }
@@ -951,24 +836,20 @@ namespace FactionColonies
         //Remove ability to attack colony.
 
 
-        public FactionFC(World world) : base(world)
-        {
+        public FactionFC(World world) : base(world) {
             var harmony = new Harmony("com.Saakra.Empire");
 
-            if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.Linux)
-            {
+            if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.Linux) {
                 FixLinuxHarmonyCrash(harmony);
             }
 
             harmony.PatchAll();
 
-            if (FactionColonies.checkForMod("kentington.saveourship2"))
-            {
+            if (FactionColonies.checkForMod("kentington.saveourship2")) {
                 SoS2HarmonyPatches.Patch(harmony);
             }
 
-            if (FactionColonies.checkForMod("Krkr.AndroidTiers") || FactionColonies.checkForMod("Atlas.AndroidTiers"))
-            {
+            if (FactionColonies.checkForMod("Krkr.AndroidTiers") || FactionColonies.checkForMod("Atlas.AndroidTiers")) {
                 //Android_Tiers_Patches.Patch(harmony);
             }
 
@@ -979,15 +860,11 @@ namespace FactionColonies
             research.isTitheBool = true;
         }
 
-        public List<SettlementFC> settlementsOnPlanet
-        {
-            get
-            {
+        public List<SettlementFC> settlementsOnPlanet {
+            get {
                 List<SettlementFC> list = new List<SettlementFC>();
-                foreach (SettlementFC settlement in settlements)
-                {
-                    if (settlement.planetName == Find.World.info.name)
-                    {
+                foreach (SettlementFC settlement in settlements) {
+                    if (settlement.planetName == Find.World.info.name) {
                         list.Add(settlement);
                     }
                 }
@@ -996,23 +873,19 @@ namespace FactionColonies
             }
         }
 
-        public override void WorldComponentTick()
-        {
+        public override void WorldComponentTick() {
             base.WorldComponentTick();
-            if (firstTick)
-            {
+            if (firstTick) {
                 //Log.Message("First Tick");
                 FactionColonies.updateChanges();
-                if (planetName.NullOrEmpty())
-                {
+                if (planetName.NullOrEmpty()) {
                     planetName = Find.World.info.name;
                 }
 
                 roadBuilder.FirstTick();
 
                 Faction FCf = FactionColonies.getPlayerColonyFaction();
-                if (FCf != null)
-                {
+                if (FCf != null) {
                     FCf.def.techLevel = TechLevel.Undefined;
                     factionIcon = TexLoad.factionIcons.FirstOrFallback(obj => obj.name == factionIconPath,
                         TexLoad.factionIcons.First());
@@ -1032,24 +905,20 @@ namespace FactionColonies
 
             //If Player Colony Faction does exists
             Faction faction = FactionColonies.getPlayerColonyFaction();
-            if (faction != null)
-            {
+            if (faction != null) {
                 roadBuilder.RoadTick();
                 TaxTick();
                 UITick();
                 StatTick();
                 MilitaryTick();
                 TickActions();
-            }
-            else if (faction == null && settlements.Count() >= 0 && factionBackup != null)
-            {
+            } else if (faction == null && settlements.Count() >= 0 && factionBackup != null) {
                 //Log.Message("Moved to new planet - Adding faction copy");
                 //FactionColonies.createPlayerColonyFaction();
                 //FactionColonies.copyPlayerColonyFaction();
             }
 
-            if (boolChangedPlanet)
-            {
+            if (boolChangedPlanet) {
                 // if (!factionUpdated)
                 // {
                 SoS2HarmonyPatches.updateFactionOnPlanet();
@@ -1057,16 +926,14 @@ namespace FactionColonies
                 // }
                 Reset:
                 //Log.Message("New planet-" + Find.World.info.name);
-                foreach (SettlementSoS2Info entry in createSettlementQueue)
-                {
+                foreach (SettlementSoS2Info entry in createSettlementQueue) {
                     //Log.Message("key for create-" + entry.Key);
-                    if (entry.planetName == Find.World.info.name)
-                    {
+                    if (entry.planetName == Find.World.info.name) {
                         //Log.Message("Match");
 
 
                         Settlement settlement =
-                            (Settlement) WorldObjectMaker.MakeWorldObject(WorldObjectDefOf.Settlement);
+                            (Settlement)WorldObjectMaker.MakeWorldObject(WorldObjectDefOf.Settlement);
                         settlement.SetFaction(faction);
                         settlement.Tile = entry.location;
                         settlement.Name = returnSettlementByLocation(settlement.Tile, Find.World.info.name).name;
@@ -1080,8 +947,7 @@ namespace FactionColonies
                 roadBuilder.CreateRoadQueue(Find.World.info.name);
                 roadBuilder.FlagUpdateRoadQueues();
                 Reset2:
-                foreach (SettlementSoS2Info entry in deleteSettlementQueue)
-                {
+                foreach (SettlementSoS2Info entry in deleteSettlementQueue) {
                     //Log.Message("key for destroy-" + entry.Key);
                     if (entry.planetName != Find.World.info.name) continue;
                     //Log.Message("Match");
@@ -1094,18 +960,15 @@ namespace FactionColonies
             }
         }
 
-        public void TickActions()
-        {
+        public void TickActions() {
             int tick = Find.TickManager.TicksGame;
-            foreach (SettlementFC settlement in settlements)
-            {
+            foreach (SettlementFC settlement in settlements) {
                 settlement.tickSpecialActions(tick);
             }
 
             //Feudal
             if (traitFeudalBoolCanUseMercenary == false &&
-                (traitFeudalTickLastUsedMercenary + GenDate.TicksPerSeason) <= Find.TickManager.TicksGame)
-            {
+                (traitFeudalTickLastUsedMercenary + GenDate.TicksPerSeason) <= Find.TickManager.TicksGame) {
                 traitFeudalBoolCanUseMercenary = true;
                 Find.LetterStack.ReceiveLetter("FCActionAvailable".Translate(),
                     "FCActionMercenaryRefreshed".Translate(), LetterDefOf.PositiveEvent);
@@ -1114,24 +977,22 @@ namespace FactionColonies
             //Expansionist
             if (traitExpansionistBoolCanUseSettlementFeeReduction == false &&
                 (traitExpansionistTickLastUsedSettlementFeeReduction + GenDate.TicksPerYear) <=
-                Find.TickManager.TicksGame)
-            {
+                Find.TickManager.TicksGame) {
                 traitExpansionistBoolCanUseSettlementFeeReduction = true;
                 Find.LetterStack.ReceiveLetter("FCActionAvailable".Translate(),
                     "FCActionSettlementFeeReduction".Translate(), LetterDefOf.PositiveEvent);
             }
 
             //Mercantile
-            if (hasTrait(FCPolicyDefOf.mercantile) && traitMercantileTradeCaravanTickDue <= Find.TickManager.TicksGame)
-            {
+            if (hasTrait(FCPolicyDefOf.mercantile) && traitMercantileTradeCaravanTickDue <= Find.TickManager.TicksGame) {
                 IncidentWorker_TraderCaravanArrival worker = new IncidentWorker_TraderCaravanArrival();
                 worker.def = IncidentDefOf.TraderCaravanArrival;
                 IncidentParms parms =
                     StorytellerUtility.DefaultParmsNow(IncidentCategoryDefOf.FactionArrival, returnCapitalMap());
                 parms.faction = FactionColonies.getPlayerColonyFaction();
-                RCellFinder.TryFindRandomPawnEntryCell(out parms.spawnCenter, (Map) parms.target,
+                RCellFinder.TryFindRandomPawnEntryCell(out parms.spawnCenter, (Map)parms.target,
                     CellFinder.EdgeRoadChance_Friendly);
-                parms.spawnRotation = Rot4.FromAngleFlat((((Map) parms.target).Center - parms.spawnCenter).AngleFlat);
+                parms.spawnRotation = Rot4.FromAngleFlat((((Map)parms.target).Center - parms.spawnCenter).AngleFlat);
                 if (parms.spawnCenter.IsValid)
                     worker.TryExecute(parms);
                 else
@@ -1142,30 +1003,24 @@ namespace FactionColonies
             }
         }
 
-        public void TickMecernaries()
-        {
+        public void TickMecernaries() {
             mercenaryTick++;
-            if (mercenaryTick > 120)
-            {
+            if (mercenaryTick > 120) {
                 for (int i = 0; i < militaryCustomizationUtil.mercenarySquads.Count(); i++)
-                    //foreach (MercenarySquadFC squad in militaryCustomizationUtil.mercenarySquads)
+                //foreach (MercenarySquadFC squad in militaryCustomizationUtil.mercenarySquads)
                 {
                     MercenarySquadFC squad = militaryCustomizationUtil.mercenarySquads[i];
-                    if (squad.isDeployed)
-                    {
-                        if (squad.DeployedMercenaries.Count > 0 && squad.isDeployed && squad.hasLord == false)
-                        {
+                    if (squad.isDeployed) {
+                        if (squad.DeployedMercenaries.Count > 0 && squad.isDeployed && squad.hasLord == false) {
                             Log.Message("Pawn deployed, creating lord");
                             Faction faction = FactionColonies.getPlayerColonyFaction();
                             List<Pawn> pawns = new List<Pawn>();
-                            foreach (Mercenary pawn in squad.DeployedMercenaries)
-                            {
+                            foreach (Mercenary pawn in squad.DeployedMercenaries) {
                                 pawn.pawn.mindState.canFleeIndividual = false;
                                 pawns.Add(pawn.pawn);
                             }
 
-                            foreach (Mercenary pawn in squad.DeployedMercenaryAnimals)
-                            {
+                            foreach (Mercenary pawn in squad.DeployedMercenaryAnimals) {
                                 pawn.pawn.mindState.canFleeIndividual = false;
                                 pawns.Add(pawn.pawn);
                             }
@@ -1181,8 +1036,7 @@ namespace FactionColonies
                             squad.hasLord = true;
                         }
 
-                        if (Find.WindowStack.IsOpen(typeof(EmpireUIMercenaryCommandMenu)) == false)
-                        {
+                        if (Find.WindowStack.IsOpen(typeof(EmpireUIMercenaryCommandMenu)) == false) {
                             //Log.Message("Opening Window");
                             // menu.focusWhenOpened = false;
 
@@ -1196,33 +1050,29 @@ namespace FactionColonies
                 mercenaryTick = 0;
             }
 
-            if (militaryCustomizationUtil.fireSupport == null)
-            {
+            if (militaryCustomizationUtil.fireSupport == null) {
                 militaryCustomizationUtil.fireSupport = new List<MilitaryFireSupport>();
             }
 
             //Other functions
             ResetFireSupport:
-            foreach (MilitaryFireSupport fireSupport in militaryCustomizationUtil.fireSupport)
-            {
-                if (fireSupport.ticksTillEnd <= Find.TickManager.TicksGame)
-                {
+            foreach (MilitaryFireSupport fireSupport in militaryCustomizationUtil.fireSupport) {
+                if (fireSupport.ticksTillEnd <= Find.TickManager.TicksGame) {
                     militaryCustomizationUtil.fireSupport.Remove(fireSupport);
                     goto ResetFireSupport;
                 }
 
                 //process firesupport
-                if (fireSupport.fireSupportType == "fireSupport")
-                {
+                if (fireSupport.fireSupportType == "fireSupport") {
                     if ((fireSupport.timeRunning % 15) == 0 && fireSupport.timeRunning >= fireSupport.startupTime) //15
                     {
                         //Log.Message("Boom");
                         IntVec3 spawnCenter =
                             (from x in GenRadial.RadialCellsAround(fireSupport.location, fireSupport.accuracy, true)
-                                where x.InBounds(fireSupport.map)
-                                select x).RandomElementByWeight(x =>
-                                new SimpleCurve {new CurvePoint(0f, 1f), new CurvePoint(fireSupport.accuracy, 0.1f)}
-                                    .Evaluate(x.DistanceTo(fireSupport.location)));
+                             where x.InBounds(fireSupport.map)
+                             select x).RandomElementByWeight(x =>
+                             new SimpleCurve { new CurvePoint(0f, 1f), new CurvePoint(fireSupport.accuracy, 0.1f) }
+                                 .Evaluate(x.DistanceTo(fireSupport.location)));
 
                         Map map = fireSupport.map;
                         Thing launcher = null;
@@ -1230,8 +1080,7 @@ namespace FactionColonies
                         LocalTargetInfo info = new LocalTargetInfo(spawnCenter);
                         ThingDef def = new ThingDef();
                         ThingDef tempDef;
-                        if (FactionColonies.checkForMod("CETeam.CombatExtended"))
-                        {
+                        if (FactionColonies.checkForMod("CETeam.CombatExtended")) {
                             //if CE is on
                             tempDef = fireSupport.expendProjectile();
                             Type typeDef = FactionColonies.returnUnknownTypeFromName("CombatExtended.AmmoDef");
@@ -1240,22 +1089,20 @@ namespace FactionColonies
                                 .GetValue(tempDef);
                             Type ammoLink = FactionColonies.returnUnknownTypeFromName("CombatExtended.AmmoLink");
                             var ammoLinkVar = ammoSetDef.GetType().GetProperty("Item")
-                                .GetValue(ammoSetDef, new object[] {0});
+                                .GetValue(ammoSetDef, new object[] { 0 });
                             //  Log.Message(ammoLinkVar.ToString());
                             var ammoTypes = ammoLinkVar.GetType()
                                 .GetField("ammoTypes", BindingFlags.Public | BindingFlags.Instance)
                                 .GetValue(ammoLinkVar);
                             //list of ammotypes
-                            int count = (int) ammoTypes.GetType().GetProperty("Count")
+                            int count = (int)ammoTypes.GetType().GetProperty("Count")
                                 .GetValue(ammoTypes, new object[] { });
-                            for (int k = 0; k < count; k++)
-                            {
+                            for (int k = 0; k < count; k++) {
                                 var ammoDefAmmo = ammoTypes.GetType().GetProperty("Item")
-                                    .GetValue(ammoTypes, new object[] {k});
+                                    .GetValue(ammoTypes, new object[] { k });
                                 if (ammoDefAmmo.GetType().GetField("ammo", BindingFlags.Public | BindingFlags.Instance)
-                                    .GetValue(ammoDefAmmo).ToString() == tempDef.defName)
-                                {
-                                    def = (ThingDef) ammoDefAmmo.GetType()
+                                    .GetValue(ammoDefAmmo).ToString() == tempDef.defName) {
+                                    def = (ThingDef)ammoDefAmmo.GetType()
                                         .GetField("projectile", BindingFlags.Public | BindingFlags.Instance)
                                         .GetValue(ammoDefAmmo);
                                     break;
@@ -1282,16 +1129,16 @@ namespace FactionColonies
                             Vector3 finalVector = (destVec - sourceVec);
                             float magnitude = finalVector.magnitude;
 
-                            float gravity = (float) gravityProperty.GetValue(thing); //1.96f * 5;
+                            float gravity = (float)gravityProperty.GetValue(thing); //1.96f * 5;
 
                             float shotRotation =
                                 (-90f + 57.29578f * Mathf.Atan2(finalVector.y, finalVector.x)) %
                                 360; //Vector2Utility.AngleTo(sourceVec, destVec);
                             float shotHeight = 10f;
                             float shotSpeed = 100f;
-                            float shotAngle = (float) getShotAngle.Invoke(null,
+                            float shotAngle = (float)getShotAngle.Invoke(null,
                                 BindingFlags.Public | BindingFlags.Static, null,
-                                new object[] {shotSpeed, magnitude, shotHeight, true, gravity}, null);
+                                new object[] { shotSpeed, magnitude, shotHeight, true, gravity }, null);
 
 
                             launch.Invoke(thing,
@@ -1300,11 +1147,9 @@ namespace FactionColonies
                                     FactionColonies.getPlayerColonyFaction().leader, sourceVec, shotAngle, shotRotation,
                                     shotHeight, shotSpeed, null
                                 });
-                        }
-                        else
-                        {
+                        } else {
                             def = fireSupport.expendProjectile().projectileWhenLoaded;
-                            Projectile projectile = (Projectile) GenSpawn.Spawn(def, fireSupport.sourceLocation, map);
+                            Projectile projectile = (Projectile)GenSpawn.Spawn(def, fireSupport.sourceLocation, map);
                             projectile.Launch(launcher, info, info, hitFlags);
                         }
                     }
@@ -1316,66 +1161,56 @@ namespace FactionColonies
         }
 
 
-        public int GetNextSettlementFCID()
-        {
+        public int GetNextSettlementFCID() {
             nextSettlementFCID++;
             //Log.Message("Returning next settlement FC ID " + nextSettlementFCID);
 
             return nextSettlementFCID;
         }
 
-        public int GetNextMercenaryID()
-        {
+        public int GetNextMercenaryID() {
             nextMercenaryID++;
             //Log.Message("Returning next mercenary ID " + nextMercenaryID);
             return nextMercenaryID;
         }
 
-        public int GetNextMilitaryFireSupportID()
-        {
+        public int GetNextMilitaryFireSupportID() {
             nextMilitaryFireSupportID++;
             //Log.Message("Returning next MilitaryFireSupportID " + nextSquadID);
 
             return nextMilitaryFireSupportID;
         }
 
-        public int GetNextMercenarySquadID()
-        {
+        public int GetNextMercenarySquadID() {
             nextMercenarySquadID++;
             //Log.Message("Returning next MercenarySquadID " + nextMercenarySquadID);
 
             return nextMercenarySquadID;
         }
 
-        public int GetNextTaxID()
-        {
+        public int GetNextTaxID() {
             nextTaxID++;
             return nextTaxID;
         }
 
-        public int GetNextEventID()
-        {
+        public int GetNextEventID() {
             nextEventID++;
             return nextEventID;
         }
 
-        public int GetNextBillID()
-        {
+        public int GetNextBillID() {
             nextBillID++;
             return nextBillID;
         }
 
-        public int GetNextPrisonerID()
-        {
+        public int GetNextPrisonerID() {
             nextPrisonerID++;
             return nextPrisonerID;
         }
 
-        public List<FCTraitEffectDef> returnListFactionTraits()
-        {
+        public List<FCTraitEffectDef> returnListFactionTraits() {
             List<FCTraitEffectDef> tmpList = new List<FCTraitEffectDef>();
-            foreach (FCTraitEffectDef trait in traits)
-            {
+            foreach (FCTraitEffectDef trait in traits) {
                 tmpList.Add(trait);
             }
 
@@ -1383,8 +1218,7 @@ namespace FactionColonies
         }
 
 
-        public void setStartTime()
-        {
+        public void setStartTime() {
             taxTimeDue = Find.TickManager.TicksGame + LoadedModManager.GetMod<FactionColoniesMod>()
                 .GetSettings<FactionColonies>().timeBetweenTaxes;
             dailyTimer = Find.TickManager.TicksGame + 2000;
@@ -1395,11 +1229,9 @@ namespace FactionColonies
         //2 location
         //3 time till trigger
 
-        public int returnHighestMilitaryLevel()
-        {
+        public int returnHighestMilitaryLevel() {
             int max = 1;
-            foreach (SettlementFC settlement in settlements)
-            {
+            foreach (SettlementFC settlement in settlements) {
                 max = Math.Max(max, settlement.settlementMilitaryLevel);
             }
 
@@ -1407,13 +1239,9 @@ namespace FactionColonies
         }
 
 
-        public void updateFaction()
-        {
-            if (Find.World.GetComponent<FactionFC>().factionDef != null)
-            {
-            }
-            else
-            {
+        public void updateFaction() {
+            if (Find.World.GetComponent<FactionFC>().factionDef != null) {
+            } else {
                 Find.World.GetComponent<FactionFC>().factionDef = new FactionFCDef();
             }
 
@@ -1422,16 +1250,13 @@ namespace FactionColonies
             //FactionColonies.getPlayerColonyFaction().def.apparelStuffFilter = factionDef.apparelStuffFilter;
         }
 
-        public void updateFactionRaces()
-        {
+        public void updateFactionRaces() {
             Faction faction = FactionColonies.getPlayerColonyFaction();
             // TODO updateFactionRaces()
         }
 
-        public string returnNextTechToLevel()
-        {
-            switch (techLevel)
-            {
+        public string returnNextTechToLevel() {
+            switch (techLevel) {
                 case TechLevel.Ultra:
                     return "ReachedMaxLevel".Translate();
                 case TechLevel.Spacer:
@@ -1447,53 +1272,42 @@ namespace FactionColonies
             }
         }
 
-        public void updateTechLevel(ResearchManager researchManager)
-        {
+        public void updateTechLevel(ResearchManager researchManager) {
             bool medievalOnly = LoadedModManager.GetMod<FactionColoniesMod>().GetSettings<FactionColonies>()
                 .medievalTechOnly;
 
 
             if (!medievalOnly && DefDatabase<ResearchProjectDef>.GetNamed("ShipBasics", false) != null &&
                 researchManager.GetProgress(DefDatabase<ResearchProjectDef>.GetNamed("ShipBasics", false)) ==
-                DefDatabase<ResearchProjectDef>.GetNamed("ShipBasics", false).baseCost && techLevel < TechLevel.Ultra)
-            {
+                DefDatabase<ResearchProjectDef>.GetNamed("ShipBasics", false).baseCost && techLevel < TechLevel.Ultra) {
                 techLevel = TechLevel.Ultra;
                 factionDef.techLevel = TechLevel.Ultra;
                 Log.Message("Ultra");
-            }
-            else if (!medievalOnly && DefDatabase<ResearchProjectDef>.GetNamed("Fabrication", false) != null &&
-                     researchManager.GetProgress(DefDatabase<ResearchProjectDef>.GetNamed("Fabrication", false)) ==
-                     DefDatabase<ResearchProjectDef>.GetNamed("Fabrication", false).baseCost &&
-                     techLevel < TechLevel.Spacer)
-            {
+            } else if (!medievalOnly && DefDatabase<ResearchProjectDef>.GetNamed("Fabrication", false) != null &&
+                       researchManager.GetProgress(DefDatabase<ResearchProjectDef>.GetNamed("Fabrication", false)) ==
+                       DefDatabase<ResearchProjectDef>.GetNamed("Fabrication", false).baseCost &&
+                       techLevel < TechLevel.Spacer) {
                 techLevel = TechLevel.Spacer;
                 factionDef.techLevel = TechLevel.Spacer;
                 Log.Message("Spacer");
-            }
-            else if (!medievalOnly && DefDatabase<ResearchProjectDef>.GetNamed("Electricity", false) != null &&
-                     researchManager.GetProgress(DefDatabase<ResearchProjectDef>.GetNamed("Electricity", false)) ==
-                     DefDatabase<ResearchProjectDef>.GetNamed("Electricity", false).baseCost &&
-                     techLevel < TechLevel.Industrial)
-            {
+            } else if (!medievalOnly && DefDatabase<ResearchProjectDef>.GetNamed("Electricity", false) != null &&
+                       researchManager.GetProgress(DefDatabase<ResearchProjectDef>.GetNamed("Electricity", false)) ==
+                       DefDatabase<ResearchProjectDef>.GetNamed("Electricity", false).baseCost &&
+                       techLevel < TechLevel.Industrial) {
                 techLevel = TechLevel.Industrial;
                 factionDef.techLevel = TechLevel.Industrial;
                 Log.Message("Industrial");
-            }
-            else if (DefDatabase<ResearchProjectDef>.GetNamed("Smithing", false) != null &&
-                     researchManager.GetProgress(DefDatabase<ResearchProjectDef>.GetNamed("Smithing", false)) ==
-                     DefDatabase<ResearchProjectDef>.GetNamed("Smithing", false).baseCost &&
-                     techLevel < TechLevel.Medieval)
-            {
+            } else if (DefDatabase<ResearchProjectDef>.GetNamed("Smithing", false) != null &&
+                       researchManager.GetProgress(DefDatabase<ResearchProjectDef>.GetNamed("Smithing", false)) ==
+                       DefDatabase<ResearchProjectDef>.GetNamed("Smithing", false).baseCost &&
+                       techLevel < TechLevel.Medieval) {
                 techLevel = TechLevel.Medieval;
                 factionDef.techLevel = TechLevel.Medieval;
                 //Log.Message("Medieval");
                 Log.Message("Medieval");
-            }
-            else
-            {
+            } else {
                 //Log.Message("Neolithic");
-                if (techLevel < TechLevel.Neolithic)
-                {
+                if (techLevel < TechLevel.Neolithic) {
                     Log.Message("Neolithic");
                     techLevel = TechLevel.Neolithic;
                 }
@@ -1503,35 +1317,27 @@ namespace FactionColonies
             updateFaction();
 
             Faction playerColonyfaction = FactionColonies.getPlayerColonyFaction();
-            if (playerColonyfaction != null && playerColonyfaction.def.techLevel < techLevel)
-            {
+            if (playerColonyfaction != null && playerColonyfaction.def.techLevel < techLevel) {
                 Log.Message("Updating Tech Level");
                 updateFactionDef(techLevel, ref playerColonyfaction);
-            }
-            else if (playerColonyfaction.def.techLevel >= techLevel)
-            {
+            } else if (playerColonyfaction.def.techLevel >= techLevel) {
                 Log.Message("Tech Level already matches");
             }
             // Check Leader
-            if (playerColonyfaction != null)
-            {
-                if (playerColonyfaction.leader != null)
-                {
+            if (playerColonyfaction != null) {
+                if (playerColonyfaction.leader != null) {
                     if (playerColonyfaction.leader.Dead)
                         playerColonyfaction.leader = null;
                 }
-                if (playerColonyfaction.leader == null)
-                {
-                    if (!playerColonyfaction.TryGenerateNewLeader())
-                    {
+                if (playerColonyfaction.leader == null) {
+                    if (!playerColonyfaction.TryGenerateNewLeader()) {
                         Log.Message("Generating Leader failed! Manually Generating . . .");
                         playerColonyfaction.leader = PawnGenerator.GeneratePawn(new PawnGenerationRequest(kind: Faction.OfPlayer.RandomPawnKind(),
                         faction: playerColonyfaction, context: PawnGenerationContext.NonPlayer,
                         forceGenerateNewPawn: true, newborn: false, allowDead: false, allowDowned: false,
                         canGeneratePawnRelations: true, mustBeCapableOfViolence: true, colonistRelationChanceFactor: 0,
                         forceAddFreeWarmLayerIfNeeded: false, worldPawnFactionDoesntMatter: false));
-                        if (playerColonyfaction.leader == null)
-                        {
+                        if (playerColonyfaction.leader == null) {
                             Log.Warning("That failed, too! Contacting " + playerColonyfaction.Name + " won't work!");
                         }
                     }
@@ -1539,30 +1345,29 @@ namespace FactionColonies
             }
         }
 
-        public void updateFactionIcon(ref Faction faction, string iconPath)
-        {
+        public void updateFactionIcon(ref Faction faction, string iconPath) {
             Log.Message("Updated Icon - " + iconPath);
-            faction.def.factionIconPath = iconPath;
-            if (settlements.Any())
-            {
-                WorldSettlementFC.traitCachedIcon.SetValue(settlements[0].worldSettlement.def,
-                    ContentFinder<Texture2D>.Get(iconPath));
-            }
+            try {
+                faction.def.factionIconPath = iconPath;
+                if (settlements.Any()) {
+                    WorldSettlementFC.traitCachedIcon.SetValue(settlements[0].worldSettlement.def,
+                        ContentFinder<Texture2D>.Get(iconPath));
+                }
 
-            foreach (SettlementFC settlement in settlements)
-            {
-                settlement.worldSettlement.def.expandingIconTexture = iconPath;
+                foreach (SettlementFC settlement in settlements) {
+                    settlement.worldSettlement.def.expandingIconTexture = iconPath;
+                }
+            } catch (Exception e) {
+                Log.Error(e.Message);
             }
         }
 
-        public void updateFactionDef(TechLevel tech, ref Faction faction)
-        {
+        public void updateFactionDef(TechLevel tech, ref Faction faction) {
             FactionDef replacingDef;
             ThingFilter apparelStuffFilter = new ThingFilter();
             FactionDef def = faction.def;
 
-            switch (tech)
-            {
+            switch (tech) {
                 case TechLevel.Archotech:
                 case TechLevel.Ultra:
                 case TechLevel.Spacer:
@@ -1573,12 +1378,9 @@ namespace FactionColonies
                     replacingDef = DefDatabase<FactionDef>.GetNamedSilentFail("OutlanderCivil");
                     break;
                 case TechLevel.Medieval:
-                    if (FactionColonies.checkForMod("OskarPotocki.VanillaFactionsExpanded.MedievalModule"))
-                    {
+                    if (FactionColonies.checkForMod("OskarPotocki.VanillaFactionsExpanded.MedievalModule")) {
                         replacingDef = DefDatabase<FactionDef>.GetNamedSilentFail("VFEM_KingdomCivil");
-                    }
-                    else
-                    {
+                    } else {
                         replacingDef = DefDatabase<FactionDef>.GetNamedSilentFail("TribeCivil");
                     }
 
@@ -1607,8 +1409,7 @@ namespace FactionColonies
                 def.apparelStuffFilter = replacingDef.apparelStuffFilter;
 
 
-            if (tech >= TechLevel.Spacer && def.apparelStuffFilter != null)
-            {
+            if (tech >= TechLevel.Spacer && def.apparelStuffFilter != null) {
                 def.apparelStuffFilter.SetAllow(DefDatabase<StuffCategoryDef>.GetNamedSilentFail("Synthread"), true);
                 def.apparelStuffFilter.SetAllow(DefDatabase<StuffCategoryDef>.GetNamedSilentFail("Hyperweave"), true);
                 def.apparelStuffFilter.SetAllow(DefDatabase<StuffCategoryDef>.GetNamedSilentFail("Plasteel"), true);
@@ -1618,16 +1419,13 @@ namespace FactionColonies
             Log.Message("FactionFC.updateFactionDef - Completed tech update");
         }
 
-        public bool hasPolicy(FCPolicyDef def)
-        {
+        public bool hasPolicy(FCPolicyDef def) {
             //Don't game the system
-            if (policies.Count() < 2)
-            {
+            if (policies.Count() < 2) {
                 return false;
             }
 
-            foreach (FCPolicy policy in policies)
-            {
+            foreach (FCPolicy policy in policies) {
                 if (policy.def == def)
                     return true;
             }
@@ -1635,10 +1433,8 @@ namespace FactionColonies
             return false;
         }
 
-        public bool hasTrait(FCPolicyDef def)
-        {
-            foreach (FCPolicy trait in factionTraits)
-            {
+        public bool hasTrait(FCPolicyDef def) {
+            foreach (FCPolicy trait in factionTraits) {
                 if (trait.def == def)
                     return true;
             }
@@ -1646,27 +1442,21 @@ namespace FactionColonies
             return false;
         }
 
-        public bool sendDiplomaticEnvoy(Faction faction)
-        {
+        public bool sendDiplomaticEnvoy(Faction faction) {
             FactionFC factionfc = Find.World.GetComponent<FactionFC>();
 
-            if (!faction.def.permanentEnemy)
-            {
+            if (!faction.def.permanentEnemy) {
                 if (Find.TickManager.TicksGame >=
-                    (factionfc.traitPacifistTickLastUsedDiplomat + GenDate.TicksPerDay * 5))
-                {
+                    (factionfc.traitPacifistTickLastUsedDiplomat + GenDate.TicksPerDay * 5)) {
                     factionfc.traitPacifistTickLastUsedDiplomat = Find.TickManager.TicksGame;
                     int random = Rand.Range(1, 10);
-                    if (random > 5)
-                    {
+                    if (random > 5) {
                         int relationImprovement = Rand.Range(5, 15);
                         faction.TryAffectGoodwillWith(Find.FactionManager.OfPlayer, relationImprovement);
                         Find.LetterStack.ReceiveLetter("FCRelationImproved".Translate(),
                             "FCRelationImprovedText".Translate(faction.Name, relationImprovement),
                             LetterDefOf.PositiveEvent);
-                    }
-                    else
-                    {
+                    } else {
                         Find.LetterStack.ReceiveLetter("FCRelationNotImproved".Translate(),
                             "FCFailedToImproveRelationship".Translate(faction.Name), LetterDefOf.NeutralEvent);
                     }
@@ -1685,23 +1475,19 @@ namespace FactionColonies
             return false;
         }
 
-        public void resetRaceFilter()
-        {
+        public void resetRaceFilter() {
             raceFilter = new RaceThingFilter(this);
             raceFilter.FinalizeInit(this);
         }
 
-        public void updateAverages()
-        {
+        public void updateAverages() {
             int averageHappinessTmp = 0;
             int averageLoyaltyTmp = 0;
             int averageUnrestTmp = 0;
             int averageProsperityTmp = 0;
 
-            if (settlements.Count() > 0)
-            {
-                foreach (SettlementFC settlement in settlements)
-                {
+            if (settlements.Count() > 0) {
+                foreach (SettlementFC settlement in settlements) {
                     averageHappinessTmp += Convert.ToInt32(settlement.happiness);
                     averageLoyaltyTmp += Convert.ToInt32(settlement.loyalty);
                     averageUnrestTmp += Convert.ToInt32(settlement.unrest);
@@ -1720,26 +1506,22 @@ namespace FactionColonies
             averageProsperity = averageProsperityTmp;
 
 
-            if (settlements.Any() && FactionColonies.getPlayerColonyFaction() != null)
-            {
+            if (settlements.Any() && FactionColonies.getPlayerColonyFaction() != null) {
                 FactionColonies.getPlayerColonyFaction().TryAffectGoodwillWith(Find.FactionManager.OfPlayer,
                     (Convert.ToInt32(averageHappiness) - FactionColonies.getPlayerColonyFaction().PlayerGoodwill));
             }
         }
 
-        public void setName(string name)
-        {
+        public void setName(string name) {
             this.name = name;
         }
 
-        public void addSettlement(SettlementFC settlement)
-        {
+        public void addSettlement(SettlementFC settlement) {
             settlements.Add(settlement);
             uiUpdate();
         }
 
-        public void uiUpdate()
-        {
+        public void uiUpdate() {
             //Pop UI updates
             updateTotalResources();
             updateTotalProfit();
@@ -1749,8 +1531,7 @@ namespace FactionColonies
         public double getTotalIncome() //return total income of settlements       ####MAKE UPDATE PER HOUR TICK
         {
             double income = 0;
-            for (int i = 0; i < settlements.Count(); i++)
-            {
+            for (int i = 0; i < settlements.Count(); i++) {
                 income += settlements[i].getTotalIncome();
             }
 
@@ -1761,8 +1542,7 @@ namespace FactionColonies
         public double getTotalUpkeep() //returns total upkeep of all settlements
         {
             double upkeep = 0;
-            for (int i = 0; i < settlements.Count(); i++)
-            {
+            for (int i = 0; i < settlements.Count(); i++) {
                 upkeep += settlements[i].getTotalUpkeep();
             }
 
@@ -1774,22 +1554,18 @@ namespace FactionColonies
             return getTotalIncome() - getTotalUpkeep();
         }
 
-        public void updateTotalProfit()
-        {
+        public void updateTotalProfit() {
             income = getTotalIncome();
             upkeep = getTotalUpkeep();
             profit = income - upkeep;
         }
 
-        public void updateTotalResources()
-        {
-            foreach (ResourceType resourceType in ResourceUtils.resourceTypes)
-            {
+        public void updateTotalResources() {
+            foreach (ResourceType resourceType in ResourceUtils.resourceTypes) {
                 int resource = 0;
 
-                for (int k = 0; k < settlements.Count(); k++)
-                {
-                    resource += (int) settlements[k].getResource(resourceType).endProduction;
+                for (int k = 0; k < settlements.Count(); k++) {
+                    resource += (int)settlements[k].getResource(resourceType).endProduction;
                 }
 
                 returnResource(resourceType).amount = resource;
@@ -1797,30 +1573,23 @@ namespace FactionColonies
             }
         }
 
-        public void updateDailyResearch()
-        {
+        public void updateDailyResearch() {
             //Research adding
-            if (Find.ResearchManager.currentProj == null && researchPointPool != 0)
-            {
+            if (Find.ResearchManager.currentProj == null && researchPointPool != 0) {
                 Messages.Message("NoResearchExpended".Translate(Math.Round(researchPointPool)),
                     MessageTypeDefOf.NeutralEvent);
-            }
-            else if (researchPointPool != 0 && Find.ResearchManager.currentProj != null)
-            {
+            } else if (researchPointPool != 0 && Find.ResearchManager.currentProj != null) {
                 //Log.Message(researchTotal.ToString());
                 float neededPoints;
-                neededPoints = (float) Math.Ceiling(Find.ResearchManager.currentProj.CostApparent -
+                neededPoints = (float)Math.Ceiling(Find.ResearchManager.currentProj.CostApparent -
                                                     Find.ResearchManager.currentProj.ProgressApparent);
                 Log.Message("Needed points: " + neededPoints);
 
                 float expendedPoints;
-                if (researchPointPool >= neededPoints)
-                {
+                if (researchPointPool >= neededPoints) {
                     researchPointPool -= neededPoints;
                     expendedPoints = neededPoints;
-                }
-                else
-                {
+                } else {
                     expendedPoints = researchPointPool;
                     researchPointPool = 0;
                 }
@@ -1830,31 +1599,27 @@ namespace FactionColonies
                 Find.LetterStack.ReceiveLetter("ResearchPointsExpended".Translate(),
                     "ResearchExpended".Translate(Math.Round(expendedPoints), Find.ResearchManager.currentProj.LabelCap,
                         Math.Round(researchPointPool)), LetterDefOf.PositiveEvent);
-                if (Find.ColonistBar.GetColonistsInOrder().Count > 0)
-                {
+                if (Find.ColonistBar.GetColonistsInOrder().Count > 0) {
                     Pawn pawn = Find.ColonistBar.GetColonistsInOrder()[0];
                     Find.ResearchManager.ResearchPerformed(
-                        (float) Math.Ceiling(
+                        (float)Math.Ceiling(
                             ((1 * Find.ResearchManager.currentProj.CostFactor(pawn.Faction.def.techLevel)) /
                              (0.00825 * Find.Storyteller.difficulty.researchSpeedFactor)) * expendedPoints),
                         pawn);
-                    Log.Message("Passed to function: " + (float) Math.Ceiling(
+                    Log.Message("Passed to function: " + (float)Math.Ceiling(
                         ((1 * Find.ResearchManager.currentProj.CostFactor(pawn.Faction.def.techLevel)) /
                          (0.00825 * Find.Storyteller.difficulty.researchSpeedFactor)) * expendedPoints));
-                }
-                else
-                {
+                } else {
                     Log.Message("Could not find colonist to research with");
                     Find.ResearchManager.ResearchPerformed(
-                        (float) Math.Ceiling((1 / (0.00825 * Find.Storyteller.difficulty.researchSpeedFactor)) *
+                        (float)Math.Ceiling((1 / (0.00825 * Find.Storyteller.difficulty.researchSpeedFactor)) *
                                              expendedPoints), null);
                 }
             }
         }
 
 
-        public void addTax(bool isUpdating)
-        {
+        public void addTax(bool isUpdating) {
             //if (capitalLocation == -1)
             //{
             //    setCapital();
@@ -1863,18 +1628,15 @@ namespace FactionColonies
 
             if (settlements.Count != 0) //if settlements is not zero
             {
-                foreach (SettlementFC settlement in settlements)
-                {
+                foreach (SettlementFC settlement in settlements) {
                     //Start Traits
                     addExperienceToFactionLevel(2f);
 
 
                     float trait_Industrious_TaxPercentageBoost = 1;
-                    if (hasTrait(FCPolicyDefOf.industrious))
-                    {
+                    if (hasTrait(FCPolicyDefOf.industrious)) {
                         int num = Rand.RangeInclusive(1, 20);
-                        if (num == 5)
-                        {
+                        if (num == 5) {
                             trait_Industrious_TaxPercentageBoost = 1f + (Rand.RangeInclusive(20, 50) / 100f);
                             Find.LetterStack.ReceiveLetter("FCIdustriousTaxBoost".Translate(),
                                 "FCIndustriousPop".Translate(settlement.name,
@@ -1909,32 +1671,27 @@ namespace FactionColonies
                 if (!isUpdating) //if done updating (timeskip) then send goods/silver etc
                 {
                     //Messages.Message("TaxesBilled".Translate() + "!", MessageTypeDefOf.PositiveEvent);
-                    Find.LetterStack.ReceiveLetter("Taxes Billed", "Taxes from your settlements have been billed",
+                    Find.LetterStack.ReceiveLetter("账单已支付", "你的领地税收账单已支付",
                         LetterDefOf.PositiveEvent);
                     uiUpdate();
 
                     //Messages.Message(Find.TickManager.TicksGame.ToString(), MessageTypeDefOf.PositiveEvent);
                 }
-            }
-            else
-            {
+            } else {
                 Messages.Message("NoSettlementsToTax".Translate(), MessageTypeDefOf.NeutralEvent);
             }
         }
 
-        public float updateFactionLevelGoalXP(int currentLevel)
-        {
+        public float updateFactionLevelGoalXP(int currentLevel) {
             float newGoal = 100 + (currentLevel * 150);
             return newGoal;
         }
 
-        public bool addExperienceToFactionLevel(float xp)
-        {
+        public bool addExperienceToFactionLevel(float xp) {
             bool leveled = false;
             factionXPCurrent += xp;
 
-            while (factionXPCurrent >= factionXPGoal)
-            {
+            while (factionXPCurrent >= factionXPGoal) {
                 factionXPCurrent -= factionXPGoal;
                 factionLevel += 1;
                 Find.LetterStack.ReceiveLetter("FCFactionLevelUp".Translate(),
@@ -1946,25 +1703,20 @@ namespace FactionColonies
             return leveled;
         }
 
-        public void addEvent(FCEvent fcevent)
-        {
+        public void addEvent(FCEvent fcevent) {
             //Add event to events
             events.Add(fcevent);
 
             //check if event has a location, if does, add traits to that specific location;
             if (fcevent.settlementTraitLocations.Count() > 0) //if has specific locations
             {
-                foreach (SettlementFC location in fcevent.settlementTraitLocations)
-                {
+                foreach (SettlementFC location in fcevent.settlementTraitLocations) {
                     location.traits.AddRange(fcevent.def.traits);
-                    foreach (FCTraitEffectDef trait in fcevent.def.traits)
-                    {
+                    foreach (FCTraitEffectDef trait in fcevent.def.traits) {
                         //Log.Message(trait.label);
                     }
                 }
-            }
-            else
-            {
+            } else {
                 //if no specific location then faction wide
                 traits.AddRange(fcevent.traits);
             }
@@ -1972,11 +1724,9 @@ namespace FactionColonies
 
         public bool checkSettlementCaravansList(string location) //list of destinations caravans gone to
         {
-            for (int i = 0; i < settlementCaravansList.Count(); i++)
-            {
+            for (int i = 0; i < settlementCaravansList.Count(); i++) {
                 if (location == settlementCaravansList[i] || Find.WorldGrid.IsNeighbor(Convert.ToInt32(location),
-                    Convert.ToInt32(settlementCaravansList[i])))
-                {
+                    Convert.ToInt32(settlementCaravansList[i]))) {
                     return true; // is on list
                 }
             }
@@ -1994,10 +1744,8 @@ namespace FactionColonies
             return returnResource(ResourceUtils.resourceTypes[name]);
         }
 
-        public ResourceFC returnResource(ResourceType type)
-        {
-            switch (type)
-            {
+        public ResourceFC returnResource(ResourceType type) {
+            switch (type) {
                 case ResourceType.Food:
                     return food;
                 case ResourceType.Weapons:
@@ -2022,40 +1770,30 @@ namespace FactionColonies
             return null;
         }
 
-        public void setCapital()
-        {
-            if (Find.CurrentMap != null && Find.CurrentMap.IsPlayerHome)
-            {
+        public void setCapital() {
+            if (Find.CurrentMap != null && Find.CurrentMap.IsPlayerHome) {
                 capitalLocation = Find.CurrentMap.Parent.Tile;
                 capitalPlanet = Find.World.info.name;
 
                 //Log.Message(Find.CurrentMap.Parent.def.defName);
-                if (Find.CurrentMap.Parent.def.defName == "ShipOrbiting")
-                {
+                if (Find.CurrentMap.Parent.def.defName == "ShipOrbiting") {
                     SoSShipCapital = true;
-                }
-                else
-                {
+                } else {
                     SoSShipCapital = false;
                 }
 
                 Messages.Message("SetAsFactionCapital".Translate(Find.CurrentMap.Parent.LabelCap),
                     MessageTypeDefOf.NeutralEvent);
-            }
-            else
-            {
+            } else {
                 Messages.Message(
                     "Unable to set faction capital on this map. Please go to your capital map and use the Set Capital button or else you may have some bugs soon.",
                     MessageTypeDefOf.NegativeEvent);
             }
         }
 
-        public int returnCapitalMapId()
-        {
-            for (int i = 0; i < Find.Maps.Count(); i++)
-            {
-                if (Find.Maps[i].Tile == capitalLocation)
-                {
+        public int returnCapitalMapId() {
+            for (int i = 0; i < Find.Maps.Count(); i++) {
+                if (Find.Maps[i].Tile == capitalLocation) {
                     return i;
                 }
             }
@@ -2064,12 +1802,9 @@ namespace FactionColonies
             return -1;
         }
 
-        public Map returnCapitalMap()
-        {
-            for (int i = 0; i < Find.Maps.Count(); i++)
-            {
-                if (Find.Maps[i].Tile == capitalLocation)
-                {
+        public Map returnCapitalMap() {
+            for (int i = 0; i < Find.Maps.Count(); i++) {
+                if (Find.Maps[i].Tile == capitalLocation) {
                     return Find.Maps[i];
                 }
             }
@@ -2078,12 +1813,9 @@ namespace FactionColonies
             return null;
         }
 
-        public int returnSettlementFCIDByLocation(int location, string planetName)
-        {
-            for (int i = 0; i < settlements.Count(); i++)
-            {
-                if (settlements[i].mapLocation == location && settlements[i].planetName == planetName)
-                {
+        public int returnSettlementFCIDByLocation(int location, string planetName) {
+            for (int i = 0; i < settlements.Count(); i++) {
+                if (settlements[i].mapLocation == location && settlements[i].planetName == planetName) {
                     return i;
                 }
             }
@@ -2091,20 +1823,16 @@ namespace FactionColonies
             return -1;
         }
 
-        public SettlementFC returnSettlementByLocation(int location, string planetName)
-        {
-            if (planetName == null)
-            {
+        public SettlementFC returnSettlementByLocation(int location, string planetName) {
+            if (planetName == null) {
                 Log.Message(
                     "Planet name was null. Please report this as well as the military event that the settlement was used for.");
                 planetName = Find.World.info.name;
             }
 
-            for (int i = 0; i < settlements.Count(); i++)
-            {
+            for (int i = 0; i < settlements.Count(); i++) {
                 //Log.Message(settlements[i].planetName);
-                if (settlements[i].mapLocation == location && settlements[i].planetName == planetName)
-                {
+                if (settlements[i].mapLocation == location && settlements[i].planetName == planetName) {
                     return settlements[i];
                 }
             }
@@ -2112,11 +1840,9 @@ namespace FactionColonies
             return null;
         }
 
-        public string getSettlementName(int location, string planetName)
-        {
+        public string getSettlementName(int location, string planetName) {
             int i = returnSettlementFCIDByLocation(location, planetName);
-            switch (i)
-            {
+            switch (i) {
                 case -1:
                     return "Null";
 
@@ -2125,11 +1851,9 @@ namespace FactionColonies
             }
         }
 
-        public SettlementFC getSettlement(int location, string planetName)
-        {
+        public SettlementFC getSettlement(int location, string planetName) {
             int i = returnSettlementFCIDByLocation(location, planetName);
-            switch (i)
-            {
+            switch (i) {
                 case -1:
                     return null;
                 default:
@@ -2138,10 +1862,8 @@ namespace FactionColonies
         }
 
 
-        public void updateSettlementStats()
-        {
-            foreach (SettlementFC settlement in settlements)
-            {
+        public void updateSettlementStats() {
+            foreach (SettlementFC settlement in settlements) {
                 settlement.updateHappiness();
                 settlement.updateLoyalty();
                 settlement.updateUnrest();
@@ -2149,8 +1871,7 @@ namespace FactionColonies
             }
         }
 
-        public void TaxTick()
-        {
+        public void TaxTick() {
             if (Find.TickManager.TicksGame >= taxTimeDue) // taxTimeDue being used as set interval when skipping time
             {
                 while (Find.TickManager.TicksGame >= taxTimeDue) //while updating events
@@ -2158,12 +1879,9 @@ namespace FactionColonies
                     //update events in this order: regular events: tax events.
 
 
-                    if (Find.TickManager.TicksGame > taxTimeDue)
-                    {
+                    if (Find.TickManager.TicksGame > taxTimeDue) {
                         addTax(true);
-                    }
-                    else
-                    {
+                    } else {
                         Log.Message(
                             "Empire Mod - TaxTick - Catching Up - Did you skip time? Report this if you did not");
                         addTax(false);
@@ -2176,8 +1894,7 @@ namespace FactionColonies
                 }
 
                 //if Autoresolve bills on, attempt to autoresolve
-                switch (autoResolveBills)
-                {
+                switch (autoResolveBills) {
                     case true:
                         PaymentUtil.autoresolveBills(Bills);
                         break;
@@ -2187,13 +1904,10 @@ namespace FactionColonies
             }
         }
 
-        public void TaxTickPrisoner(SettlementFC settlement)
-        {
+        public void TaxTickPrisoner(SettlementFC settlement) {
             Reset:
-            foreach (FCPrisoner prisoner in settlement.prisonerList)
-            {
-                switch (prisoner.workload)
-                {
+            foreach (FCPrisoner prisoner in settlement.prisonerList) {
+                switch (prisoner.workload) {
                     case FCWorkLoad.Heavy:
                         if (prisoner.AdjustHealth(-20))
                             goto Reset;
@@ -2210,15 +1924,13 @@ namespace FactionColonies
             }
         }
 
-        public void resetTraitMercantileCaravanTime()
-        {
+        public void resetTraitMercantileCaravanTime() {
             float days = Rand.RangeInclusive(3, 5);
-            traitMercantileTradeCaravanTickDue = Find.TickManager.TicksGame + (int) (days * GenDate.TicksPerDay);
+            traitMercantileTradeCaravanTickDue = Find.TickManager.TicksGame + (int)(days * GenDate.TicksPerDay);
         }
 
 
-        public void StatTick()
-        {
+        public void StatTick() {
             if (Find.TickManager.TicksGame >= dailyTimer) // taxTimeDue being used as set interval when skipping time
             {
                 while (Find.TickManager.TicksGame >= dailyTimer) //while updating events
@@ -2238,38 +1950,29 @@ namespace FactionColonies
                     int tmpNum = Rand.Range(1, 100);
                     //Log.Message(tmpNum.ToString());
                     if (tmpNum <= FactionColonies.randomEventChance &&
-                        FactionColonies.Settings().disableRandomEvents == false)
-                    {
+                        FactionColonies.Settings().disableRandomEvents == false) {
                         FCEvent tmpEvt = FCEventMaker.MakeRandomEvent(FCEventMaker.returnRandomEvent(), null);
                         //Log.Message(tmpEvt.def.label);
-                        if (tmpEvt != null)
-                        {
+                        if (tmpEvt != null) {
                             Find.World.GetComponent<FactionFC>().addEvent(tmpEvt);
 
 
                             //letter code
                             string settlementString = "";
-                            foreach (SettlementFC loc in tmpEvt.settlementTraitLocations)
-                            {
-                                if (settlementString == "")
-                                {
+                            foreach (SettlementFC loc in tmpEvt.settlementTraitLocations) {
+                                if (settlementString == "") {
                                     settlementString = settlementString + loc.name;
-                                }
-                                else
-                                {
+                                } else {
                                     settlementString = settlementString + ", " + loc.name;
                                 }
                             }
 
-                            if (settlementString != "")
-                            {
-                                Find.LetterStack.ReceiveLetter("Random Event",
-                                    tmpEvt.def.desc + "\n This event is affecting the following settlements: " +
+                            if (settlementString != "") {
+                                Find.LetterStack.ReceiveLetter("随机事件",
+                                    tmpEvt.def.desc + "\n 该事件影响了以下定居点： " +
                                     settlementString, LetterDefOf.NeutralEvent);
-                            }
-                            else
-                            {
-                                Find.LetterStack.ReceiveLetter("Random Event", tmpEvt.def.desc,
+                            } else {
+                                Find.LetterStack.ReceiveLetter("随机事件", tmpEvt.def.desc,
                                     LetterDefOf.NeutralEvent);
                             }
                         }
@@ -2282,14 +1985,11 @@ namespace FactionColonies
             }
         }
 
-        public void MilitaryTick()
-        {
-            if (Find.TickManager.TicksGame >= militaryTimeDue)
-            {
+        public void MilitaryTick() {
+            if (Find.TickManager.TicksGame >= militaryTimeDue) {
                 if (LoadedModManager.GetMod<FactionColoniesMod>().GetSettings<FactionColonies>()
                         .disableHostileMilitaryActions == false &
-                    Find.TickManager.TicksGame > (timeStart + GenDate.TicksPerSeason))
-                {
+                    Find.TickManager.TicksGame > (timeStart + GenDate.TicksPerSeason)) {
                     //if military actions not disabled or game has not passed through the first season
                     //Log.Message("Mil Action debug");
 
@@ -2304,20 +2004,16 @@ namespace FactionColonies
 
                     //choose random
 
-                    if (settlements.Any())
-                    {
+                    if (settlements.Any()) {
                         //if settlements exist
                         List<SettlementFC> targets = new List<SettlementFC>();
-                        foreach (SettlementFC settlement in settlements)
-                        {
+                        foreach (SettlementFC settlement in settlements) {
                             //create weight list of settlements
-                            if (settlement.isUnderAttack == false)
-                            {
+                            if (settlement.isUnderAttack == false) {
                                 //if not underattack, add to list
                                 //get weightvalue of target
                                 int weightValue;
-                                switch (settlement.settlementMilitaryLevel)
-                                {
+                                switch (settlement.settlementMilitaryLevel) {
                                     case 0:
                                     case 1:
                                         weightValue = 10;
@@ -2335,32 +2031,29 @@ namespace FactionColonies
                                         break;
                                 }
 
-                                for (int k = 0; k < weightValue; k++)
-                                {
+                                for (int k = 0; k < weightValue; k++) {
                                     targets.Add(settlement);
                                 }
                             }
                         }
 
-                        if (targets.Any())
-                        {
+                        if (targets.Any()) {
                             //List created, pick from list
                             Faction enemy = Find.FactionManager.RandomEnemyFaction();
-                            if (enemy != null)
-                            {
+                            if (enemy != null) {
                                 // Limit to settlements on current planet
                                 // TODO: Make it compatible with settlements on different planets instead of excluding
                                 // them
                                 SettlementFC settlement = targets
                                     .Where(s => s.planetName == Find.World.info.name)
                                     .RandomElementWithFallback();
-                                
+
                                 if (settlement != null)
                                     MilitaryUtilFC.attackPlayerSettlement(
                                         militaryForce.createMilitaryForceFromFaction(enemy, true),
                                         targets.RandomElement(), enemy);
                             }
-                                    
+
                         }
                     }
                 }
@@ -2368,14 +2061,13 @@ namespace FactionColonies
                 militaryTimeDue = Find.TickManager.TicksGame + (60000 * LoadedModManager.GetMod<FactionColoniesMod>()
                     .GetSettings<FactionColonies>().minMaxDaysTillMilitaryAction.RandomInRange);
                 //Log.Message(militaryTimeDue + " - " + Find.TickManager.TicksGame);
-//Log.Message((militaryTimeDue - Find.TickManager.TicksGame) / 60000 + " days till next military action");
+                //Log.Message((militaryTimeDue - Find.TickManager.TicksGame) / 60000 + " days till next military action");
                 //militaryTimeDue =
             }
         }
 
 
-        public void UITick()
-        {
+        public void UITick() {
             if (uiTimeUpdate <= 0) //update per time?
             {
                 uiTimeUpdate = FactionColonies.updateUiTimer;
@@ -2385,9 +2077,7 @@ namespace FactionColonies
 
                 //Pop UI updates
                 uiUpdate();
-            }
-            else
-            {
+            } else {
                 uiTimeUpdate -= 1;
             }
         }

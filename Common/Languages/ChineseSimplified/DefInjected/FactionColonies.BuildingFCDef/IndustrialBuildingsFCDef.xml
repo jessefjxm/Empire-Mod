@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<LanguageData>
+		<researchLabs.label>实验室</researchLabs.label>
+		<indoorHydroponics.label>水培基地</indoorHydroponics.label>
+		<firearmsFactory.label>枪械厂</firearmsFactory.label>
+		<rimazonWarehouse.label>边缘仓库</rimazonWarehouse.label>
+		<inhouseMercCompany.label>私人安保公司</inhouseMercCompany.label>
+		<adultEntertainmentCentre.label>娱乐中心</adultEntertainmentCentre.label>
+		<forcedWorkCamps.label>劳改集中营</forcedWorkCamps.label>
+		<artilleryOutpost.label>炮兵哨塔</artilleryOutpost.label>
+	</LanguageData>

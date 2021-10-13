@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<LanguageData>
+		<Impassable.label>无法逾越</Impassable.label>
+		<Lake.label>湖泊</Lake.label>
+		<Ocean.label>海洋</Ocean.label>
+	</LanguageData>

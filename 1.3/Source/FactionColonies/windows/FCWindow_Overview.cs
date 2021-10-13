@@ -1,16 +1,13 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace FactionColonies
-{
-    public class FCWindow_Overview : Window
-    {
-        public override Vector2 InitialSize
-        {
+namespace FactionColonies {
+    public class FCWindow_Overview : Window {
+        public override Vector2 InitialSize {
             get { return new Vector2(838f, 538f); }
         }
 
@@ -62,8 +59,7 @@ namespace FactionColonies
         Rect settlement_8 = new Rect(495, 0, 60, 25); // Rest
 
 
-        public FCWindow_Overview()
-        {
+        public FCWindow_Overview() {
             forcePause = false;
             draggable = true;
             doCloseX = true;
@@ -79,16 +75,14 @@ namespace FactionColonies
             background.SetPixel(0, 0, Color.black);
             background.Apply();
 
-            maxScroll = (int) ((faction.settlements.Count() * 25) - settlementsBox.height);
+            maxScroll = (int)((faction.settlements.Count() * 25) - settlementsBox.height);
         }
 
 
-        public virtual void confirm()
-        {
+        public virtual void confirm() {
         }
 
-        public override void DoWindowContents(Rect inRect)
-        {
+        public override void DoWindowContents(Rect inRect) {
             //grab before anchor/font
             GameFont fontBefore = Text.Font;
             TextAnchor anchorBefore = Text.Anchor;
@@ -101,8 +95,7 @@ namespace FactionColonies
             Widgets.DrawMenuSection(menuSectionHeader);
             Widgets.DrawBox(menuSectionHeader);
             //Icon button
-            if (Widgets.ButtonImage(headerFactionIcon, faction.factionIcon))
-            {
+            if (Widgets.ButtonImage(headerFactionIcon, faction.factionIcon)) {
             }
 
             Text.Anchor = TextAnchor.MiddleLeft;
@@ -113,8 +106,7 @@ namespace FactionColonies
             Widgets.Label(headerFactionTitle, faction.title);
 
             //Settings button
-            if (Widgets.ButtonImage(headerSettings, TexLoad.iconCustomize))
-            {
+            if (Widgets.ButtonImage(headerSettings, TexLoad.iconCustomize)) {
                 Faction fact = FactionColonies.getPlayerColonyFaction();
                 if (fact != null)
                     Find.WindowStack.Add(new FactionCustomizeWindowFc(faction));
@@ -137,23 +129,18 @@ namespace FactionColonies
 
 
             //Policies
-            if (faction.policies.Count() == 2)
-            {
+            if (faction.policies.Count() == 2) {
                 Widgets.ButtonImage(policy_1, faction.policies[0].def.IconLight);
-                if (policy_1.Contains(Event.current.mousePosition))
-                {
+                if (policy_1.Contains(Event.current.mousePosition)) {
                     TooltipHandler.TipRegion(policy_1, returnPolicyText(faction.policies[0].def));
                 }
 
                 //Widgets.Label(policy_2, new GUIContent("test", "test test test"));
                 Widgets.ButtonImage(policy_2, faction.policies[1].def.IconLight);
-                if (policy_2.Contains(Event.current.mousePosition))
-                {
+                if (policy_2.Contains(Event.current.mousePosition)) {
                     TooltipHandler.TipRegion(policy_2, returnPolicyText(faction.policies[1].def));
                 }
-            }
-            else
-            {
+            } else {
                 Widgets.Label(new Rect(policy_1.x, policy_1.y, 200, 50), "FCSelectYourTraits".Translate());
             }
 
@@ -165,19 +152,15 @@ namespace FactionColonies
             //TraitSlot
             if (Widgets.ButtonTextSubtle(trait_1, returnTraitAvailibility(1, faction.factionTraits[0]))) //CHANGE THIS
             {
-                if (canChangeTrait(1, faction.factionTraits[0]))
-                {
-                    foreach (FCPolicyDef trait in available)
-                    {
-                        list.Add(new FloatMenuOption(trait.label, delegate
-                            {
-                                List<FloatMenuOption> confirm = new List<FloatMenuOption>();
-                                confirm.Add(new FloatMenuOption("FCConfirmTrait".Translate(trait.label),
-                                    delegate { faction.factionTraits[0] = new FCPolicy(trait); }));
-                                Find.WindowStack.Add(new FloatMenu(confirm));
-                            },
-                            mouseoverGuiAction: delegate
-                            {
+                if (canChangeTrait(1, faction.factionTraits[0])) {
+                    foreach (FCPolicyDef trait in available) {
+                        list.Add(new FloatMenuOption(trait.label, delegate {
+                            List<FloatMenuOption> confirm = new List<FloatMenuOption>();
+                            confirm.Add(new FloatMenuOption("FCConfirmTrait".Translate(trait.label),
+                                delegate { faction.factionTraits[0] = new FCPolicy(trait); }));
+                            Find.WindowStack.Add(new FloatMenu(confirm));
+                        },
+                            mouseoverGuiAction: delegate {
                                 TooltipHandler.TipRegion(new Rect(Event.current.mousePosition, new Vector2(100, 200)),
                                     returnPolicyText(trait));
                             }));
@@ -187,8 +170,7 @@ namespace FactionColonies
                 }
             }
 
-            if (Mouse.IsOver(trait_1) && faction.factionTraits[0].def != FCPolicyDefOf.empty)
-            {
+            if (Mouse.IsOver(trait_1) && faction.factionTraits[0].def != FCPolicyDefOf.empty) {
                 TooltipHandler.TipRegion(new Rect(Event.current.mousePosition, new Vector2(100, 200)),
                     returnPolicyText(faction.factionTraits[0].def));
             }
@@ -197,19 +179,15 @@ namespace FactionColonies
             //TraitSlot
             if (Widgets.ButtonTextSubtle(trait_2, returnTraitAvailibility(2, faction.factionTraits[1]))) //CHANGE THIS
             {
-                if (canChangeTrait(2, faction.factionTraits[1]))
-                {
-                    foreach (FCPolicyDef trait in available)
-                    {
-                        list.Add(new FloatMenuOption(trait.label, delegate
-                            {
-                                List<FloatMenuOption> confirm = new List<FloatMenuOption>();
-                                confirm.Add(new FloatMenuOption("FCConfirmTrait".Translate(trait.label),
-                                    delegate { faction.factionTraits[1] = new FCPolicy(trait); }));
-                                Find.WindowStack.Add(new FloatMenu(confirm));
-                            },
-                            mouseoverGuiAction: delegate
-                            {
+                if (canChangeTrait(2, faction.factionTraits[1])) {
+                    foreach (FCPolicyDef trait in available) {
+                        list.Add(new FloatMenuOption(trait.label, delegate {
+                            List<FloatMenuOption> confirm = new List<FloatMenuOption>();
+                            confirm.Add(new FloatMenuOption("FCConfirmTrait".Translate(trait.label),
+                                delegate { faction.factionTraits[1] = new FCPolicy(trait); }));
+                            Find.WindowStack.Add(new FloatMenu(confirm));
+                        },
+                            mouseoverGuiAction: delegate {
                                 TooltipHandler.TipRegion(new Rect(Event.current.mousePosition, new Vector2(200, 200)),
                                     returnPolicyText(trait));
                             }));
@@ -219,8 +197,7 @@ namespace FactionColonies
                 }
             }
 
-            if (Mouse.IsOver(trait_2) && faction.factionTraits[1].def != FCPolicyDefOf.empty)
-            {
+            if (Mouse.IsOver(trait_2) && faction.factionTraits[1].def != FCPolicyDefOf.empty) {
                 TooltipHandler.TipRegion(new Rect(Event.current.mousePosition, new Vector2(200, 200)),
                     returnPolicyText(faction.factionTraits[1].def));
             }
@@ -229,19 +206,15 @@ namespace FactionColonies
             //TraitSlot
             if (Widgets.ButtonTextSubtle(trait_3, returnTraitAvailibility(3, faction.factionTraits[2]))) //CHANGE THIS
             {
-                if (canChangeTrait(3, faction.factionTraits[2]))
-                {
-                    foreach (FCPolicyDef trait in available)
-                    {
-                        list.Add(new FloatMenuOption(trait.label, delegate
-                            {
-                                List<FloatMenuOption> confirm = new List<FloatMenuOption>();
-                                confirm.Add(new FloatMenuOption("FCConfirmTrait".Translate(trait.label),
-                                    delegate { faction.factionTraits[2] = new FCPolicy(trait); }));
-                                Find.WindowStack.Add(new FloatMenu(confirm));
-                            },
-                            mouseoverGuiAction: delegate
-                            {
+                if (canChangeTrait(3, faction.factionTraits[2])) {
+                    foreach (FCPolicyDef trait in available) {
+                        list.Add(new FloatMenuOption(trait.label, delegate {
+                            List<FloatMenuOption> confirm = new List<FloatMenuOption>();
+                            confirm.Add(new FloatMenuOption("FCConfirmTrait".Translate(trait.label),
+                                delegate { faction.factionTraits[2] = new FCPolicy(trait); }));
+                            Find.WindowStack.Add(new FloatMenu(confirm));
+                        },
+                            mouseoverGuiAction: delegate {
                                 TooltipHandler.TipRegion(new Rect(Event.current.mousePosition, new Vector2(300, 200)),
                                     returnPolicyText(trait));
                             }));
@@ -251,8 +224,7 @@ namespace FactionColonies
                 }
             }
 
-            if (Mouse.IsOver(trait_3) && faction.factionTraits[2].def != FCPolicyDefOf.empty)
-            {
+            if (Mouse.IsOver(trait_3) && faction.factionTraits[2].def != FCPolicyDefOf.empty) {
                 TooltipHandler.TipRegion(new Rect(Event.current.mousePosition, new Vector2(300, 200)),
                     returnPolicyText(faction.factionTraits[2].def));
             }
@@ -261,19 +233,15 @@ namespace FactionColonies
             //TraitSlot
             if (Widgets.ButtonTextSubtle(trait_4, returnTraitAvailibility(4, faction.factionTraits[3]))) //CHANGE THIS
             {
-                if (canChangeTrait(4, faction.factionTraits[3]))
-                {
-                    foreach (FCPolicyDef trait in available)
-                    {
-                        list.Add(new FloatMenuOption(trait.label, delegate
-                            {
-                                List<FloatMenuOption> confirm = new List<FloatMenuOption>();
-                                confirm.Add(new FloatMenuOption("FCConfirmTrait".Translate(trait.label),
-                                    delegate { faction.factionTraits[3] = new FCPolicy(trait); }));
-                                Find.WindowStack.Add(new FloatMenu(confirm));
-                            },
-                            mouseoverGuiAction: delegate
-                            {
+                if (canChangeTrait(4, faction.factionTraits[3])) {
+                    foreach (FCPolicyDef trait in available) {
+                        list.Add(new FloatMenuOption(trait.label, delegate {
+                            List<FloatMenuOption> confirm = new List<FloatMenuOption>();
+                            confirm.Add(new FloatMenuOption("FCConfirmTrait".Translate(trait.label),
+                                delegate { faction.factionTraits[3] = new FCPolicy(trait); }));
+                            Find.WindowStack.Add(new FloatMenu(confirm));
+                        },
+                            mouseoverGuiAction: delegate {
                                 TooltipHandler.TipRegion(new Rect(Event.current.mousePosition, new Vector2(400, 200)),
                                     returnPolicyText(trait));
                             }));
@@ -283,8 +251,7 @@ namespace FactionColonies
                 }
             }
 
-            if (Mouse.IsOver(trait_4) && faction.factionTraits[3].def != FCPolicyDefOf.empty)
-            {
+            if (Mouse.IsOver(trait_4) && faction.factionTraits[3].def != FCPolicyDefOf.empty) {
                 TooltipHandler.TipRegion(new Rect(Event.current.mousePosition, new Vector2(400, 200)),
                     returnPolicyText(faction.factionTraits[3].def));
             }
@@ -293,19 +260,15 @@ namespace FactionColonies
             //TraitSlot
             if (Widgets.ButtonTextSubtle(trait_5, returnTraitAvailibility(5, faction.factionTraits[4]))) //CHANGE THIS
             {
-                if (canChangeTrait(5, faction.factionTraits[4]))
-                {
-                    foreach (FCPolicyDef trait in available)
-                    {
-                        list.Add(new FloatMenuOption(trait.label, delegate
-                            {
-                                List<FloatMenuOption> confirm = new List<FloatMenuOption>();
-                                confirm.Add(new FloatMenuOption("FCConfirmTrait".Translate(trait.label),
-                                    delegate { faction.factionTraits[4] = new FCPolicy(trait); }));
-                                Find.WindowStack.Add(new FloatMenu(confirm));
-                            },
-                            mouseoverGuiAction: delegate
-                            {
+                if (canChangeTrait(5, faction.factionTraits[4])) {
+                    foreach (FCPolicyDef trait in available) {
+                        list.Add(new FloatMenuOption(trait.label, delegate {
+                            List<FloatMenuOption> confirm = new List<FloatMenuOption>();
+                            confirm.Add(new FloatMenuOption("FCConfirmTrait".Translate(trait.label),
+                                delegate { faction.factionTraits[4] = new FCPolicy(trait); }));
+                            Find.WindowStack.Add(new FloatMenu(confirm));
+                        },
+                            mouseoverGuiAction: delegate {
                                 TooltipHandler.TipRegion(new Rect(Event.current.mousePosition, new Vector2(500, 200)),
                                     returnPolicyText(trait));
                             }));
@@ -315,8 +278,7 @@ namespace FactionColonies
                 }
             }
 
-            if (Mouse.IsOver(trait_5) && faction.factionTraits[4].def != FCPolicyDefOf.empty)
-            {
+            if (Mouse.IsOver(trait_5) && faction.factionTraits[4].def != FCPolicyDefOf.empty) {
                 TooltipHandler.TipRegion(new Rect(Event.current.mousePosition, new Vector2(500, 200)),
                     returnPolicyText(faction.factionTraits[4].def));
             }
@@ -336,51 +298,43 @@ namespace FactionColonies
             GUI.BeginGroup(settlementsBoxLabels);
             Widgets.DrawMenuSection(new Rect(0, 0, settlementsBox.width, 20));
             Widgets.DrawLightHighlight(new Rect(0, 0, settlementsBox.width, 20));
-            Widgets.Label(settlement_1, "Name");
-            if (Widgets.ButtonInvisible(settlement_1))
-            {
+            Widgets.Label(settlement_1, "名称");
+            if (Widgets.ButtonInvisible(settlement_1)) {
                 faction.settlements.Sort(FactionColonies.CompareSettlementName);
             }
 
-            Widgets.Label(settlement_2, "Level");
-            if (Widgets.ButtonInvisible(settlement_2))
-            {
+            Widgets.Label(settlement_2, "领地等级");
+            if (Widgets.ButtonInvisible(settlement_2)) {
                 faction.settlements.Sort(FactionColonies.CompareSettlementLevel);
             }
 
-            Widgets.Label(settlement_3, "Mil Level");
-            if (Widgets.ButtonInvisible(settlement_3))
-            {
+            Widgets.Label(settlement_3, "军力等级");
+            if (Widgets.ButtonInvisible(settlement_3)) {
                 faction.settlements.Sort(FactionColonies.CompareSettlementMilitaryLevel);
             }
 
-            Widgets.Label(settlement_4, "Profit");
-            if (Widgets.ButtonInvisible(settlement_4))
-            {
+            Widgets.Label(settlement_4, "收益");
+            if (Widgets.ButtonInvisible(settlement_4)) {
                 faction.settlements.Sort(FactionColonies.CompareSettlementProfit);
             }
 
-            Widgets.Label(settlement_5, "Free Workers");
-            if (Widgets.ButtonInvisible(settlement_5))
-            {
+            Widgets.Label(settlement_5, "可用工人");
+            if (Widgets.ButtonInvisible(settlement_5)) {
                 faction.settlements.Sort(FactionColonies.CompareSettlementFreeWorkers);
             }
 
-            Widgets.Label(settlement_6, "Happiness");
-            if (Widgets.ButtonInvisible(settlement_6))
-            {
+            Widgets.Label(settlement_6, "幸福度");
+            if (Widgets.ButtonInvisible(settlement_6)) {
                 faction.settlements.Sort(FactionColonies.CompareSettlementHappiness);
             }
 
-            Widgets.Label(settlement_7, "Loyalty");
-            if (Widgets.ButtonInvisible(settlement_7))
-            {
+            Widgets.Label(settlement_7, "忠诚度");
+            if (Widgets.ButtonInvisible(settlement_7)) {
                 faction.settlements.Sort(FactionColonies.CompareSettlementLoyalty);
             }
 
-            Widgets.Label(settlement_8, "Unrest");
-            if (Widgets.ButtonInvisible(settlement_8))
-            {
+            Widgets.Label(settlement_8, "叛乱度");
+            if (Widgets.ButtonInvisible(settlement_8)) {
                 faction.settlements.Sort(FactionColonies.CompareSettlementUnrest);
             }
 
@@ -390,13 +344,11 @@ namespace FactionColonies
 
             GUI.BeginGroup(settlementsBox);
 
-            for (int i = 0; i < faction.settlements.Count(); i++)
-            {
+            for (int i = 0; i < faction.settlements.Count(); i++) {
                 SettlementFC settlement = faction.settlements[i];
 
                 //settlement name
-                if (Widgets.ButtonTextSubtle(AdjustRect(settlement_1, i), settlement.name))
-                {
+                if (Widgets.ButtonTextSubtle(AdjustRect(settlement_1, i), settlement.name)) {
                     Find.WindowStack.Add(new SettlementWindowFc(settlement));
                 }
 
@@ -419,94 +371,76 @@ namespace FactionColonies
             Text.Font = fontBefore;
             Text.Anchor = anchorBefore;
 
-            if (Event.current.type == EventType.ScrollWheel)
-            {
+            if (Event.current.type == EventType.ScrollWheel) {
                 scrollWindow(Event.current.delta.y);
             }
         }
 
-        public Rect AdjustRect(Rect rect, int i)
-        {
+        public Rect AdjustRect(Rect rect, int i) {
             Rect tmp = new Rect();
             tmp = rect;
             tmp.y = 25 * i + scroll;
             return tmp;
         }
 
-        private void scrollWindow(float num)
-        {
-            if (scroll - num * 10 < -1 * maxScroll)
-            {
+        private void scrollWindow(float num) {
+            if (scroll - num * 10 < -1 * maxScroll) {
                 scroll = -1 * maxScroll;
-            }
-            else if (scroll - num * 10 > 0)
-            {
+            } else if (scroll - num * 10 > 0) {
                 scroll = 0;
-            }
-            else
-            {
-                scroll -= (int) Event.current.delta.y * 10;
+            } else {
+                scroll -= (int)Event.current.delta.y * 10;
             }
 
             Event.current.Use();
         }
 
-        string returnPolicyText(FCPolicyDef def)
-        {
+        string returnPolicyText(FCPolicyDef def) {
             string str = "";
 
             str += def.LabelCap + "\n";
 
-            foreach (string positive in def.positiveEffects)
-            {
+            foreach (string positive in def.positiveEffects) {
                 str += "\n" + positive;
             }
 
             str += "\n==========";
-            foreach (string negative in def.negativeEffects)
-            {
+            foreach (string negative in def.negativeEffects) {
                 str += "\n" + negative;
             }
 
             return str;
         }
 
-        string returnTraitAvailibility(int slot, FCPolicy current)
-        {
+        string returnTraitAvailibility(int slot, FCPolicy current) {
             int requiredLevel = slot;
 
-            if (current.def != FCPolicyDefOf.empty)
-            {
+            if (current.def != FCPolicyDefOf.empty) {
                 return current.def.label;
             }
 
-            if (faction.factionLevel >= requiredLevel)
-            {
+            if (faction.factionLevel >= requiredLevel) {
                 return "FCSelectANewTrait".Translate();
             }
 
             return "FCTraitLockedUntilLevel".Translate(slot);
         }
 
-        bool canChangeTrait(int slot, FCPolicy current)
-        {
+        bool canChangeTrait(int slot, FCPolicy current) {
             int requiredLevel = slot;
 
-            if (current.def != FCPolicyDefOf.empty)
-            {
+            if (current.def != FCPolicyDefOf.empty) {
                 return false;
             }
 
-            if (faction.factionLevel >= requiredLevel)
-            {
+            if (faction.factionLevel >= requiredLevel) {
                 return true;
             }
 
             return false;
         }
 
-        List<FCPolicyDef> availableTraitsList()
-        {
+        List<FCPolicyDef> availableTraitsList() {
             List<FCPolicyDef> list = new List<FCPolicyDef>();
             if (!faction.hasTrait(FCPolicyDefOf.resilient))
                 list.Add(FCPolicyDefOf.resilient);

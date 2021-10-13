@@ -1,10 +1,8 @@
 ﻿using System;
 using Verse;
 
-namespace FactionColonies
-{
-    public enum ResourceType
-    {
+namespace FactionColonies {
+    public enum ResourceType {
         Food,
         Weapons,
         Apparel,
@@ -16,17 +14,14 @@ namespace FactionColonies
         Medicine
     }
 
-    public static class ResourceUtils
-    {
-        public static ResourceType[] resourceTypes = (ResourceType[]) Enum.GetValues(typeof(ResourceType));
-        
-        public static ResourceType getTypeFromName(String name)
-        {
-            int index = Array.FindIndex(Enum.GetNames(typeof(ResourceType)), 
+    public static class ResourceUtils {
+        public static ResourceType[] resourceTypes = (ResourceType[])Enum.GetValues(typeof(ResourceType));
+
+        public static ResourceType getTypeFromName(String name) {
+            int index = Array.FindIndex(Enum.GetNames(typeof(ResourceType)),
                 foundName => foundName.EqualsIgnoreCase(name));
-            
-            if (index == -1)
-            {
+
+            if (index == -1) {
                 Log.Warning("Unknown resource type " + name);
             }
 
